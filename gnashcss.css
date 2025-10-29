@@ -1,0 +1,269 @@
+:root {
+	--white: #eeece9;
+	--light-accent: #c5bbbb;
+	--mid-accent: #d34949;
+	--bright-accent: #d72929;
+	--black: #06020b;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+/*//////////// General ////////////*/
+
+html {
+	background: var(--black);
+	color: var(--white);
+	scroll-behavior: smooth;
+}
+
+body {
+	font-family: "Underdog";
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+footer {
+	padding: 10px;
+	text-align: center;
+	margin: 80px 0 20px;
+}
+
+h1 {
+	font-family: 'Kablammo';
+	margin: 0 10px 30px 0;
+	font-size: 5.6em;
+}
+
+h2 {
+	font-family: 'Bahiana';
+	margin: 10px 0 20px;
+	font-size: 3.4em;
+}
+
+a {
+	text-decoration: none;
+	color: var(--light-accent);
+	transition: 400ms ease;
+}
+
+a:hover, a:focus {
+	color: var(--mid-accent);
+}
+
+.section {
+	display: flex;
+	text-align: center;
+	padding: 30px;
+	width: 1100px;
+	max-width: 100%;
+}
+
+.section .content {
+	padding: 20px 20px 60px;
+	flex: 1 1 100%;
+}
+
+.section-wrap {
+	width: fit-content;
+	max-width: 90vw;
+}
+
+#eyesimage {
+	position: absolute;
+	top: 0;
+	width: 800px;
+	max-width: 100vw;
+}
+
+.section-wrap, #landing-box, .quote {
+	z-index: 1;
+}
+
+/*//////////// Quote ////////////*/
+
+.quote {
+	font-family: 'Lavishly Yours';
+	font-size: 2em;
+	font-weight: normal;
+	max-width: 600px;
+	text-align: center;
+	line-height: 1;
+	color: var(--mid-accent);
+	text-shadow: -1px -1px 0 #070915, 0 -1px 0 #070915, 1px -1px 0 #070915, 1px 0 0 #070915, 1px 1px 0 #070915, 0 1px 0 #070915, -1px 1px 0 #070915, -1px 0 0 #070915;
+}
+
+body > .quote {
+	margin: 120px 0 60px;
+}
+
+.quote i:last-child, .quote .fa-solid {
+	font-size: 50%;
+}
+
+.quote i:last-child {
+	display: block;
+	font-family: "Underdog";
+	padding-right: 20px;
+	width: 100%;
+	text-align: right;
+	margin-top:10px;
+}
+
+/*//////////// Nav ////////////*/
+
+.nav {
+	font-family: "Bahiana";
+	list-style: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+}
+
+.nav li {
+	list-style: none;
+	margin: 0;
+	padding: 10px;
+	font-size: 2em;
+}
+
+.nav img {
+	height: 45px;
+	margin: 5px 5px -10px;
+	transition: 400ms ease;
+}
+
+.nav .fa-tooth {
+	font-size: 1.6em;
+}
+
+.nav a {
+	color: inherit;
+}
+
+.nav a:hover, .nav a:focus, .nav a.focused {
+	color: var(--bright-accent);
+}
+
+.nav a:hover img, .nav a:focus img, .nav a.focused img {
+	filter: brightness(0.27) sepia(1) hue-rotate(-45deg) saturate(6);
+}
+
+.section-wrap .nav {
+	margin: -80px auto 0;
+	font-size: 80%;
+	max-width: calc(100% - 360px);
+	flex-wrap: wrap;
+}
+
+.section-wrap .nav img {
+	height: 25px;
+	margin: 2px 2px -3px;
+}
+
+/*//////////// Boxes ////////////*/
+
+#landing-box {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 90vh;
+	width: 100vw;
+	padding: 180px 0 0;
+}
+
+.header {
+	font-family: "Bahiana";
+	font-size: 2.5em;
+}
+
+.trait-body {
+	margin-bottom: 40px;
+}
+
+.trait-body:has(+.trait-body), .trait-body:has(+.text-body), .text-body:has(+.text-body), .text-body:has(+.trait-body) {
+	margin-bottom: 10px;
+	padding-bottom:0;
+}
+
+.text-body {
+	padding: 10px 0;
+	margin-bottom: 30px;
+}
+
+ul.text-body {
+	margin: 0;
+	padding: 0;
+}
+
+.text-body li {
+	width: fit-content;
+	margin: auto;
+}
+
+
+.flex-row-narrow, .flex-column-narrow {
+	display: inline-flex;
+	width: 49%;
+}
+
+.flex-row-narrow {
+	text-align: left;
+	align-items: center;
+	justify-content: center;
+}
+
+.flex-row-narrow .trait-body {
+	margin: 10px;
+}
+
+.flex-row-narrow .header {
+	font-size: 2.1em;
+}
+
+.flex-column-narrow {
+	margin: 40px 0;
+	flex-direction: column;
+}
+
+/*//////////// Windows ////////////*/
+
+.window-left, .window-right {
+	display: flex;
+	flex-direction: column;
+	width: 150px;
+	background: url(https://images.unsplash.com/photo-1665001423954-df4c8c0d564a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=774);
+	background-attachment: fixed;
+	background-size: auto 100%;
+	background-position: top center;
+	flex-shrink: 0;
+}
+
+.window-top, .window-middle, .window-bottom {
+	background-size: 150px auto;
+	width: 100%;
+}
+
+.window-top {
+	background-image: url(img/windowframetop.png);
+	background-position: center;
+	height: 115px;
+}
+
+.window-middle {
+	background-image: url(img/windowframemiddle.png);
+	background-position: top;
+	flex-grow: 1;
+}
+
+.window-bottom {
+	background-image: url(img/windowframebottom.png);
+	background-position: center;
+	height: 38px;
+}
