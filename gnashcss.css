@@ -82,6 +82,7 @@ a:hover, a:focus {
 .section-wrap {
 	width: fit-content;
 	max-width: 90vw;
+	transition: 400ms ease;
 }
 
 #eyesimage {
@@ -184,7 +185,7 @@ body > .quote {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	height: 90vh;
+	height: 85vh;
 	width: 100vw;
 	padding: 180px 0 0;
 }

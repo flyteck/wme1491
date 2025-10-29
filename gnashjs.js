@@ -39,3 +39,25 @@ window.addEventListener("scroll", imageParallax);
 function imageParallax() {
 	  mainImage.style.top = "-" + parseInt(window.scrollY)/parseInt("5") + "px";
 }
+
+//////////Animation for each section
+
+//scroll listener
+window.addEventListener("scroll", animateIn);
+
+var sectionWraps = document.querySelectorAll(".section-wrap")
+
+function animateIn() {
+	for (var i = sectionWraps.length - 1; i >= 0; i--) {
+		var middleScreen = parseInt(window.innerHeight / "2");
+
+		console.log(middleScreen)
+
+		if(parseInt(sectionWraps[i].getBoundingClientRect().top) <= middleScreen && parseInt(sectionWraps[i].getBoundingClientRect().bottom) >= middleScreen) {
+			sectionWraps[i].style.opacity = "1"
+		} else {
+			sectionWraps[i].style.opacity = "0.1"
+		}
+
+	}
+}
