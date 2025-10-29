@@ -25,6 +25,16 @@ body {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	animation: fadeInOpacity 1s;
+}
+
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 
 footer {
@@ -75,9 +85,9 @@ a:hover, a:focus {
 
 #eyesimage {
 	position: absolute;
-	top: 0;
 	width: 800px;
 	max-width: 100vw;
+	transition: 100ms ease;
 }
 
 .section-wrap, #landing-box, .quote {
