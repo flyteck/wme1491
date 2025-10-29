@@ -15,7 +15,6 @@
 html {
 	background: var(--black);
 	color: var(--white);
-	scroll-behavior: smooth;
 }
 
 body {
@@ -27,6 +26,8 @@ body {
 	justify-content: center;
 	animation: fadeInOpacity 1s;
 }
+
+img { max-width: 100% } 
 
 @keyframes fadeInOpacity {
 	0% {
