@@ -90,14 +90,19 @@ for (i = 0; i < image.length; i++) {
 }
 
 function modalOpen() {
-  if(!this.classList.contains("open")) {
-    this.classList.add("open");
-    document.querySelector("body").classList.add("locked");
-  } else {
-    this.classList.remove("open");
-    document.querySelector("body").classList.remove("locked");
-    document.getElementById("gallery").scrollIntoView({ behavior: "instant"});
-  }
+
+	if(event.target.parentElement.classList.contains("image-wrapper")) {
+		return;
+	}
+
+	if(!this.classList.contains("open")) {
+    	this.classList.add("open");
+    	document.querySelector("body").classList.add("locked");
+  	} else {
+    	this.classList.remove("open");
+    	document.querySelector("body").classList.remove("locked");
+    	document.getElementById("gallery").scrollIntoView({ behavior: "instant"});
+  	}
 }
 
 //This lets you close them with escape
@@ -121,8 +126,8 @@ for (i = 0; i < closeButtons.length; i++) {
 function buttonClose() {
   var openModal = this.closest(".open");
   openModal.classList.remove("open");
-  document.querySelector("body").classList.add("locked");
-
+  document.querySelector("body").classList.remove("locked");
+  document.getElementById("gallery").scrollIntoView({ behavior: "instant"});
 }
 
 //This lets you tab left & right
@@ -145,11 +150,8 @@ function tabLeft() {
   var openModal = document.querySelectorAll(".image-wrapper.open");
   if(openModal.length > 0) {
 
-    if(event.key === "ArrowLeft") {
-	   openModal[0].classList.remove("open");
-	}
+  	openModal[0].classList.remove("open");
     
-
     if(openModal[0].previousElementSibling !== null && openModal[0].previousElementSibling.classList.contains("image-wrapper")) {
       	openModal[0].previousElementSibling.classList.add("open");
       	document.querySelector("body").classList.add("locked");
@@ -166,9 +168,7 @@ function tabRight() {
   var openModal = document.querySelectorAll(".image-wrapper.open");
   if(openModal.length > 0) {
 
-    if(event.key === "ArrowRight") {
-	   openModal[0].classList.remove("open");
-	}
+  	openModal[0].classList.remove("open");
 
     if(openModal[0].nextElementSibling !== null && openModal[0].nextElementSibling.classList.contains("image-wrapper")) {
       	openModal[0].nextElementSibling.classList.add("open");
