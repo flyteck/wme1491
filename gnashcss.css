@@ -27,6 +27,11 @@ body {
 	animation: fadeInOpacity 1s;
 }
 
+body.locked {
+	height: 100vh;
+	overflow: hidden;
+}
+
 img { max-width: 100% } 
 
 @keyframes fadeInOpacity {
@@ -46,7 +51,7 @@ footer {
 
 h1 {
 	font-family: 'Kablammo';
-	margin: 0 10px 30px 0;
+	margin: -50px 10px -30px 0;
 	font-size: 5.6em;
 }
 
@@ -77,6 +82,7 @@ a:hover, a:focus {
 .section .content {
 	padding: 20px 20px 60px;
 	flex: 1 1 100%;
+	max-width: calc(100% - 300px);
 }
 
 .section-wrap {
@@ -135,6 +141,7 @@ body > .quote {
 	align-items: center;
 	justify-content: center;
 	padding: 0;
+	flex-wrap: wrap;
 }
 
 .nav li {
@@ -279,3 +286,95 @@ ul.text-body {
 	background-position: center;
 	height: 38px;
 }
+
+/*//////////// Gallery Box ////////////*/
+
+#gallery-wrap {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.image-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24%;
+	aspect-ratio: 1;
+	overflow: hidden;
+	border: 2px solid var(--white);
+	border-radius: 10%;
+	margin: 10px;
+	cursor: pointer;
+	background: var(--black);
+	opacity: 0.5;
+	transition: 400ms ease opacity;
+}
+
+.image-wrapper:hover, .image-wrapper:focus {
+	opacity: 1;
+}
+
+#gallery-wrap .image-wrapper img {
+	max-width: unset;
+	object-fit: cover;
+	max-width: 100%;
+	pointer-events: none;
+}
+
+.image-wrapper.open {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	z-index: 10;
+	margin: 0;
+	border: 0;
+	border-radius: 0;
+	opacity: 1;
+	transition: 0ms ease opacity;
+}
+
+#gallery-wrap .image-wrapper.open img {
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: unset;
+	animation: fadeInOpacity 500ms;
+}
+
+.left-arrow, .right-arrow {
+    display: none;
+    content: "";
+    background-image: url(img/angle-left-solid.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 80%;
+    width: 40px;
+    height: 40px;
+    margin: 10px;
+    position: absolute;
+    top: calc(50% - 20px);
+    transition: 200ms ease;
+    filter: invert(1);
+}
+
+.image-wrapper.open .left-arrow, .image-wrapper.open .right-arrow {
+    opacity: 0.1;
+    display: block;
+}
+
+.image-wrapper.open .right-arrow {
+    background-image: url(img/angle-right-solid.svg);
+    right: 0;
+}
+
+.image-wrapper.open .left-arrow {
+    background-image: url(img/angle-left-solid.svg);
+    left: 0;
+}
+
+.image-wrapper.open .left-arrow:hover, .image-wrapper.open .left-arrow:focus, .image-wrapper.open .right-arrow:hover, .image-wrapper.open .right-arrow:focus {
+    opacity: 0.6;
+}
+
+
