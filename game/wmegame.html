@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<head>
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+  <link rel="stylesheet" href="../gnashcss.css">
+  <link rel="stylesheet" href="wmegamecss.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Jacquard+12&family=Micro+5&display=swap" rel="stylesheet">
+
+	<script src="dialogue.js"></script>
+
+	<title>WME 1273</title>
+</head>
+
+<body>
+	<div id="game-container" class="Oddly-Shaded-Woods initial-screen">
+		<div id="test-character" style="left:432px;top:304px;"></div>
+
+		<!------------------------ Level 1 ------------------------>
+		<!--------- Initial Screen --------->
+		<!-- Obstacles -->
+		<div class="test-obstacle fence Oddly-Shaded-Woods initial-screen" style="left:304px;top:108px;">
+			<div><!--this has the actual fence image in it--></div>
+		</div>
+		<div class="test-obstacle Oddly-Shaded-Woods initial-screen" style="left:208px;top:416px;"></div>
+		<div class="test-obstacle small Oddly-Shaded-Woods initial-screen" style="left:576px;top:496px;"></div>
+		<!-- Decorations -->
+		<div class="test-decoration Oddly-Shaded-Woods initial-screen" style="left:64px;top:304px;"></div>
+		<!--Objectives -->
+		<div class="objective CandyApple Oddly-Shaded-Woods initial-screen" title="CandyApple" style="left:240px;top:304px;"></div>
+		<!-- Characters -->
+		<div id="Alsike" class="Oddly-Shaded-Woods initial-screen npc" style="left:700px;top:304px;"></div>
+
+		<!--------- Left-0 --------->
+		<div class="test-obstacle fence Oddly-Shaded-Woods left-1" style="left:0;top:108px;">
+			<div><!--this has the actual fence image in it--></div>
+		</div>
+		<div class="test-obstacle fence Oddly-Shaded-Woods left-1" style="left:109px;top:108px;">
+			<div><!--this has the actual fence image in it--></div>
+		</div>
+		<div class="test-obstacle fence Oddly-Shaded-Woods left-1" style="left:217px;top:108px;">
+			<div><!--this has the actual fence image in it--></div>
+		</div>
+
+		<!--------- Left-1 --------->
+
+		<!------------------------ Level 2 ------------------------>
+
+
+	<!------------------------ Top Elements ------------------------>
+		<!--------- Title --------->
+		<span id="screen-display">Oddly Shaded Woods</span>
+		<!--------- Tutorial --------->
+		<div id="tutorial" style="display: flex;">
+			Move: WASD or ARROW KEYS
+			<br>
+			Sprint: shift(hold)
+			<br>
+			Interact: space
+			<button onclick="hideTutorial()" id="tutorial-button">Okay!</button>
+		</div>
+		<!--------- Character Pop-Up --------->
+		<div class="dialogue-popup">
+			<div class="dialogue-wrap">
+				<div id="talk-sprite"></div>
+				<div id="speech-bubble">
+					<h3 id="character-name"></h3>
+					<div id="dialogue-loader"></div>
+					<i class="fa-solid fa-caret-down" id="dialogue-arrow" onclick="buttonPress()"></i>
+				</div>
+			</div>
+		</div>
+
+
+
+	</div>
+
+
+	<ul id="inventory">
+		<h3>Clues</h3>
+		<li id="CandyApple">
+			<span></span>
+			Candy Apple
+		</li>
+		<li>Test List</li>
+	</ul>
+</body>
+
+<script src="wmegamejs3.js"></script>
+
+</html>

@@ -1,0 +1,385 @@
+* {
+	box-sizing: border-box;
+}
+
+:root {
+	--game-width: 900px;
+	--game-height: 600px;
+}
+
+body {
+	color: var(--black);
+	width: 100vw;
+	height: 100vh;
+	margin: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 50px;
+	font-family: 'Micro 5';
+	font-size: 1.5em;
+}
+
+h1, h2, h3, h4, h5 {
+	font-family: 'Jacquard 12';
+}
+
+button {
+	font-family: inherit;
+	text-transform: uppercase;
+	font-size: inherit;
+	margin: 10px auto;
+	background: var(--mid-accent);
+	border-radius: 1px;
+	padding: 3px 6px;
+	display: block;
+	cursor: pointer;
+	transition: 50ms ease;
+}
+
+button:hover, button:focus {
+	margin: 12px auto 8px;
+	background: var(--bright-accent);
+}
+
+/********************** Game UI *********************/
+
+/*** Instructional Overlay ***/
+
+#tutorial {
+	position: absolute;
+	top: 0;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	left: 0;
+	width: var(--game-width);
+	height: var(--game-height);
+	background: white;
+	z-index: 1000;
+	text-align: center;
+	transition: 200ms ease-out;
+	padding: 20px;
+}
+
+/*** Inventory ***/
+
+#inventory {
+	display: flex;
+	flex-wrap: wrap;
+	align-content: flex-start;
+	width: calc(100vw - var(--game-width) - 50px);
+	height: var(--game-height);
+	max-width: 200px;
+	background: red;
+	margin: 0;
+	padding: 20px;
+	background: beige;
+	border: 2px solid black;
+}
+
+#inventory li {
+	list-style: none;
+	margin: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	min-height: 100px;
+	display: none;
+	min-width: 60px;
+}
+
+#inventory li span {
+	min-height: 60px;
+	min-width: 100%;
+	display: block;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+#inventory li.collected {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#inventory h3 {
+	font-size: 2.4em;
+	margin: 10px;
+	width: 100%;
+	text-align: center;
+}
+
+/********************** Dialogue Pop-Up *********************/
+
+.dialogue-popup {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(255, 255, 255, 0.1);
+	backdrop-filter: blur(5px);
+	z-index: 999;
+}
+
+.dialogue-wrap {
+	display: flex;
+	margin: 45% auto auto;
+	align-items: center;
+}
+
+#speech-bubble {
+	width: 550px;
+	height: 150px;
+	background: white;
+	padding: 20px;
+	border: 2px solid black;
+	position: relative;
+}
+
+#speech-bubble h3 {
+	margin: 0;
+}
+
+#dialogue-arrow {
+	position: absolute;
+	margin: 5px 10px;
+	right: 0;
+	bottom: 0;
+	animation: bounce 1s infinite 500ms;
+	cursor: pointer;
+}
+
+@keyframes bounce { 
+	0% { transform: translateY(0);}
+	25% { transform: translateY(-5px);}
+	50% { transform: translateY(0);}
+}
+
+#talk-sprite {
+	height: 150px;
+	width: 120px;
+	background:red;
+	background-position: center;
+	margin: 10px;
+}
+
+#Alsike-talking.dialogue-popup #talk-sprite {
+	background-image: url(charactersprites/alsiketalk.gif);
+}
+
+/********************** Game Container *********************/
+
+#game-container {
+	background-image: url(background0.png);
+	background-size: cover;
+	background-position: top left;
+	max-height: 100%;
+	max-width: 100%;
+	height: var(--game-height);
+	width: var(--game-width);
+	position: relative;
+	overflow:hidden;
+	border: 2px solid black;
+}
+
+#screen-display {
+	display: flex;
+	padding: 10px 20px;
+	text-transform: capitalize;
+	background: beige;
+	width: fit-content;
+	z-index: 1000;
+	position: absolute;
+	top: 0;
+	left: 0;
+	opacity: 0.9;
+	border-bottom-right-radius: 4px;
+}
+
+#game-container > div {
+	display: none;
+}
+
+#game-container > div#test-character {
+	display: flex;
+}
+
+#game-container.Oddly-Shaded-Woods.initial-screen > div.Oddly-Shaded-Woods.initial-screen,
+#game-container.Oddly-Shaded-Woods.left-1 > div.Oddly-Shaded-Woods.left-1 {
+	display: flex;
+}
+
+/*** Level 1 ***/
+
+#game-container.Oddly-Shaded-Woods { 
+	background-image: url(background0.png);
+}
+
+#game-container.Oddly-Shaded-Woods.up-1 {
+	background-image: url(backgroundup-0.png);
+}
+
+#game-container.Oddly-Shaded-Woods.down-1 {
+	background-image: url(backgrounddown-0.png);
+}
+
+#game-container.Oddly-Shaded-Woods.left-1 {
+	background-image: url(backgroundleft-0.png);
+}
+
+#game-container.Oddly-Shaded-Woods.right-1 {
+	background-image: url(backgroundright-0.png);
+}
+
+#game-container.Oddly-Shaded-Woods.right-1.up-1 {
+	background-image: url(backgroundright-0-up-0.png);
+}
+
+/********************** /Game Container *********************/
+
+/************************* Character ************************/
+
+#test-character {
+	height: 88px;
+	width: 88px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	transition:  100ms ease, transform 400ms ease ;
+	margin: 0 6px;
+}
+
+#test-character:after {
+	height: 88px;
+	width: 128px;
+	content:"";
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	background-position: center center;
+	background-image: url(charactersprites/standleft.png);
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+#test-character.moving:after {
+	background-image: url(charactersprites/walkleft.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+#test-character.moving.sprint:after {
+	background-image: url(charactersprites/lopeleft.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+#test-character.face-right {
+	transform: scaleX(-1);
+}
+
+.npc {
+	height: 100px;
+	width: 100px;
+	position: absolute;
+}
+
+#Alsike {
+	background-image: url(charactersprites/alsikepix.png);
+}
+
+/************* Obstacles, Decorations, & Objectives *************/
+
+/** General **/
+
+.test-decoration, .test-obstacle, .objective {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-position: center bottom;
+	background-size: contain;
+	background-repeat: no-repeat;
+	position: absolute;
+}
+
+@keyframes wiggle {
+   0% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  50% { transform: rotate(0eg); }
+  75% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/** Obstacles **/
+
+.test-obstacle {
+	height: 108px;
+	width: 108px;
+	background: black;
+
+	margin: -16px 0 0;
+}
+
+.test-obstacle.fence {
+	background-color: transparent;
+	height: 40px;
+	margin-top: 64px;
+}
+
+.test-obstacle.fence div {
+	background-size: contain;
+	background-image: url(fence.png);
+	height: 108px;
+	width: 108px;
+	position: absolute;
+	bottom: 16px;
+}
+
+.test-obstacle.small {
+	height: 32px;
+	width: 32px;
+}
+
+.test-obstacle:after {
+ content:"obstacle";
+ color: white;
+ z-index: 1;
+}
+
+.test-decoration:after {
+ content:"decoration";
+ color: white;
+}
+
+/** Decorations **/
+
+.test-decoration {
+	height: 108px;
+	width: 108px;
+	background: red;
+
+	margin: -16px 0 0;
+}
+
+/** Objectives **/
+
+.objective {
+	height: 32px;
+	width: 32px;
+	border: 10px solid transparent;
+	box-sizing: content-box;
+	animation: wiggle 500ms infinite;
+}
+
+.objective.collected {
+	position: unset;
+	display: none;
+}
+
+.CandyApple, #CandyApple span {
+	background-image: url(https://cdn-icons-png.flaticon.com/512/8530/8530388.png);
+}
