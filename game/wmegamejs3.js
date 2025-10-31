@@ -250,7 +250,7 @@ function buttonPress() {
 
     var direction = "left"
 
-    if (document.querySelectorAll(".test-obstacle") != null) {
+    if (document.querySelectorAll(".obstacle") != null) {
 
       if (obstacleCheck(direction,moveDistance) == false) {
         //if no obstacles, then pass to the move function
@@ -276,7 +276,7 @@ function buttonPress() {
 
     var direction = "right"
 
-    if (document.querySelectorAll(".test-obstacle") != null) {
+    if (document.querySelectorAll(".obstacle") != null) {
 
       if (obstacleCheck(direction,moveDistance) == false) {
         //if no obstacles, then pass to the move function
@@ -302,7 +302,7 @@ function buttonPress() {
 
     var direction = "up"
 
-    if (document.querySelectorAll(".test-obstacle") != null) {
+    if (document.querySelectorAll(".obstacle") != null) {
 
       if (obstacleCheck(direction,moveDistance) == false) {
         //if no obstacles, then pass to the move function
@@ -328,7 +328,7 @@ function buttonPress() {
 
     var direction = "down"
 
-    if (document.querySelectorAll(".test-obstacle") != null) {
+    if (document.querySelectorAll(".obstacle") != null) {
 
       if (obstacleCheck(direction,moveDistance) == false) {
         //if no obstacles, then pass to the move function
@@ -374,7 +374,7 @@ function buttonRelease() {
 
 //check for obstacles
 function obstacleCheck(direction,moveDistance) {
-  var obstacle = document.querySelectorAll(".test-obstacle");
+  var obstacle = document.querySelectorAll(".obstacle");
   var characterBounds = character.getBoundingClientRect();
 
   //check for obstacles

@@ -75,7 +75,7 @@ button:hover, button:focus {
 	margin: 0;
 	padding: 20px;
 	background: beige;
-	border: 2px solid black;
+	border: 2px solid var(--light-accent);
 }
 
 #inventory li {
@@ -183,7 +183,7 @@ button:hover, button:focus {
 	width: var(--game-width);
 	position: relative;
 	overflow:hidden;
-	border: 2px solid black;
+	border: 2px solid var(--light-accent);
 }
 
 #screen-display {
@@ -209,34 +209,104 @@ button:hover, button:focus {
 }
 
 #game-container.Oddly-Shaded-Woods.initial-screen > div.Oddly-Shaded-Woods.initial-screen,
-#game-container.Oddly-Shaded-Woods.left-1 > div.Oddly-Shaded-Woods.left-1 {
+#game-container.Oddly-Shaded-Woods.left-1 > div.Oddly-Shaded-Woods.left-1,
+#game-container.Oddly-Shaded-Woods.left-2 > div.Oddly-Shaded-Woods.left-2,
+#game-container.Oddly-Shaded-Woods.right-1 > div.Oddly-Shaded-Woods.right-1,
+#game-container.Oddly-Shaded-Woods.right-2 > div.Oddly-Shaded-Woods.right-2 {
 	display: flex;
 }
 
 /*** Level 1 ***/
+	
 
+/** screen 4 **/
+#game-container.Oddly-Shaded-Woods.up-1 {
+	background-image: url(background4.png);
+}
+
+/** screen 5 **/
+#game-container.Oddly-Shaded-Woods.right-1.up-1 {
+	background-image: url(background5.png);
+}
+
+/** screen 6 **/
+#game-container.Oddly-Shaded-Woods.right-2.up-1 {
+	background-image: url(background6.png);
+}
+
+/** screen 7 **/
+#game-container.Oddly-Shaded-Woods.right-3.up-1 {
+	background-image: url(background7.png);
+}
+
+/** screen 8 **/
+#game-container.Oddly-Shaded-Woods.left-3 {
+	background-image: url(background8.png);
+}
+
+/** screen 9 **/
+#game-container.Oddly-Shaded-Woods.left-2 {
+	background-image: url(background9.png);
+}
+
+/** screen 10 **/
+#game-container.Oddly-Shaded-Woods.left-1 {
+	background-image: url(background10.png);
+}
+
+/** screen 11  || INTITIAL SCREEN **/
 #game-container.Oddly-Shaded-Woods { 
 	background-image: url(background0.png);
 }
 
-#game-container.Oddly-Shaded-Woods.up-1 {
-	background-image: url(backgroundup-0.png);
-}
-
-#game-container.Oddly-Shaded-Woods.down-1 {
-	background-image: url(backgrounddown-0.png);
-}
-
-#game-container.Oddly-Shaded-Woods.left-1 {
-	background-image: url(backgroundleft-0.png);
-}
-
+/** screen 12 **/
 #game-container.Oddly-Shaded-Woods.right-1 {
-	background-image: url(backgroundright-0.png);
+	background-image: url(background12.png);
 }
 
-#game-container.Oddly-Shaded-Woods.right-1.up-1 {
-	background-image: url(backgroundright-0-up-0.png);
+/** screen 13 **/
+#game-container.Oddly-Shaded-Woods.right-2 {
+	background-image: url(background13.png);
+}
+
+/** screen 14 **/
+#game-container.Oddly-Shaded-Woods.right-3 {
+	background-image: url(background14.png);
+}
+
+/** screen 15 **/
+#game-container.Oddly-Shaded-Woods.left-3.down-1 {
+	background-image: url(background15.png);
+}
+
+/** screen 16 **/
+#game-container.Oddly-Shaded-Woods.left-2.down-1 {
+	background-image: url(background16.png);
+}
+
+/** screen 17 **/
+#game-container.Oddly-Shaded-Woods.left-1.down-1 {
+	background-image: url(background17.png);
+}
+
+/** screen 18 **/
+#game-container.Oddly-Shaded-Woods.down-1 {
+	background-image: url(background18.png);
+}
+
+/** screen 19 **/
+#game-container.Oddly-Shaded-Woods.right-1.down-1 {
+	background-image: url(background19.png);
+}
+
+/** screen 20 **/
+#game-container.Oddly-Shaded-Woods.right-2.down-1 {
+	background-image: url(background20.png);
+}
+
+/** screen 21 **/
+#game-container.Oddly-Shaded-Woods.right-3.down-1 {
+	background-image: url(background21.png);
 }
 
 /********************** /Game Container *********************/
@@ -296,7 +366,7 @@ button:hover, button:focus {
 
 /** General **/
 
-.test-decoration, .test-obstacle, .objective {
+.test-decoration, .obstacle, .objective {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -316,7 +386,7 @@ button:hover, button:focus {
 
 /** Obstacles **/
 
-.test-obstacle {
+.obstacle {
 	height: 108px;
 	width: 108px;
 	background: black;
@@ -324,35 +394,56 @@ button:hover, button:focus {
 	margin: -16px 0 0;
 }
 
-.test-obstacle.fence {
+/** fence style; obstacles with a solid base but open top/bottom have the fence class **/
+.obstacle.fence {
 	background-color: transparent;
-	height: 40px;
+	height: 48px;
 	margin-top: 64px;
 }
 
-.test-obstacle.fence div {
+/** default fence **/
+.obstacle.fence div {
 	background-size: contain;
-	background-image: url(fence.png);
+	background-image: url(obstacles/fence.png);
 	height: 108px;
-	width: 108px;
+	width: 100%;
 	position: absolute;
 	bottom: 16px;
 }
 
-.test-obstacle.small {
-	height: 32px;
+/** tall trunk **/
+.obstacle.fence.talltrunk {
+	width: 154px;
+}
+
+.obstacle.fence.talltrunk div {
+	background-size: contain;
+	background-image: url(obstacles/talltrunk.png);
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	height: 600px;
+	width: 100%;
+	position: absolute;
+}
+
+/** dead tree **/
+.obstacle.fence.deadtree {
 	width: 32px;
 }
 
-.test-obstacle:after {
- content:"obstacle";
- color: white;
- z-index: 1;
+.obstacle.fence.deadtree div {
+	background-size: contain;
+	background-image: url(obstacles/deadtree.png);
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	height: 156px;
+	width: 156px;
+	position: absolute;
 }
 
-.test-decoration:after {
- content:"decoration";
- color: white;
+.obstacle.small {
+	height: 32px;
+	width: 32px;
 }
 
 /** Decorations **/
