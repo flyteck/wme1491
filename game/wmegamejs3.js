@@ -1,5 +1,17 @@
 ////// Code to move the character
 
+////KNOWN BUGS
+//Clipping through fence objects possible -- I think bc of how I have the *bottom* intersects coded unfortunately
+
+// I think the solution here, is to like... use the object height & character height to get a specific
+//value for how far the character can overlap, vs having the bottom/bottom
+
+//the church flickers on entrance -- code thinks you're in the old location still (can be fixed by only firing the code on select screens)
+
+
+////PLANS
+//Fullscreen: needs to use zoom or else pixel alignments break. Would need to dynamically find the right zoom number and use that with JS
+
 //character + container
 const character = document.getElementById("test-character");
 const gameContainer = document.getElementById("game-container");
@@ -250,19 +262,18 @@ function buttonPress() {
 
     var direction = "left"
 
+    //check for obstacles
     if (document.querySelectorAll(".obstacle") != null) {
 
-      if (obstacleCheck(direction,moveDistance) == false) {
+      if (obstacleCheck(direction,moveDistance) == false || obstacleCheck(direction,moveDistance) == true && !character.classList.contains("left")) {
         //if no obstacles, then pass to the move function
         moveLeft(moveDistance)
       }
-
-      if (obstacleCheck(direction,moveDistance) == true && !character.classList.contains("face-left")) {
-        //if obstacles, but moving the other way, then pass to the move function;
-        var moveDistance = parseInt(moveDistance) + parseInt("8");
-        moveLeft(moveDistance);
-      }
     }
+
+    //check for buildings
+    churchOverlap();
+
   }
 
   if (event.key === 'ArrowRight' || event.key === 'd' || character.classList.contains("right")) {
@@ -276,19 +287,17 @@ function buttonPress() {
 
     var direction = "right"
 
+    //check for obstacles
     if (document.querySelectorAll(".obstacle") != null) {
 
-      if (obstacleCheck(direction,moveDistance) == false) {
-        //if no obstacles, then pass to the move function
+      if (obstacleCheck(direction,moveDistance) == false || obstacleCheck(direction,moveDistance) == true && !character.classList.contains("right")) {
+        //if no obstacles, or obstacles but moving the other way, then pass to the move function
         moveRight(moveDistance)
       }
-
-      if (obstacleCheck(direction,moveDistance) == true && !character.classList.contains("face-right")) {
-        //if obstacles, but moving the other way, then pass to the move function;
-        var moveDistance = parseInt(moveDistance) + parseInt("8");
-        moveRight(moveDistance);
-      }
     }
+
+    //check for buildings
+    churchOverlap();
   }
 
   if (event.key === 'ArrowUp' || event.key === 'w' ||character.classList.contains("up")) {
@@ -302,19 +311,17 @@ function buttonPress() {
 
     var direction = "up"
 
+    //check for obstacles
     if (document.querySelectorAll(".obstacle") != null) {
 
-      if (obstacleCheck(direction,moveDistance) == false) {
-        //if no obstacles, then pass to the move function
-        moveUp(moveDistance);
-      }
-
-      if (obstacleCheck(direction,moveDistance) == true && !character.classList.contains("face-up")) {
-        //if obstacles, but moving the other way, then pass to the move function;
-        var moveDistance = parseInt(moveDistance) + parseInt("8");
+      if (obstacleCheck(direction,moveDistance) == false || obstacleCheck(direction,moveDistance) == true && !character.classList.contains("up")) {
+        //if no obstacles, or obstacles but moving the other way, then pass to the move function
         moveUp(moveDistance);
       }
     }
+
+    //check for buildings
+    churchOverlap();
   }
 
   if (event.key === 'ArrowDown' || event.key === 's' || character.classList.contains("down")) {
@@ -328,41 +335,71 @@ function buttonPress() {
 
     var direction = "down"
 
+    //check for obstacles
     if (document.querySelectorAll(".obstacle") != null) {
 
-      if (obstacleCheck(direction,moveDistance) == false) {
-        //if no obstacles, then pass to the move function
-        moveDown(moveDistance);
-      }
-
-      if (obstacleCheck(direction,moveDistance) == true && !character.classList.contains("face-down")) {
-        //if obstacles, but moving the other way, then pass to the move function;
-        var moveDistance = parseInt(moveDistance) + parseInt("8");
+      if (obstacleCheck(direction,moveDistance) == false || obstacleCheck(direction,moveDistance) == true && !character.classList.contains("down")) {
+        //if no obstacles, or obstacles but moving the other way, then pass to the move function
         moveDown(moveDistance);
       }
     }
+
+    //check for buildings
+    churchOverlap();
   }
 }
 
 function buttonRelease() {
   if (event.key === 'ArrowLeft' || event.key === 'a') {
+    moveDistance = "8"
+    if(event.shiftKey) {
+      moveDistance = "16"
+    }
     stopLeft()
     zIndexSort()
+    //re-check for obstacles
+    obstacleCheck("left",moveDistance)
+    //check for buildings
+    churchOverlap();
   }
 
   if (event.key === 'ArrowRight' || event.key === 'd') {
+    moveDistance = "8"
+    if(event.shiftKey) {
+      moveDistance = "16"
+    }
     stopRight()
     zIndexSort()
+    //re-check for obstacles
+    obstacleCheck("right",moveDistance)
+    //check for buildings
+    churchOverlap();
   }
 
   if (event.key === 'ArrowUp' || event.key === 'w') {
+    moveDistance = "8"
+    if(event.shiftKey) {
+      moveDistance = "16"
+    }
     stopUp()
     zIndexSort()
+    //re-check for obstacles
+    obstacleCheck("up",moveDistance)
+    //check for buildings
+    churchOverlap();
   }
 
   if (event.key === 'ArrowDown' || event.key === 's') {
+    moveDistance = "8"
+    if(event.shiftKey) {
+      moveDistance = "16"
+    }
     stopDown()
     zIndexSort()
+    //re-check for obstacles
+    obstacleCheck("down",moveDistance)
+    //check for buildings
+    churchOverlap();
   }
 
   //this prevents any weird lingering of the move animation (and it's readded immediately if a direction is held)
@@ -370,6 +407,26 @@ function buttonRelease() {
     character.classList.remove("moving");
     character.classList.remove("sprint");
   }
+}
+
+//check for the church overlap
+
+function churchOverlap() {
+  var church = document.querySelector(".churchtop");
+  var characterBounds = character.getBoundingClientRect();
+
+  var churchBounds = church.getBoundingClientRect();
+
+      var overlap = !(churchBounds.right <= characterBounds.left || churchBounds.left >= characterBounds.right ||
+                    churchBounds.bottom <= characterBounds.top || churchBounds.top >= characterBounds.bottom);
+
+      if (overlap === true) {
+        church.style.opacity = "0";
+      }
+
+      if (overlap === false) {
+        church.style.opacity = "1";
+      }
 }
 
 //check for obstacles
@@ -386,68 +443,42 @@ function obstacleCheck(direction,moveDistance) {
       var overlap = !(obstacleBounds.right <= characterBounds.left || obstacleBounds.left >= characterBounds.right ||
                     obstacleBounds.bottom <= characterBounds.top || obstacleBounds.top >= characterBounds.bottom);
 
+      //if there's overlap
       if (overlap === true) {
         
-        if (direction == "right" && character.classList.contains("face-right")) {
-          //if we're moving right or facing right
+        //currently, this uses your movement direction to see how to move you. We should be using the object intersections. Let's try again.
 
-          //see if we just moved up or down
-          if (character.classList.contains("face-up") || character.classList.contains("face-down")) {
-            //move down if up, up if down
-            if (character.classList.contains("face-up")) {
-              character.style.top = parseInt(character.style.top) + parseInt(moveDistance*"0.5") + "px";
-            }
-            if (character.classList.contains("face-down")) {
-              character.style.top = parseInt(character.style.top) - parseInt(moveDistance*"0.5") + "px";
-            }
-          } else if (obstacleBounds.left <= characterBounds.right && obstacleBounds.right <= characterBounds.right ) {
-            //if we've turned around, move right
-            character.style.left = parseInt(character.style.left) + parseInt(moveDistance) + "px";
-            return true;
-          }
+        //check where the overlap is [overlap || character || object]
 
-          else {
-            //if not, move left
-            character.style.left = parseInt(character.style.left) - parseInt(moveDistance) + "px";
-            return true;
-          }
+        var overlapLeftRight = characterBounds.left <= obstacleBounds.right
+        var overlapRightLeft = characterBounds.right >= obstacleBounds.left
+        var overlapTopBottom = characterBounds.top <= obstacleBounds.bottom
+        var overlapBottomTop = characterBounds.bottom >= obstacleBounds.top
+
+        if (overlapLeftRight == true && character.classList.contains("right")) {
+          //if character left overlaps object right, increase left to push it over
+          character.style.left = parseInt(character.style.left) - parseInt(moveDistance) + "px";
+          console.log("left overlap, moving right")
         }
 
-        if (direction == "left" && character.classList.contains("face-left")) {
-          //if we're moving left or facing left
-
-          //see if we just moved up or down
-          if (character.classList.contains("face-up") || character.classList.contains("face-down")) {
-            //move down if up, up if down
-            if (character.classList.contains("face-up")) {
-              character.style.top = parseInt(character.style.top) + parseInt(moveDistance*"0.5") + "px";
-            }
-            if (character.classList.contains("face-down")) {
-              character.style.top = parseInt(character.style.top) - parseInt(moveDistance*"0.5") + "px";
-            }
-          } else if (obstacleBounds.right >= characterBounds.left && obstacleBounds.left >= characterBounds.left ) {
-            //if we've turned around, move left
-            character.style.left = parseInt(character.style.left) - parseInt(moveDistance) + "px";
-            return true;
-          } else {
-            //if not, move right
-            character.style.left = parseInt(character.style.left) + parseInt(moveDistance) + "px";
-            return true;
-          }
-
+        if (overlapRightLeft == true && character.classList.contains("left")) {
+          //if character right overlaps object left, decrease left to push it over
+          character.style.left = parseInt(character.style.left) + parseInt(moveDistance) + "px";
+          console.log("right overlap, moving left")
         }
 
-        if (direction == "up" && character.classList.contains("face-up")) {
-          //if we're facing up or have just moved up, move down
+        if (overlapTopBottom == true && character.classList.contains("up")) {
+          //if character top overlaps object bottom, increase top to push it down
           character.style.top = parseInt(character.style.top) + parseInt(moveDistance) + "px";
-          return true;
+          console.log("top overlap, moving up")
         }
 
-        if (direction == "down" && character.classList.contains("face-down")) {
-          //if we're facing down or have just moved down, move up
+        if (overlapBottomTop == true && character.classList.contains("down")) {
+          //if character bottom overlaps object top, decrease top to push it up
           character.style.top = parseInt(character.style.top) - parseInt(moveDistance) + "px";
-          return true;
+          console.log("bottom overlap, moving down")
         }
+
       }
     }
 
@@ -458,33 +489,32 @@ function obstacleCheck(direction,moveDistance) {
       var overlap = !(obstacleBounds.right <= characterBounds.left || obstacleBounds.left >= characterBounds.right ||
                     obstacleBounds.bottom <= characterBounds.top || obstacleBounds.top >= characterBounds.bottom);
 
+
+      //note that this one is different -- we want to see if the bottoms intersect, not the top/bottom
+      var overlapTopBottom = characterBounds.bottom <= obstacleBounds.bottom
+      var overlapBottomTop = characterBounds.bottom >= obstacleBounds.top
+
       if (overlap === true) {
         //see if it's in front or behind
         var inFront = parseInt(obstacle[i].style.zIndex) < parseInt(character.style.zIndex);
 
+        console.log(inFront)
+
         if (inFront === true) {
-          //if it's in front, see if it's moving up
-          if (direction == "up") {
-            //check if the *bottoms* are intersecting
-            if (obstacleBounds.bottom > characterBounds.bottom) {
-              //if they are, fix it
+          //if it's in front, and moving up with the top intersecting the bottom
+          if (overlapTopBottom == true && character.classList.contains("up")) {
+              //if character top overlaps object bottom, increase top to push it down
               character.style.top = parseInt(character.style.top) + parseInt(moveDistance) + "px";
-              //& stop
-              return true;
+              console.log("top overlap, moving up")
             }
-          }
         }
 
         if (inFront === false) {
-          //if it's in behind, see if it's moving down
-          if (direction == "down") {
-            //check if the bottom and top are intersecting,
-            if (obstacleBounds.top < characterBounds.bottom) {
-              //if they are, fix it
-              character.style.top = parseInt(character.style.top) - parseInt(moveDistance) + "px";
-              //& stop
-              return true;
-            }
+          //if it's in front, and moving down with the bottom intersecting the top
+          if (overlapBottomTop == true && character.classList.contains("down")) {
+            //if character bottom overlaps object top, decrease top to push it up
+            character.style.top = parseInt(character.style.top) - parseInt(moveDistance) + "px";
+            console.log("bottom overlap, moving down")
           }
         }
 
@@ -803,11 +833,6 @@ function npcCheck() {
   }
 
 ///////////////////////NPCs
-
-function npcPopUp(characterName) {
-
-}
-
 
 ///////////////////////
 

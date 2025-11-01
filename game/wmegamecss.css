@@ -3,8 +3,8 @@
 }
 
 :root {
-	--game-width: 900px;
-	--game-height: 600px;
+	--game-width: 896px;
+	--game-height: 576px;
 }
 
 body {
@@ -15,7 +15,6 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 50px;
 	font-family: 'Micro 5';
 	font-size: 1.5em;
 }
@@ -174,7 +173,7 @@ button:hover, button:focus {
 /********************** Game Container *********************/
 
 #game-container {
-	background-image: url(background0.png);
+	background-image: url(background11.png);
 	background-size: cover;
 	background-position: top left;
 	max-height: 100%;
@@ -184,6 +183,8 @@ button:hover, button:focus {
 	position: relative;
 	overflow:hidden;
 	border: 2px solid var(--light-accent);
+	aspect-ratio: 896 / 576;
+   flex: 0 0 auto;
 }
 
 #screen-display {
@@ -256,7 +257,7 @@ button:hover, button:focus {
 
 /** screen 11  || INTITIAL SCREEN **/
 #game-container.Oddly-Shaded-Woods { 
-	background-image: url(background0.png);
+	background-image: url(background11.png);
 }
 
 /** screen 12 **/
@@ -330,7 +331,7 @@ button:hover, button:focus {
 	position: absolute;
 	left: 0;
 	bottom: 0;
-	background-position: center center;
+	background-position: left center;
 	background-image: url(charactersprites/standleft.png);
 	background-repeat: no-repeat;
 	background-size: contain;
@@ -384,7 +385,7 @@ button:hover, button:focus {
   100% { transform: rotate(0deg); }
 }
 
-/** Obstacles **/
+/**** Obstacles ****/
 
 .obstacle {
 	height: 108px;
@@ -401,6 +402,11 @@ button:hover, button:focus {
 	margin-top: 64px;
 }
 
+/** flip each odd number tree, for variation **/
+.deadtree:nth-child(odd), .talltrunk:nth-child(odd)  {
+	transform: scaleX(-1);
+}
+
 /** default fence **/
 .obstacle.fence div {
 	background-size: contain;
@@ -408,7 +414,26 @@ button:hover, button:focus {
 	height: 108px;
 	width: 100%;
 	position: absolute;
-	bottom: 16px;
+	bottom: 24px;
+}
+
+/** vertical fence **/
+.obstacle.fencevertical {
+	background-color: transparent;
+	height: 108px;
+	width: 32px;
+	position: absolute;
+}
+
+.obstacle.fencevertical div {
+	height: calc(100% + 92px);
+	width: 32px;
+	background-image: url(obstacles/fencevertical.png);
+	background-position: 16px 0;
+	background-repeat: repeat-y;
+	background-size: 10px auto;
+	position: absolute;
+	top: -36px;
 }
 
 /** tall trunk **/
@@ -436,9 +461,26 @@ button:hover, button:focus {
 	background-image: url(obstacles/deadtree.png);
 	background-position: bottom center;
 	background-repeat: no-repeat;
-	height: 156px;
+	height: 154px;
 	width: 156px;
 	position: absolute;
+}
+
+/** hollow tree **/
+.obstacle.fence.hollowtree {
+	width: 96px;
+}
+
+.obstacle.fence.hollowtree div {
+	background-size: contain;
+	background-image: url(obstacles/hollowtree.png);
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	height: 152px;
+	width: 138px;
+	position: absolute;
+	bottom: 8px;
+   left: -25px;
 }
 
 .obstacle.small {
@@ -446,7 +488,7 @@ button:hover, button:focus {
 	width: 32px;
 }
 
-/** Decorations **/
+/**** Decorations ****/
 
 .test-decoration {
 	height: 108px;
@@ -454,6 +496,30 @@ button:hover, button:focus {
 	background: red;
 
 	margin: -16px 0 0;
+}
+
+/**Church Top (this has a smaller base, to change when it fades**/
+
+.churchtop {
+	width: 456px;
+	height: 780px;
+	position: absolute;
+	left: 572px;
+   top: -560px;
+   z-index: 237;
+   position: absolute;
+   transition: 400ms ease;
+}
+
+.churchtop div {
+	width: 476px;
+	height: 880px;
+	background-size: contain;
+	background-image: url(obstacles/churchtop.png);
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	position: absolute;
+   left: -14px;
 }
 
 /** Objectives **/
