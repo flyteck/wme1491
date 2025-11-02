@@ -6,6 +6,13 @@
 // I think the solution here, is to like... use the object height & character height to get a specific
 //value for how far the character can overlap, vs having the bottom/bottom
 
+
+//POSSIBLE FIX: Instead of the normal overlap, check for overlap of x direction, then check z index -- do not allow movement up if it's overlapping
+//I think I wrote this wrong but I was cooking for a sec augh
+
+//check for overlap bottom/bottom + moving up when z index is higher, check for overlap bottom/top + moving down when z index is lower?
+
+
 //the church flickers on entrance -- code thinks you're in the old location still (can be fixed by only firing the code on select screens)
 
 
@@ -356,11 +363,12 @@ function buttonRelease() {
       moveDistance = "16"
     }
     stopLeft()
-    zIndexSort()
     //re-check for obstacles
     obstacleCheck("left",moveDistance)
     //check for buildings
     churchOverlap();
+    //fix zindex
+    zIndexSort()
   }
 
   if (event.key === 'ArrowRight' || event.key === 'd') {
@@ -369,11 +377,12 @@ function buttonRelease() {
       moveDistance = "16"
     }
     stopRight()
-    zIndexSort()
     //re-check for obstacles
     obstacleCheck("right",moveDistance)
     //check for buildings
     churchOverlap();
+    //fix zindex
+    zIndexSort()
   }
 
   if (event.key === 'ArrowUp' || event.key === 'w') {
@@ -382,11 +391,12 @@ function buttonRelease() {
       moveDistance = "16"
     }
     stopUp()
-    zIndexSort()
     //re-check for obstacles
     obstacleCheck("up",moveDistance)
     //check for buildings
     churchOverlap();
+    //fix zindex
+    zIndexSort()
   }
 
   if (event.key === 'ArrowDown' || event.key === 's') {
@@ -395,11 +405,12 @@ function buttonRelease() {
       moveDistance = "16"
     }
     stopDown()
-    zIndexSort()
     //re-check for obstacles
     obstacleCheck("down",moveDistance)
     //check for buildings
     churchOverlap();
+    //fix zindex
+    zIndexSort()
   }
 
   //this prevents any weird lingering of the move animation (and it's readded immediately if a direction is held)
@@ -445,8 +456,6 @@ function obstacleCheck(direction,moveDistance) {
 
       //if there's overlap
       if (overlap === true) {
-        
-        //currently, this uses your movement direction to see how to move you. We should be using the object intersections. Let's try again.
 
         //check where the overlap is [overlap || character || object]
 
@@ -458,25 +467,21 @@ function obstacleCheck(direction,moveDistance) {
         if (overlapLeftRight == true && character.classList.contains("right")) {
           //if character left overlaps object right, increase left to push it over
           character.style.left = parseInt(character.style.left) - parseInt(moveDistance) + "px";
-          console.log("left overlap, moving right")
         }
 
         if (overlapRightLeft == true && character.classList.contains("left")) {
           //if character right overlaps object left, decrease left to push it over
           character.style.left = parseInt(character.style.left) + parseInt(moveDistance) + "px";
-          console.log("right overlap, moving left")
         }
 
         if (overlapTopBottom == true && character.classList.contains("up")) {
           //if character top overlaps object bottom, increase top to push it down
           character.style.top = parseInt(character.style.top) + parseInt(moveDistance) + "px";
-          console.log("top overlap, moving up")
         }
 
         if (overlapBottomTop == true && character.classList.contains("down")) {
           //if character bottom overlaps object top, decrease top to push it up
           character.style.top = parseInt(character.style.top) - parseInt(moveDistance) + "px";
-          console.log("bottom overlap, moving down")
         }
 
       }
@@ -489,37 +494,35 @@ function obstacleCheck(direction,moveDistance) {
       var overlap = !(obstacleBounds.right <= characterBounds.left || obstacleBounds.left >= characterBounds.right ||
                     obstacleBounds.bottom <= characterBounds.top || obstacleBounds.top >= characterBounds.bottom);
 
-
-      //note that this one is different -- we want to see if the bottoms intersect, not the top/bottom
-      var overlapTopBottom = characterBounds.bottom <= obstacleBounds.bottom
-      var overlapBottomTop = characterBounds.bottom >= obstacleBounds.top
-
+      //if there's overlap
       if (overlap === true) {
-        //see if it's in front or behind
-        var inFront = parseInt(obstacle[i].style.zIndex) < parseInt(character.style.zIndex);
 
-        console.log(inFront)
+        //check where the overlap is [overlap || character || object]
 
-        if (inFront === true) {
-          //if it's in front, and moving up with the top intersecting the bottom
-          if (overlapTopBottom == true && character.classList.contains("up")) {
-              //if character top overlaps object bottom, increase top to push it down
-              character.style.top = parseInt(character.style.top) + parseInt(moveDistance) + "px";
-              console.log("top overlap, moving up")
-            }
+        //allow to move up unless the character bottom is higher than the obstacle bottom
+
+        var overlapTopBottom = characterBounds.top <= obstacleBounds.bottom
+        var overlapBottomTop = characterBounds.bottom >= obstacleBounds.top
+
+        if (overlapBottomTop == true && character.classList.contains("down")) {
+          //if character bottom overlaps object top, decrease top to push it up
+          character.style.top = parseInt(character.style.top) - parseInt(moveDistance) + "px";
         }
 
-        if (inFront === false) {
-          //if it's in front, and moving down with the bottom intersecting the top
-          if (overlapBottomTop == true && character.classList.contains("down")) {
-            //if character bottom overlaps object top, decrease top to push it up
-            character.style.top = parseInt(character.style.top) - parseInt(moveDistance) + "px";
-            console.log("bottom overlap, moving down")
+        if (overlapTopBottom == true && character.classList.contains("up")) {
+          //if character top overlaps object bottom,
+          var overlapBottomBottom = characterBounds.bottom <= obstacleBounds.bottom
+          var inFront = (parseInt(obstacle[i].style.zIndex) - parseInt(moveDistance)) < parseInt(character.style.zIndex);
+          //see if the bottom is also higher, and if we're in front
+          if (overlapBottomBottom == true && inFront === true) {
+            //if it is, increase top to push it down
+            character.style.top = parseInt(character.style.top) + parseInt(moveDistance) + "px";
           }
         }
 
       }
     }
+
   }
   //otherwise we're good
   return false;
