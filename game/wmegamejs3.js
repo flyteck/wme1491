@@ -45,8 +45,6 @@ function screenTitle() {
   document.getElementById("screen-display").innerHTML = gameContainer.classList.toString().replace(/\s/g, ' SPACEHOLDER ').replace(/-/g, ' ').replace(' SPACEHOLDER ', ' - ').replace(' SPACEHOLDER ', ', ');
 }
 
-//I NEED TO ADD A SPACEBAR LISTENER TOO
-
 //quick listener to hide the tutorial with a key press as well
 window.addEventListener("keydown", hideTutorial);
 
@@ -57,14 +55,41 @@ function hideTutorial() {
     document.getElementById("tutorial").style.display = "none";
     }, 200);
     document.getElementById("tutorial").style.opacity = "0";
+
     //run through all the functions of the controller whenever someone presses a button
     document.addEventListener("keydown", buttonPress);
+
     //run through all the functions of the controller whenever someone lifts a button
     document.addEventListener("keyup", buttonRelease);
+
+    //remove that once the tutorial is gone
     window.removeEventListener("keydown", hideTutorial);
     return
   }
 }
+
+//stock inventory descriptions
+var menu = document.getElementById("inventory");
+
+var items = menu.getElementsByTagName("li")
+
+//loop through the inventory
+for (i = 0; i < items.length; i++) {
+  //get the name of each item
+  npcName = items[i].id.replace("Inventory", "");
+
+  //loop through the interact list
+  for (j = 0; j < npcList.length; j++) {
+    if (npcName == npcList[j].name) {
+      var description = items[i].querySelector(".description")
+      //if they match, set the description text
+      description.innerHTML = npcList[j].dialogue
+    }
+  }
+
+}
+
+
 
 ///////////////////////Controlling the Character & Other Inputs
 
@@ -74,28 +99,30 @@ function buttonPress() {
     character.classList.remove("up","down","left","right","stopped");
   }
 
-  //on spacebar click, call item check. if it returns true, modify the clicked item
-  if (event.key === ' ' || event.target.id == "dialogue-arrow") {
+  if (event.key === 'q' || event.key === 'Tab') {
+    //open/close menu
 
-    var found = itemCheck();
-
-    if (found != undefined) {
-      //if an item is found, unposition it and add the collected class to the item and it's match in the inventory
-      var foundInventory = document.getElementById(found.title);
-
-      found.style.left = "";
-      found.style.top = "";
-      found.classList.add("collected");
-      found.style.display = "none"
-      foundInventory.classList.add("collected");
-      //and exit
+    //if it's open
+    if (menu.classList.contains("open")) {
+      menu.classList.remove("open");
       return
     }
 
-    //and check if you're talking to an NPC as well
-    var npcFound = npcCheck(words);
+    //if it's closed
+    if (!menu.classList.contains("open")) {
+      menu.classList.add("open");
+      return
+    }
 
-    if (npcFound != undefined) {
+
+  }
+
+  //on spacebar click, call item check. if it returns true, modify the clicked item
+  if (event.key === ' ' || event.target.id == "dialogue-arrow") {
+
+    var interactFound = interactCheck();
+
+    if (interactFound != undefined || document.querySelector(".last-line") != null) {
 
       //if you are, set needed general variables
       var dialoguePopUp = document.querySelector(".dialogue-popup")
@@ -109,21 +136,37 @@ function buttonPress() {
         dialoguePopUp.id = "";
         //remove last line,
         dialoguePopUp.classList.remove("last-line")
-        //add repeat to the character so we know they're done their main dialogue
-        npcFound.classList.add("repeat");
+
+        if (interactFound != null) {        
+          //add repeat for characters so we know they're done their main dialogue (items dissapear after interact, so this excludes them)
+          interactFound.classList.add("repeat");
+        }
+
+        if (interactFound.classList.contains("objective")) {
+        //properly remove items from the map
+        interactFound.style.left = "";
+        interactFound.style.top = "";
+        interactFound.classList.add("collected");
+        interactFound.style.display = "none"
+
+        //and make sure to remove the item-text class for items, for proper display of the next interact
+        dialoguePopUp.classList.remove("item-text");
+
+        }
+
         //and gtfo
         return
       }
 
-      if (npcFound.classList.contains("repeat")) {
-        var npcName = document.getElementById(npcFound.id).id;
+      if (interactFound.classList.contains("repeat")) {
+        var npcName = document.getElementById(interactFound.id).id;
 
         //if we've talked to this NPC already, they say their extra line.
 
         dialoguePopUp.style.display = "flex";
 
         //get the name of the NPC
-        var npcName = document.getElementById(npcFound.id).id;
+        var npcName = document.getElementById(interactFound.id).id;
 
         //add the who's talking to the textbox
         var dialoguePopUp = document.querySelector(".dialogue-popup");
@@ -137,7 +180,7 @@ function buttonPress() {
         function getRepeatDialogue() {
           //iterate through the list to find a name match,
           for (i = 0; i < npcList.length; i++) {
-            if (npcName = npcList[i].name) {
+            if (npcName == npcList[i].name) {
               //then grab their dialogue
               return npcList[i].repeatLine;
             }
@@ -155,51 +198,29 @@ function buttonPress() {
         return
       }
 
-      //check if we're in a dialogue box already, and if so do something different
-      if (dialoguePopUp.id != "") {
-        //get dialogue
-        var dialogue = getCharacterDialogue().toString();
+      //for items only
+      if (interactFound.classList.contains("objective")) {
+        //if an item is found, unposition it and add the collected class to the item and it's match in the inventory
+        var foundInventory = document.getElementById(interactFound.id + "Inventory");
+        var itemImage = document.getElementById("item-display");
+        var dialoguePopUp = document.querySelector(".dialogue-popup");
 
-        //split dialogue by spaces,
-        var words = dialogue.split(' ');
+        //add item class to dialogue box, and add collected to the item in the inventory
+        dialoguePopUp.classList.add("item-text");
+        foundInventory.classList.add("collected");
 
-        //get a 20 word chunk, add it to the textbox
-        dialogueSplit()
+        //set the viewable image with the right SRC
+        itemImage.src = "objectives/" + interactFound.id.toLowerCase() + ".png";
 
-        function dialogueSplit() {
-          var dialogueChunk = words.slice(0,39);
-          //and clean it up (remove excess commas and put desired ones back in)
-          dialogueLoader.innerHTML = dialogueChunk.toString().replaceAll(",", " ").replaceAll("  ", ", ");
-
-          //shift the first 39 elements off of the array,
-          for (i = 0; i < 39; i++) {
-            words.shift(); 
-          }
-
-          //if there's words left after the splice
-          if (words.length != 0) {
-            //and set the global dialogue var to the remaning dialogue
-            for (i = 0; i < npcList.length; i++) {
-              if (npcName = npcList[i].name) {
-                //then grab their dialogue
-               npcList[i].dialogue = words;
-              }
-            }
-          } else {
-            //otherwise, indicate we're on the last bit of text
-            document.querySelector(".dialogue-popup").classList.add("last-line");
-          }
-        }
-
-        //return for now BUT I'll need to do something different here to progress the dialogue instead
-        return
+        //drop the opacity on the interact
+        interactFound.style.opacity = "0"
       }
 
       //make the textbox visible
       dialoguePopUp.style.display = "flex";
 
       //get the name of the NPC
-      var npcName = document.getElementById(npcFound.id).id;
+      var npcName = document.getElementById(interactFound.id).id;
 
       //add the who's talking to the textbox
       var dialoguePopUp = document.querySelector(".dialogue-popup");
@@ -209,12 +230,13 @@ function buttonPress() {
       document.getElementById("character-name").innerHTML = npcName;
 
       //dialogue is set earlier in global, so we need to go find it
-      var dialogue = getCharacterDialogue();
+      var dialogue = getCharacterDialogue().toString();
 
       function getCharacterDialogue() {
+
         //iterate through the list to find a name match,
         for (i = 0; i < npcList.length; i++) {
-          if (npcName = npcList[i].name) {
+          if (npcName == npcList[i].name) {
             //then grab their dialogue
             return npcList[i].dialogue;
           }
@@ -227,11 +249,16 @@ function buttonPress() {
       //get a 20 word chunk, add it to the textbox
 
       dialogueSplit()
-
       function dialogueSplit() {
         var dialogueChunk = words.slice(0,39);
         //and clean it up (remove excess commas and put desired ones back in)
         dialogueLoader.innerHTML = dialogueChunk.toString().replaceAll(",", " ").replaceAll("  ", ", ");
+
+        console.log(words.length);
+        if (words.length <= 39) {
+          dialoguePopUp.classList.add("last-line");
+          console.log("so is this running?");
+        }
 
         //shift the first 39 elements off of the array,
         for (i = 0; i < 39; i++) {
@@ -242,11 +269,13 @@ function buttonPress() {
         if (words.length != 0) {
           //set the global dialogue var to the new remaining text
           for (i = 0; i < npcList.length; i++) {
-            if (npcName = npcList[i].name) {
+            if (npcName == npcList[i].name) {
               //then grab their dialogue
              npcList[i].dialogue = words;
             }
           }
+        } else {
+          dialoguePopUp.classList.add("last-line");
         }
       }
 
@@ -530,32 +559,15 @@ function obstacleCheck(direction,moveDistance) {
   return false;
 }
 
-//check for interactable items 
-function itemCheck() {
-  var objective = document.querySelectorAll(".objective");
-  var characterBounds = character.getBoundingClientRect();
-
-  for (i = 0; i < objective.length; i++) {
-    var objectiveBounds = objective[i].getBoundingClientRect();
-
-    //check all objectives for intersection
-    var overlap = !(objectiveBounds.right <= characterBounds.left || objectiveBounds.left >= characterBounds.right ||
-                  objectiveBounds.bottom <= characterBounds.top || objectiveBounds.top >= characterBounds.bottom);
-
-    if (overlap === true && !objective[i].classList.contains("collected")) {
-      //if player is touching one (and it hasn't been found), return which one
-      var found = objective[i];
-      return found
-    }
-    //otherwise, button does nothing
-  }
-}
-
-//check for interactable NPC 
-function npcCheck() {
+//check for interactable object (NPC, Item) 
+function interactCheck() {
   var npc = document.querySelectorAll(".npc");
   var characterBounds = character.getBoundingClientRect();
 
+  var objective = document.querySelectorAll(".objective");
+  var characterBounds = character.getBoundingClientRect();
+
+  //for NPCs
   for (i = 0; i < npc.length; i++) {
     var npcBounds = npc[i].getBoundingClientRect();
 
@@ -569,6 +581,22 @@ function npcCheck() {
 
       return characterTalking
     }
+  }
+
+    //for items
+    for (i = 0; i < objective.length; i++) {
+    var objectiveBounds = objective[i].getBoundingClientRect();
+
+    //check all objectives for intersection
+    var overlap = !(objectiveBounds.right <= characterBounds.left || objectiveBounds.left >= characterBounds.right ||
+                  objectiveBounds.bottom <= characterBounds.top || objectiveBounds.top >= characterBounds.bottom);
+
+    if (overlap === true && !objective[i].classList.contains("collected")) {
+      //if player is touching one (and it hasn't been found), return which one
+      var foundItem = objective[i];
+      return foundItem
+    }
+
     //otherwise, button does nothing
   }
 }

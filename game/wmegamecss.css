@@ -5,6 +5,9 @@
 :root {
 	--game-width: 896px;
 	--game-height: 576px;
+	--inventory-width: 200px;
+
+	--accent: #692A03;
 }
 
 body {
@@ -41,6 +44,12 @@ button:hover, button:focus {
 	background: var(--bright-accent);
 }
 
+#game-wrapper {
+	display: flex;
+	position: relative;
+	width: calc(var(--game-width) + var(--inventory-width) );
+}
+
 /********************** Game UI *********************/
 
 /*** Instructional Overlay ***/
@@ -67,14 +76,21 @@ button:hover, button:focus {
 	display: flex;
 	flex-wrap: wrap;
 	align-content: flex-start;
-	width: calc(100vw - var(--game-width) - 50px);
 	height: var(--game-height);
-	max-width: 200px;
+	width: var(--inventory-width);
 	background: red;
 	margin: 0;
 	padding: 20px;
 	background: beige;
 	border: 2px solid var(--light-accent);
+	transition: 200ms ease;
+	position: absolute;
+   right: 0;
+   z-index: 1001;
+}
+
+#inventory.open {
+	 width: 100%;
 }
 
 #inventory li {
@@ -87,6 +103,9 @@ button:hover, button:focus {
 	min-height: 100px;
 	display: none;
 	min-width: 60px;
+	border: 2px solid var(--accent);
+   padding: 10px;
+   border-radius: 4px;
 }
 
 #inventory li span {
@@ -111,6 +130,14 @@ button:hover, button:focus {
 	text-align: center;
 }
 
+#inventory .description {
+	display: none;
+}
+
+#inventory.open .description {
+	 display: block;
+}
+
 /********************** Dialogue Pop-Up *********************/
 
 .dialogue-popup {
@@ -126,17 +153,26 @@ button:hover, button:focus {
 
 .dialogue-wrap {
 	display: flex;
-	margin: 45% auto auto;
+	margin: calc(50% - 70px) auto auto;
 	align-items: center;
 }
 
 #speech-bubble {
 	width: 550px;
-	height: 150px;
+	height: 170px;
 	background: white;
 	padding: 20px;
 	border: 2px solid black;
 	position: relative;
+	margin: 10px;
+}
+
+.dialogue-popup.item-text {
+	flex-direction: column;
+}
+
+.dialogue-popup.item-text #speech-bubble {
+	width: 670px;
 }
 
 #speech-bubble h3 {
@@ -159,11 +195,26 @@ button:hover, button:focus {
 }
 
 #talk-sprite {
-	height: 150px;
+	height: 170px;
 	width: 120px;
 	background:red;
 	background-position: center;
-	margin: 10px;
+}
+
+#item-display {
+	width: 300px;
+	left: calc(50% - 150px);
+	top: 60px;
+	display: none;
+	position: absolute;
+}
+
+.dialogue-popup.item-text #item-display {
+	display: block;
+}
+
+.dialogue-popup.item-text #talk-sprite {
+	display: none;
 }
 
 #Alsike-talking.dialogue-popup #talk-sprite {
@@ -213,7 +264,8 @@ button:hover, button:focus {
 #game-container.Oddly-Shaded-Woods.left-1 > div.Oddly-Shaded-Woods.left-1,
 #game-container.Oddly-Shaded-Woods.left-2 > div.Oddly-Shaded-Woods.left-2,
 #game-container.Oddly-Shaded-Woods.right-1 > div.Oddly-Shaded-Woods.right-1,
-#game-container.Oddly-Shaded-Woods.right-2 > div.Oddly-Shaded-Woods.right-2 {
+#game-container.Oddly-Shaded-Woods.right-2 > div.Oddly-Shaded-Woods.right-2, 
+#game-container.Oddly-Shaded-Woods.down-1 > div.Oddly-Shaded-Woods.down-1 {
 	display: flex;
 }
 
@@ -395,6 +447,19 @@ button:hover, button:focus {
 	margin: -16px 0 0;
 }
 
+/** water **/
+.water {
+	 margin: 0;
+	 position: absolute;
+	 background-image: url(water.gif);
+    left: 0;
+    top: 0;
+    background-size: 64px;
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(0% 57%, 8% 49%, 16% 44%, 25% 38.5%, 37% 37%, 45% 37%, 50% 36%, 55% 35%, 61% 35%, 68% 32.5%, 71% 33%, 74% 33%, 83% 36%, 90% 40%, 98% 45%, 100% 45.5%, 100% 100%, 0% 100%);
+}
+
 /** fence style; obstacles with a solid base but open top/bottom have the fence class **/
 .obstacle.fence {
 	background-color: transparent;
@@ -537,6 +602,6 @@ button:hover, button:focus {
 	display: none;
 }
 
-.CandyApple, #CandyApple span {
+#CandyApple, #CandyAppleInventory span {
 	background-image: url(https://cdn-icons-png.flaticon.com/512/8530/8530388.png);
 }
