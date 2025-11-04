@@ -206,6 +206,7 @@ button:hover, button:focus {
 	transition: 200ms ease;
 	position: absolute;
    right: 0;
+   z-index: 600;
 }
 
 #inventory.open {
@@ -316,11 +317,11 @@ button:hover, button:focus {
 	margin: 10px;
 }
 
-.dialogue-popup.item-text {
+.dialogue-popup {
 	flex-direction: column;
 }
 
-.dialogue-popup.item-text #speech-bubble {
+.dialogue-popup #speech-bubble {
 	width: 670px;
 }
 
@@ -343,27 +344,19 @@ button:hover, button:focus {
 	50% { transform: translateY(0);}
 }
 
-#talk-sprite {
-	height: 170px;
-	width: 120px;
-	background:red;
-	background-position: center;
-}
-
-#item-display {
+#interact-display {
 	width: 300px;
 	left: calc(50% - 150px);
 	top: 60px;
-	display: none;
 	position: absolute;
 }
 
-.dialogue-popup.item-text #item-display {
-	display: block;
-}
-
-.dialogue-popup.item-text #talk-sprite {
-	display: none;
+.dialogue-popup:not(.item-text) #interact-display {
+	width: 100%;
+	max-width: unset;
+	left: 0;
+	top: 0;
+	position: absolute;
 }
 
 #Alsike-talking.dialogue-popup #talk-sprite {
@@ -411,11 +404,12 @@ button:hover, button:focus {
 }
 
 #game-container.Oddly-Shaded-Woods.initial-screen > div.Oddly-Shaded-Woods.initial-screen,
-#game-container.Oddly-Shaded-Woods.left-1 > div.Oddly-Shaded-Woods.left-1,
-#game-container.Oddly-Shaded-Woods.left-2 > div.Oddly-Shaded-Woods.left-2,
-#game-container.Oddly-Shaded-Woods.right-1 > div.Oddly-Shaded-Woods.right-1,
-#game-container.Oddly-Shaded-Woods.right-2 > div.Oddly-Shaded-Woods.right-2, 
-#game-container.Oddly-Shaded-Woods.down-1 > div.Oddly-Shaded-Woods.down-1 {
+#game-container.Oddly-Shaded-Woods.left-1:not(.up-1, .down-1) > div.Oddly-Shaded-Woods.left-1,
+#game-container.Oddly-Shaded-Woods.left-2:not(.up-1, .down-1) > div.Oddly-Shaded-Woods.left-2,
+#game-container.Oddly-Shaded-Woods.right-1:not(.up-1, .down-1) > div.Oddly-Shaded-Woods.right-1,
+#game-container.Oddly-Shaded-Woods.right-2:not(.up-1, .down-1) > div.Oddly-Shaded-Woods.right-2, 
+#game-container.Oddly-Shaded-Woods.up-1:not(.left-1, .right-1, .left-2, .right-2, .left-3, .right-3) > div.Oddly-Shaded-Woods.up-1,
+#game-container.Oddly-Shaded-Woods.down-1:not(.left-1, .right-1, .left-2, .right-2, .left-3, .right-3) > div.Oddly-Shaded-Woods.down-1 {
 	display: flex;
 }
 
@@ -618,7 +612,7 @@ button:hover, button:focus {
 }
 
 /** flip each odd number tree, for variation **/
-.deadtree:nth-child(odd), .talltrunk:nth-child(odd)  {
+.tree:nth-child(odd)  {
 	transform: scaleX(-1);
 }
 
@@ -679,6 +673,7 @@ button:hover, button:focus {
 	height: 154px;
 	width: 156px;
 	position: absolute;
+	bottom: 20px;
 }
 
 /** hollow tree **/
@@ -696,6 +691,34 @@ button:hover, button:focus {
 	position: absolute;
 	bottom: 8px;
    left: -25px;
+}
+
+/** big tree **/
+.obstacle.fence.bigtreeorange, .obstacle.fence.bigtreegreen, .obstacle.fence.bigtreeyellow {
+	width: 32px;
+}
+
+.obstacle.fence.bigtreeorange div, .obstacle.fence.bigtreegreen div, .obstacle.fence.bigtreeyellow div {
+	background-size: contain;
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	height: 240px;
+	width: 298px;
+	position: absolute;
+	bottom: 16px;
+	margin-left: 10px;
+}
+
+.obstacle.fence.bigtreeorange div {
+	background-image: url(obstacles/bigtreeorange.png);
+}
+
+.obstacle.fence.bigtreegreen div {
+	background-image: url(obstacles/bigtreegreen.png);
+}
+
+.obstacle.fence.bigtreeyellow div {
+	background-image: url(obstacles/bigtreeyellow.png);
 }
 
 .obstacle.small {
@@ -717,7 +740,7 @@ button:hover, button:focus {
 
 .churchtop {
 	width: 456px;
-	height: 780px;
+	height: 730px;
 	position: absolute;
 	left: 572px;
    top: -560px;
@@ -735,6 +758,7 @@ button:hover, button:focus {
 	background-repeat: no-repeat;
 	position: absolute;
    left: -14px;
+   bottom: -150px;
 }
 
 /** Objectives **/

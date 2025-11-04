@@ -174,6 +174,10 @@ function buttonPress() {
         //set their name to show up in the textbox h3
         document.getElementById("character-name").innerHTML = npcName;
 
+        //set the viewable image with the right SRC
+        var interactDisplay = document.getElementById("interact-display");
+        interactDisplay.src = "objectives/" + interactFound.id.toLowerCase() + ".png";
+
         var repeatDialogue = getRepeatDialogue()
 
         function getRepeatDialogue() {
@@ -201,19 +205,19 @@ function buttonPress() {
       if (interactFound.classList.contains("objective")) {
         //if an item is found, unposition it and add the collected class to the item and it's match in the inventory
         var foundInventory = document.getElementById(interactFound.id + "Inventory");
-        var itemImage = document.getElementById("item-display");
         var dialoguePopUp = document.querySelector(".dialogue-popup");
 
         //add item class to dialogue box, and add collected to the item in the inventory
         dialoguePopUp.classList.add("item-text");
         foundInventory.classList.add("collected");
 
-        //set the viewable image with the right SRC
-        itemImage.src = "objectives/" + interactFound.id.toLowerCase() + ".png";
-
         //drop the opacity on the interact
         interactFound.style.opacity = "0"
       }
+
+      //set the viewable image with the right SRC
+      var interactDisplay = document.getElementById("interact-display");
+      interactDisplay.src = "objectives/" + interactFound.id.toLowerCase() + ".png";
 
       //make the textbox visible
       dialoguePopUp.style.display = "flex";
@@ -253,10 +257,8 @@ function buttonPress() {
         //and clean it up (remove excess commas and put desired ones back in)
         dialogueLoader.innerHTML = dialogueChunk.toString().replaceAll(",", " ").replaceAll("  ", ", ");
 
-        console.log(words.length);
         if (words.length <= 39) {
           dialoguePopUp.classList.add("last-line");
-          console.log("so is this running?");
         }
 
         //shift the first 39 elements off of the array,
@@ -783,17 +785,26 @@ function interactCheck() {
     if(direction == "up") {
       var opposite = "down"; var perp1 = "left"; var perp2 = "right";
       var matchesDirection = matchesUp; var matchesOpposite = matchesDown; var matchesPerp1 = matchesLeft; var matchesPerp2 = matchesRight;
+      var newZIndex = "896"
     }
 
     if(direction == "down") {
       var opposite = "up"; var perp1 = "left"; var perp2 = "right";
       var matchesDirection = matchesDown; var matchesOpposite = matchesUp; var matchesPerp1 = matchesLeft; var matchesPerp2 = matchesRight;
+      var newZIndex = "1"
     }
 
-    //if there's NO OTHER SCREENS, we add one to the direction, and remove initial class and exit
+    //if there's NO OTHER SCREENS, we add one to the direction, and remove initial class
       if (matchesDirection.length + matchesOpposite.length + matchesPerp1.length + matchesPerp2.length == "0") {
         gameContainer.classList.remove("initial-screen");
         gameContainer.classList.add(direction + "-" + "1");
+
+        //if moving up or down, fix the z-index
+        if (direction == "up" || direction == "down") {
+          character.style.zIndex = newZIndex;
+        }
+
+        //and exit
         return
       }
 
@@ -808,13 +819,25 @@ function interactCheck() {
 
           //if there are screens in the current direction
           if (screenNumber != 0) {
-            //remove the previous class and exit
+            //remove the previous class
             gameContainer.classList.remove(matchesDirection);
             gameContainer.classList.add(direction + "-" + (parseInt(screenNumber) + parseInt("1")));
+
+            //if moving up or down, fix the z-index
+            if (direction == "up" || direction == "down") {
+              character.style.zIndex = newZIndex;
+            }
+            //and exit
             return
           } else {
-            //otherwise, and add a new one that's 1 higher and exit
+            //otherwise, and add a new one that's 1 higher
             gameContainer.classList.add(direction + "-" + "1");
+
+            //if moving up or down, fix the z-index
+            if (direction == "up" || direction == "down") {
+              character.style.zIndex = newZIndex;
+            }
+            //and exit
             return
           }
         }
@@ -835,7 +858,11 @@ function interactCheck() {
               var perpendicularScreens = (matchesPerp1.length != 0 || matchesPerp2.length != 0)
 
               if (perpendicularScreens == true) {
-                //if there are, just exit
+                //if moving up or down, fix the z-index
+                if (direction == "up" || direction == "down") {
+                  character.style.zIndex = newZIndex;
+                }
+                //and exit
                 return
               } else {
                 //otherwise, re-add the initial class
@@ -862,6 +889,10 @@ function interactCheck() {
           }
         }
       }
+
+      if (direction == "up" || direction == "down") {
+        character.style.zIndex = newZIndex;
+      }
   }
 
 ///////////////////////NPCs
@@ -878,7 +909,9 @@ function zIndexSort() {
   for (i = 0; i < screenElements.length; i++) {
     var screenElementBounds = parseInt(screenElements[i].style.top);
       
-    screenElements[i].style.zIndex = screenElementBounds;
+    if (screenElementBounds > 0) {
+      screenElements[i].style.zIndex = screenElementBounds;
+    }
   }
 }
 
