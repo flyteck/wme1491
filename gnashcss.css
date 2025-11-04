@@ -4,6 +4,7 @@
 	--mid-accent: #d34949;
 	--bright-accent: #d72929;
 	--black: #06020b;
+	--dark-grey: #201928;
 }
 
 * {
@@ -226,6 +227,15 @@ ul.text-body {
 	margin: auto;
 }
 
+.flex-row, .flex-column {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.flex-column {
+	flex-direction: column;
+}
 
 .flex-row-narrow, .flex-column-narrow {
 	display: inline-flex;
