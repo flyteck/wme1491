@@ -304,7 +304,7 @@ function buttonPress() {
 
       if (obstacleCheck(direction,moveDistance) == false || obstacleCheck(direction,moveDistance) == true && !character.classList.contains("left")) {
         //if no obstacles, then pass to the move function
-        moveLeft(moveDistance)
+        setInterval(moveLeft(moveDistance), 100)
       }
     }
 
@@ -329,7 +329,7 @@ function buttonPress() {
 
       if (obstacleCheck(direction,moveDistance) == false || obstacleCheck(direction,moveDistance) == true && !character.classList.contains("right")) {
         //if no obstacles, or obstacles but moving the other way, then pass to the move function
-        moveRight(moveDistance)
+        setInterval(moveRight(moveDistance), 100)
       }
     }
 
@@ -353,7 +353,7 @@ function buttonPress() {
 
       if (obstacleCheck(direction,moveDistance) == false || obstacleCheck(direction,moveDistance) == true && !character.classList.contains("up")) {
         //if no obstacles, or obstacles but moving the other way, then pass to the move function
-        moveUp(moveDistance);
+        setInterval(moveUp(moveDistance), 100);
       }
     }
 
@@ -377,7 +377,7 @@ function buttonPress() {
 
       if (obstacleCheck(direction,moveDistance) == false || obstacleCheck(direction,moveDistance) == true && !character.classList.contains("down")) {
         //if no obstacles, or obstacles but moving the other way, then pass to the move function
-        moveDown(moveDistance);
+        setInterval(moveDown(moveDistance), 100);
       }
     }
 
