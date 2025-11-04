@@ -55,6 +55,7 @@ function hideTutorial() {
     document.getElementById("tutorial").style.display = "none";
     }, 200);
     document.getElementById("tutorial").style.opacity = "0";
+    document.getElementById("mobile-controls").classList.add("open");
 
     //run through all the functions of the controller whenever someone presses a button
     document.addEventListener("keydown", buttonPress);
@@ -68,7 +69,7 @@ function hideTutorial() {
   }
 }
 
-//stock inventory descriptions
+//fill in inventory descriptions
 var menu = document.getElementById("inventory");
 
 var items = menu.getElementsByTagName("li")
@@ -88,8 +89,6 @@ for (i = 0; i < items.length; i++) {
   }
 
 }
-
-
 
 ///////////////////////Controlling the Character & Other Inputs
 
@@ -118,7 +117,7 @@ function buttonPress() {
   }
 
   //on spacebar click, call item check. if it returns true, modify the clicked item
-  if (event.key === ' ' || event.target.id == "dialogue-arrow") {
+  if (event.key === ' ' || event.target.id == "dialogue-arrow" || event.target.id == "interact-button") {
 
     var interactFound = interactCheck();
 
@@ -287,7 +286,7 @@ function buttonPress() {
     return
   }
 
-  if (event.key === 'ArrowLeft' || event.key === 'a' || character.classList.contains("left")) {
+  if (event.key === 'ArrowLeft' || event.key === 'a' || character.classList.contains("left") || event.target.id == "left-arrow-button") {
 
     //set move distance, and modify if holding shift to sprint
     var moveDistance = +slowMoveSpeed
@@ -312,7 +311,7 @@ function buttonPress() {
 
   }
 
-  if (event.key === 'ArrowRight' || event.key === 'd' || character.classList.contains("right")) {
+  if (event.key === 'ArrowRight' || event.key === 'd' || character.classList.contains("right") || event.target.id == "right-arrow-button") {
     
     //set move distance, and modify if holding shift to sprint
     var moveDistance = +slowMoveSpeed
@@ -336,7 +335,7 @@ function buttonPress() {
     churchOverlap();
   }
 
-  if (event.key === 'ArrowUp' || event.key === 'w' ||character.classList.contains("up")) {
+  if (event.key === 'ArrowUp' || event.key === 'w' ||character.classList.contains("up") || event.target.id == "up-arrow-button") {
     
     //set move distance, and modify if holding shift to sprint
     var moveDistance = +slowMoveSpeed
@@ -360,7 +359,7 @@ function buttonPress() {
     churchOverlap();
   }
 
-  if (event.key === 'ArrowDown' || event.key === 's' || character.classList.contains("down")) {
+  if (event.key === 'ArrowDown' || event.key === 's' || character.classList.contains("down") || event.target.id == "down-arrow-button") {
     
     //set move distance, and modify if holding shift to sprint
     var moveDistance = +slowMoveSpeed

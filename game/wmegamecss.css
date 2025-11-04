@@ -11,7 +11,6 @@
 }
 
 body {
-	color: var(--black);
 	width: 100vw;
 	height: 100vh;
 	margin: 0;
@@ -24,6 +23,11 @@ body {
 
 h1, h2, h3, h4, h5 {
 	font-family: 'Jacquard 12';
+}
+
+h2 {
+	font-weight: 300;
+	margin-bottom: 0;
 }
 
 button {
@@ -63,11 +67,126 @@ button:hover, button:focus {
 	left: 0;
 	width: var(--game-width);
 	height: var(--game-height);
-	background: white;
+	background: var(--black);
 	z-index: 1000;
 	text-align: center;
 	transition: 200ms ease-out;
 	padding: 20px;
+}
+
+#tutorial span {
+	max-width: 60%;
+}
+
+#tutorial-button {
+	display: none;
+}
+
+.desktop-confirm {
+		color:var(--mid-accent);
+	}
+
+.game-button {
+	width: 48px;
+	height: 48px;
+	display: inline-block;
+	margin: 2px;
+	background-image: url(ui/arrowleft.png);
+	background-size: contain;
+}
+
+#left-arrow-button {
+	background-image: url(ui/arrowleft.png);
+}
+
+#right-arrow-button {
+	background-image: url(ui/arrowright.png);
+}
+
+#up-arrow-button {
+	background-image: url(ui/arrowup.png);
+}
+
+#down-arrow-button {
+	background-image: url(ui/arrowdown.png);
+}
+
+#w-button {
+	background-image: url(ui/w.png);
+}
+
+#a-button {
+	background-image: url(ui/a.png);
+}
+
+#s-button {
+	background-image: url(ui/s.png);
+}
+
+#d-button {
+	background-image: url(ui/d.png);
+}
+
+#q-button {
+	background-image: url(ui/q.png);
+}
+
+#shift-button {
+	margin: 10px;
+	width: 96px;
+	background-image: url(ui/shift.png);
+}
+
+#space-button {
+	margin: 10px;
+	width: 96px;
+	background-image: url(ui/space.png);
+}
+
+#tutorial #shift-button, #tutorial #space-button {
+	margin-right: 40px;
+}
+
+/*** Mobile Controller ***/
+
+#mobile-controls {
+	position: absolute;
+	left: 0;
+	bottom: -30px;
+	padding: 10px;
+	display: none;
+	align-items: center;
+   justify-content: center;
+   z-index: 999;
+   opacity: 0;
+   transition: 200ms ease;
+}
+
+#sprint-button {
+	margin: 5px 5px 5px 15px;
+	width: 96px;
+	background-image: url(ui/sprint.png);
+}
+
+#interact-button {
+	margin: 5px 5px 5px 15px;
+	width: 96px;
+	background-image: url(ui/interact.png);
+}
+
+@media (pointer:coarse) {
+	#mobile-controls.open {
+		opacity: 1;
+		display: flex;
+	}
+
+   #tutorial-button {
+		display: block;
+	}
+
+	.desktop-confirm {
+		display: none;
+	}
 }
 
 /*** Inventory ***/
@@ -76,21 +195,22 @@ button:hover, button:focus {
 	display: flex;
 	flex-wrap: wrap;
 	align-content: flex-start;
+	justify-content: center;
 	height: var(--game-height);
 	width: var(--inventory-width);
 	background: red;
 	margin: 0;
 	padding: 20px;
-	background: beige;
+	background: var(--dark-grey);
 	border: 2px solid var(--light-accent);
 	transition: 200ms ease;
 	position: absolute;
    right: 0;
-   z-index: 1001;
 }
 
 #inventory.open {
-	 width: 100%;
+	width: 100%;
+   z-index: 1001;
 }
 
 #inventory li {
@@ -100,27 +220,53 @@ button:hover, button:focus {
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
-	min-height: 100px;
-	display: none;
-	min-width: 60px;
+	width: 60px;
+	height: 60px;
+	margin: 6px;
 	border: 2px solid var(--accent);
    padding: 10px;
    border-radius: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--black);
+	background-color: var(--white);
+	transition: 200ms ease;
+}
+
+#inventory.open li {
+	width: 100px;
+	height: 100px;
+}
+
+#inventory.open li.collected {
+	width: unset;
+	height: unset;
 }
 
 #inventory li span {
 	min-height: 60px;
 	min-width: 100%;
-	display: block;
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center center;
+	background-image: url(https://cdn-icons-png.flaticon.com/512/25/25333.png);
 }
 
-#inventory li.collected {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+#inventory.open li span {
+	min-height: 120px;
+	display: block;
+	margin: 10px;
+}
+
+#inventory li .title {
+	font-family: 'Jacquard 12';
+   font-size: 1.5em;
+	display: none;
+}
+
+#inventory.open li.collected .title {
+	display: block;
 }
 
 #inventory h3 {
@@ -128,14 +274,16 @@ button:hover, button:focus {
 	margin: 10px;
 	width: 100%;
 	text-align: center;
+	font-weight: 300;
 }
 
 #inventory .description {
 	display: none;
 }
 
-#inventory.open .description {
+#inventory.open li.collected .description {
 	 display: block;
+	 padding: 10px 20px 20px;
 }
 
 /********************** Dialogue Pop-Up *********************/
@@ -160,7 +308,8 @@ button:hover, button:focus {
 #speech-bubble {
 	width: 550px;
 	height: 170px;
-	background: white;
+	background: var(--white);
+	color: var(--black);
 	padding: 20px;
 	border: 2px solid black;
 	position: relative;
@@ -242,7 +391,8 @@ button:hover, button:focus {
 	display: flex;
 	padding: 10px 20px;
 	text-transform: capitalize;
-	background: beige;
+	background: var(--white);
+	color: var(--black);
 	width: fit-content;
 	z-index: 1000;
 	position: absolute;
@@ -602,6 +752,39 @@ button:hover, button:focus {
 	display: none;
 }
 
-#CandyApple, #CandyAppleInventory span {
-	background-image: url(https://cdn-icons-png.flaticon.com/512/8530/8530388.png);
+#CandyApple, #CandyAppleInventory.collected span {
+	background-image: url(objectives/candyapple.png);
 }
+
+/****************************************** Media Queries ******************************************/
+
+@media (max-width: 1100px) {
+
+	#game-wrapper {
+		width: calc(var(--game-width));
+		flex-direction: column;
+		height: calc(var(--game-height) + var(--inventory-width) / 2);
+	}
+
+	#inventory:not(.open) h3 {
+		width: auto;
+	}
+
+	#inventory {
+		position: unset;
+		width: auto;
+		height: var(--inventory-width);
+		flex-direction: row;
+      justify-content: flex-end;
+	}
+
+	#inventory.open {
+		justify-content: center;
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 676px;
+	}
+}
+
+

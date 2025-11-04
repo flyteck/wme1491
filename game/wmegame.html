@@ -97,14 +97,46 @@
 			<span id="screen-display">Oddly Shaded Woods</span>
 			<!--------- Tutorial --------->
 			<div id="tutorial" style="display: flex;">
-				Move: WASD or ARROW KEYS
+				<h2>Controls</h2>
+				<div class="flex-row" style="margin: 10px 20px;">
+					Move:
+					<!-- letter buttons -->
+					<div class="flex-column" style="margin: 10px 20px;">
+						<div class="game-button" id="w-button"></div>
+						<div class="flex-row">
+							<div class="game-button" id="a-button"></div>
+							<div class="game-button" id="s-button"></div>
+							<div class="game-button" id="d-button"></div>
+						</div>
+					</div>
+
+					<!-- arrow buttons -->
+					<div class="flex-row">
+						<div class="game-button" id="left-arrow-button"></div>
+						<div class="flex-column">
+							<div class="game-button" id="up-arrow-button"></div>
+							<div class="game-button" id="down-arrow-button"></div>
+						</div>
+						<div class="game-button" id="right-arrow-button"></div>
+					</div>
+
+				</div>
 				<br>
-				Sprint: shift(hold)
+
+				<div class="flex-row">
+					Sprint (hold):
+					<div class="game-button" id="shift-button"></div>
+					Interact:
+					<div class="game-button" id="space-button"></div>
+					Menu:
+					<div class="game-button" id="q-button" style="margin:10px 20px 10px 10px"></div>
+				</div>
+
 				<br>
-				Interact: space
-				<br><br>
-				Please note: this is baby's first game of this kind. Obstacles etc may be a lil buggy. If you get stuck/move oddly, turn around and go the other way!
-				<button onclick="hideTutorial()" id="tutorial-button">Okay!</button>
+				<span>Please note: this is baby's first exploration game, so there may be bugs. If you get stuck or move oddly, turn around and go the other way!</span>
+				<br>
+				<span class="desktop-confirm">Press Space to begin</span>
+				<button onclick="hideTutorial()" id="tutorial-button">Begin</button>
 			</div>
 			<!--------- Character Pop-Up --------->
 			<div class="dialogue-popup">
@@ -119,8 +151,22 @@
 				</div>
 			</div>
 
+		</div>
 
+		<div id="mobile-controls">
+			<div class="flex-row">
+				<div class="game-button" id="left-arrow-button" onmousedown="buttonPress()" onmouseup="buttonRelease()"></div>
+				<div class="flex-column">
+					<div class="game-button" id="up-arrow-button" onmousedown="buttonPress()" onmouseup="buttonRelease()"></div>
+					<div class="game-button" id="down-arrow-button" onmousedown="buttonPress()" onmouseup="buttonRelease()"></div>
+				</div>
+				<div class="game-button" id="right-arrow-button" onmousedown="buttonPress()" onmouseup="buttonRelease()"></div>
+			</div>
 
+			<div class="flex-column">
+				<div class="game-button" id="sprint-button" onmousedown="buttonPress()" onmouseup="buttonRelease()"></div>
+				<div class="game-button" id="interact-button" onmousedown="buttonPress()" onmouseup="buttonRelease()"></div>
+			</div>
 		</div>
 
 
@@ -128,10 +174,34 @@
 			<h3>Clues</h3>
 			<li id="CandyAppleInventory">
 				<span></span>
-				Candy Apple
+				<div class="title">Candy Apple</div>
 				<div class="description"></div>
 			</li>
-			<li>Test List</li>
+			<li id="">
+				<span></span>
+				<div class="title">Clue 2</div>
+				<div class="description"></div>
+			</li>
+			<li id="">
+				<span></span>
+				<div class="title">Clue 2</div>
+				<div class="description"></div>
+			</li>
+			<li id="">
+				<span></span>
+				<div class="title">Clue 2</div>
+				<div class="description"></div>
+			</li>
+			<li id="">
+				<span></span>
+				<div class="title">Clue 2</div>
+				<div class="description"></div>
+			</li>
+			<li id="">
+				<span></span>
+				<div class="title">Clue 2</div>
+				<div class="description"></div>
+			</li>
 		</ul>
 
 	</div>
