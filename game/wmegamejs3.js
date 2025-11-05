@@ -1,20 +1,9 @@
 ////// Code to move the character
 
 ////KNOWN BUGS
-//Clipping through fence objects possible -- I think bc of how I have the *bottom* intersects coded unfortunately
-
-// I think the solution here, is to like... use the object height & character height to get a specific
-//value for how far the character can overlap, vs having the bottom/bottom
-
-
-//POSSIBLE FIX: Instead of the normal overlap, check for overlap of x direction, then check z index -- do not allow movement up if it's overlapping
-//I think I wrote this wrong but I was cooking for a sec augh
-
-//check for overlap bottom/bottom + moving up when z index is higher, check for overlap bottom/top + moving down when z index is lower?
-
-
-//the church flickers on entrance -- code thinks you're in the old location still (can be fixed by only firing the code on select screens)
-
+//So. Groan. You can clip through normal obstacles if you manage to stagger right.
+//The fix I'll have to use is resetting your position at the start of each move,
+//Or, what I'd rather if I can get it to fucking behave, is have it set your position to the edge of the object
 
 ////PLANS
 //Fullscreen: needs to use zoom or else pixel alignments break. Would need to dynamically find the right zoom number and use that with JS
@@ -101,6 +90,11 @@ function buttonPress() {
   if (event.key === 'q' || event.key === 'Tab') {
     //open/close menu
 
+    //if there's dialogue open, don't do shit
+    if (document.querySelector(".dialogue-popup").id != "") {
+      return
+    }
+
     //if it's open
     if (menu.classList.contains("open")) {
       menu.classList.remove("open");
@@ -112,7 +106,6 @@ function buttonPress() {
       menu.classList.add("open");
       return
     }
-
 
   }
 
@@ -305,6 +298,9 @@ function buttonPress() {
       if (obstacleCheck(direction,moveDistance) == false || obstacleCheck(direction,moveDistance) == true && !character.classList.contains("left")) {
         //if no obstacles, then pass to the move function
         moveLeft(moveDistance)
+      } else {
+        //this helps prevent clipping
+        character.style.left = parseInt(character.style.left) + parseInt(moveDistance) + "px";
       }
     }
 
@@ -330,6 +326,9 @@ function buttonPress() {
       if (obstacleCheck(direction,moveDistance) == false || obstacleCheck(direction,moveDistance) == true && !character.classList.contains("right")) {
         //if no obstacles, or obstacles but moving the other way, then pass to the move function
         moveRight(moveDistance)
+      } else {
+        //this helps prevent clipping
+        character.style.left = parseInt(character.style.left) - parseInt(moveDistance) + "px";
       }
     }
 
@@ -354,6 +353,9 @@ function buttonPress() {
       if (obstacleCheck(direction,moveDistance) == false || obstacleCheck(direction,moveDistance) == true && !character.classList.contains("up")) {
         //if no obstacles, or obstacles but moving the other way, then pass to the move function
         moveUp(moveDistance);
+      } else {
+        //this helps prevent clipping
+        character.style.top = parseInt(character.style.top) + parseInt(moveDistance) + "px";
       }
     }
 
@@ -378,6 +380,9 @@ function buttonPress() {
       if (obstacleCheck(direction,moveDistance) == false || obstacleCheck(direction,moveDistance) == true && !character.classList.contains("down")) {
         //if no obstacles, or obstacles but moving the other way, then pass to the move function
         moveDown(moveDistance);
+      } else {
+        //this helps prevent clipping
+        character.style.top = parseInt(character.style.top) - parseInt(moveDistance) + "px";
       }
     }
 
@@ -445,6 +450,11 @@ function buttonRelease() {
 
   //this prevents any weird lingering of the move animation (and it's readded immediately if a direction is held)
   if (event.key === 'Shift') {
+    moveDistance = slowMoveSpeed
+    if(event.shiftKey) {
+      moveDistance = fastMoveSpeed
+    }
+
     character.classList.remove("sprint");
     obstacleCheck("down",moveDistance);
     obstacleCheck("up",moveDistance);
@@ -613,7 +623,7 @@ function interactCheck() {
 
       //only move if there's room to move
       if (leftPosition > 0) {
-        //subtract a value from it, and pixels to set it right
+        //subtract a value from it to set it right
         setTimeout(() => {
           character.style.left = leftPosition - moveDistance + "px";
         }, 16);
