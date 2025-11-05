@@ -445,8 +445,11 @@ function buttonRelease() {
 
   //this prevents any weird lingering of the move animation (and it's readded immediately if a direction is held)
   if (event.key === 'Shift') {
-    character.classList.remove("moving");
     character.classList.remove("sprint");
+    obstacleCheck("down",moveDistance);
+    obstacleCheck("up",moveDistance);
+    obstacleCheck("left",moveDistance);
+    obstacleCheck("right",moveDistance);
   }
 }
 
@@ -613,7 +616,7 @@ function interactCheck() {
         //subtract a value from it, and pixels to set it right
         setTimeout(() => {
           character.style.left = leftPosition - moveDistance + "px";
-        }, 64);
+        }, 16);
       } else {
         //fire move screen event
         moveScreen("left");
@@ -637,7 +640,7 @@ function interactCheck() {
         //add a value to it, and pixels to set it right
         setTimeout(() => {
           character.style.left = leftPosition + moveDistance + "px";
-        }, 64);
+        }, 16);
       } else {
         //fire move screen event
         moveScreen("right");
@@ -661,7 +664,7 @@ function interactCheck() {
         //subtract a value from it, and pixels to push it up
         setTimeout(() => {
           character.style.top = topPosition - moveDistance + "px";
-        }, 64);
+        }, 16);
       } else {
         //fire move screen event
         moveScreen("up");
@@ -685,7 +688,7 @@ function interactCheck() {
         //add a value to it, and pixels to push it down
         setTimeout(() => {
           character.style.top = topPosition + moveDistance + "px";
-        }, 64);
+        }, 16);
       } else {
         //fire move screen event
         moveScreen("down");
@@ -707,7 +710,7 @@ function interactCheck() {
         character.classList.remove("sprint");
       }
       character.classList.add("stopped");
-    }, 64);
+    }, 16);
   }
 
   function stopRight() {
@@ -717,7 +720,7 @@ function interactCheck() {
         character.classList.remove("sprint");
       }
       character.classList.add("stopped");
-    }, 64);
+    }, 16);
   }
 
   function stopUp() {
@@ -727,7 +730,7 @@ function interactCheck() {
         character.classList.remove("sprint");
       }
       character.classList.add("stopped");
-    }, 64);
+    }, 16);
   }
 
   function stopDown() {
@@ -737,7 +740,7 @@ function interactCheck() {
         character.classList.remove("sprint");
       }
       character.classList.add("stopped");
-    }, 64);
+    }, 16);
   }
 
 
@@ -769,7 +772,7 @@ function interactCheck() {
     //this generates the screen title (delay to be sure that the classes are all updated before generating)
     setTimeout(() => {
       screenTitle();
-    }, 64);
+    }, 16);
 
     //get the classlist, split into individuals
       let list = gameContainer.classList.value.split(' ');
@@ -922,4 +925,3 @@ function zIndexSort() {
     }
   }
 }
-
