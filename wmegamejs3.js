@@ -101,6 +101,23 @@ for (i = 0; i < items.length; i++) {
 
 ///////////////////////Controlling the Character & Other Inputs
 
+//this is for the mobile sprint button only
+function sprintToggle() {
+  var sprintButton = document.getElementById("sprint-button");
+
+  if (!sprintButton.classList.contains("active")) {
+    sprintButton.classList.add("active");
+    character.classList.add("sprint");
+    return;
+  }
+
+  if (sprintButton.classList.contains("active")) {
+    sprintButton.classList.remove("active");
+    character.classList.remove("sprint");
+    return;
+  }
+}
+
 function buttonPress() {
   //on mobile, check if we're on a recall, and if so, repeat that event
   if (!matchMedia('(pointer:fine)').matches) {
@@ -108,6 +125,12 @@ function buttonPress() {
       eventVar = buttonPressed;
     } else {
       eventVar = event;
+    }
+
+    //and check if we're supposed to be sprinting still
+    var sprintButton = document.getElementById("sprint-button");
+    if (sprintButton.classList.contains("active")) {
+      character.classList.add("sprint");
     }
   } else {
     //and this makes sure it's defined for desktop
