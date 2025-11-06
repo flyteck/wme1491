@@ -31,6 +31,7 @@ h2 {
 }
 
 button {
+	color: inherit;
 	font-family: inherit;
 	text-transform: uppercase;
 	font-size: inherit;
@@ -162,7 +163,7 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 
 #mobile-controls {
 	position: absolute;
-	left: 0;
+	right: 0;
 	bottom: -30px;
 	padding: 10px;
 	display: none;
@@ -830,6 +831,10 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 
 @media (max-width: 1100px) {
 
+	body {
+		height: 90vh;
+	}
+
 	#game-wrapper {
 		width: calc(var(--game-width));
 		flex-direction: column;
@@ -845,7 +850,7 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 		width: auto;
 		height: var(--inventory-width);
 		flex-direction: row;
-      justify-content: flex-end;
+      justify-content: flex-start;
 	}
 
 	#inventory.open {
