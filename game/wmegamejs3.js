@@ -28,6 +28,7 @@ if (!matchMedia('(pointer:fine)').matches) {
   window.addEventListener("contextmenu", function(e) { e.preventDefault(); })
 }
 
+//this checks if the mouse is held down, to repeat click directions
 var mouseDown = 0;
 
 document.body.ontouchstart = function() { 
@@ -118,7 +119,6 @@ function buttonPress() {
     character.classList.remove("up","down","left","right","stopped");
   }
 
-
   if (eventVar.key === 'q' || eventVar.key === 'Tab') {
     //open/close menu
     //if there's dialogue open, don't do shit
@@ -174,7 +174,6 @@ function buttonPress() {
 
         //and make sure to remove the item-text class for items, for proper display of the next interact
         dialoguePopUp.classList.remove("item-text");
-
         }
 
         //and gtfo
@@ -424,17 +423,24 @@ function buttonPress() {
   //set the buttonpressed var to the current event trigger, to recall on mobile
   buttonPressed = eventVar;
 
+  //don't ask me why this needs to have a timeout inside and out but it won't run right otherwise
   setTimeout(() => {
     if (!matchMedia('(pointer:fine)').matches) {
       //if we're on mobile,
       if (mouseDown == 1) {
         //and button is being pressed, fire again 
-        buttonPress.call();
+        setTimeout(() => {
+          buttonPress.call();
+          console.log("running");
+        }, 16);
       }
 
       if (mouseDown == 0) {
         //if button isn't being pressed, end 
-        buttonRelease();
+        setTimeout(() => {
+          buttonRelease();
+          console.log("running 2");
+        }, 16);
       }
     }
   }, 16);
