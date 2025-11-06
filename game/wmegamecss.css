@@ -43,7 +43,7 @@ button {
 	transition: 50ms ease;
 }
 
-button:hover, button:focus {
+button:not(.game-button):hover, button:not(.game-button):focus {
 	margin: 12px auto 8px;
 	background: var(--bright-accent);
 }
@@ -87,12 +87,23 @@ button:hover, button:focus {
 	}
 
 .game-button {
+	background-color: transparent;
+	border: none;
 	width: 48px;
 	height: 48px;
 	display: inline-block;
 	margin: 2px;
 	background-image: url(ui/arrowleft.png);
 	background-size: contain;
+	user-select: none;
+	transition: 200ms ease;
+	-webkit-user-select: none;
+   -webkit-touch-callout: none;
+}
+
+.game-button:active {
+	filter: brightness(0.6);
+	margin: 4px 2px 0;
 }
 
 #left-arrow-button {
@@ -174,7 +185,7 @@ button:hover, button:focus {
 	background-image: url(ui/interact.png);
 }
 
-@media (pointer:coarse) {
+@media not (pointer:fine) {
 	#mobile-controls.open {
 		opacity: 1;
 		display: flex;
@@ -203,15 +214,15 @@ button:hover, button:focus {
 	padding: 20px;
 	background: var(--dark-grey);
 	border: 2px solid var(--light-accent);
-	transition: 200ms ease;
+	transition: 200ms ease all, 0ms ease z-index;
 	position: absolute;
    right: 0;
-   z-index: 600;
+   z-index: 998;
 }
 
 #inventory.open {
 	width: 100%;
-   z-index: 1001;
+	z-index: 1000;
 }
 
 #inventory li {

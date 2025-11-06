@@ -11,15 +11,34 @@
 //character + container
 const character = document.getElementById("test-character");
 const gameContainer = document.getElementById("game-container");
-//move distance (may have modifiers so I made it a variable)
 
+buttonPressed = "initial";
+
+//move distance (may have modifiers so I made it a variable)
 var slowMoveSpeed = "8"
 var fastMoveSpeed = "16"
-
 
 //these numbers need to be the width minus the respective height/width of the character
 var gameWidth = parseInt(795)
 var gameHeight = parseInt(510)
+
+//only mobile stuff (if no mouse support)
+if (!matchMedia('(pointer:fine)').matches) {
+  //this makes the buttons work on mobile
+  window.addEventListener("contextmenu", function(e) { e.preventDefault(); })
+}
+
+var mouseDown = 0;
+
+document.body.ontouchstart = function() { 
+    mouseDown = 1;
+    console.log(mouseDown + " being pressed");
+}
+document.body.ontouchend = function() {
+    mouseDown = 0;
+    buttonRelease;
+    console.log(mouseDown + " let go");
+}
 
 ///////////////////////Tutorial, titles, & other things over top
 
@@ -82,14 +101,26 @@ for (i = 0; i < items.length; i++) {
 ///////////////////////Controlling the Character & Other Inputs
 
 function buttonPress() {
+  //on mobile, check if we're on a recall, and if so, repeat that event
+  if (!matchMedia('(pointer:fine)').matches) {
+    if (buttonPressed != "initial") {
+      eventVar = buttonPressed;
+    } else {
+      eventVar = event;
+    }
+  } else {
+    //and this makes sure it's defined for desktop
+    eventVar = event;
+  }
+
   //remove directions whenever starting to move in a new one
   if (character.classList.contains("stopped")) {
     character.classList.remove("up","down","left","right","stopped");
   }
 
-  if (event.key === 'q' || event.key === 'Tab') {
-    //open/close menu
 
+  if (eventVar.key === 'q' || eventVar.key === 'Tab') {
+    //open/close menu
     //if there's dialogue open, don't do shit
     if (document.querySelector(".dialogue-popup").id != "") {
       return
@@ -100,17 +131,17 @@ function buttonPress() {
       menu.classList.remove("open");
       return
     }
-
+    
     //if it's closed
     if (!menu.classList.contains("open")) {
       menu.classList.add("open");
       return
     }
-
   }
+  
 
   //on spacebar click, call item check. if it returns true, modify the clicked item
-  if (event.key === ' ' || event.target.id == "dialogue-arrow" || event.target.id == "interact-button") {
+  if (eventVar.key === ' ' || eventVar.target.id == "dialogue-arrow" || eventVar.target.id == "interact-button") {
 
     var interactFound = interactCheck();
 
@@ -281,11 +312,11 @@ function buttonPress() {
     return
   }
 
-  if (event.key === 'ArrowLeft' || event.key === 'a' || character.classList.contains("left") || event.target.id == "left-arrow-button") {
+  if (eventVar.key === 'ArrowLeft' || eventVar.key === 'a' || character.classList.contains("left") || eventVar.target.id == "left-arrow-button" || direction == "left") {
 
     //set move distance, and modify if holding shift to sprint
     var moveDistance = +slowMoveSpeed
-    if (event.shiftKey) {
+    if (eventVar.shiftKey) {
       var moveDistance = +fastMoveSpeed
       character.classList.add("sprint");
     }
@@ -309,11 +340,11 @@ function buttonPress() {
 
   }
 
-  if (event.key === 'ArrowRight' || event.key === 'd' || character.classList.contains("right") || event.target.id == "right-arrow-button") {
+  if (eventVar.key === 'ArrowRight' || eventVar.key === 'd' || character.classList.contains("right") || eventVar.target.id == "right-arrow-button" ||  direction == "right") {
     
     //set move distance, and modify if holding shift to sprint
     var moveDistance = +slowMoveSpeed
-    if (event.shiftKey) {
+    if (eventVar.shiftKey) {
       var moveDistance = +fastMoveSpeed;
       character.classList.add("sprint");
     }
@@ -336,11 +367,11 @@ function buttonPress() {
     churchOverlap();
   }
 
-  if (event.key === 'ArrowUp' || event.key === 'w' ||character.classList.contains("up") || event.target.id == "up-arrow-button") {
+  if (eventVar.key === 'ArrowUp' || eventVar.key === 'w' ||character.classList.contains("up") || eventVar.target.id == "up-arrow-button" || direction == "up") {
     
     //set move distance, and modify if holding shift to sprint
     var moveDistance = +slowMoveSpeed
-    if (event.shiftKey) {
+    if (eventVar.shiftKey) {
       var moveDistance = +fastMoveSpeed;
       character.classList.add("sprint");
     }
@@ -363,11 +394,11 @@ function buttonPress() {
     churchOverlap();
   }
 
-  if (event.key === 'ArrowDown' || event.key === 's' || character.classList.contains("down") || event.target.id == "down-arrow-button") {
+  if (eventVar.key === 'ArrowDown' || eventVar.key === 's' || character.classList.contains("down") || eventVar.target.id == "down-arrow-button" ||  direction == "down") {
     
     //set move distance, and modify if holding shift to sprint
     var moveDistance = +slowMoveSpeed
-    if (event.shiftKey) {
+    if (eventVar.shiftKey) {
       var moveDistance = +fastMoveSpeed;
       character.classList.add("sprint");
     }
@@ -389,26 +420,59 @@ function buttonPress() {
     //check for buildings
     churchOverlap();
   }
+
+  //set the buttonpressed var to the current event trigger, to recall on mobile
+  buttonPressed = eventVar;
+
+  setTimeout(() => {
+    if (!matchMedia('(pointer:fine)').matches) {
+      //if we're on mobile,
+      if (mouseDown == 1) {
+        //and button is being pressed, fire again 
+        buttonPress.call();
+      }
+
+      if (mouseDown == 0) {
+        //if button isn't being pressed, end 
+        buttonRelease();
+      }
+    }
+  }, 16);
 }
 
 function buttonRelease() {
-  if (event.key === 'ArrowLeft' || event.key === 'a') {
+  //on mobile, check if we're on a recall, and if so, repeat that event
+  if (!matchMedia('(pointer:fine)').matches) {
+    if (buttonPressed != "initial") {
+      var eventVar = buttonPressed;
+    } else {
+      eventVar = event;
+    }
+  } else {
+    //and this makes sure it's defined for desktop
+    eventVar = event;
+  }
+
+  if (eventVar.key === 'ArrowLeft' || eventVar.key === 'a' || eventVar.target.id == "left-arrow-button") {
     moveDistance = slowMoveSpeed
-    if(event.shiftKey) {
+    if(eventVar.shiftKey) {
       moveDistance = fastMoveSpeed
     }
-    stopLeft()
+    stopLeft();
     //re-check for obstacles
     obstacleCheck("left",moveDistance)
     //check for buildings
     churchOverlap();
     //fix zindex
     zIndexSort()
+
+    //and reset button pressed for mobile
+    buttonPressed = "initial";
   }
 
-  if (event.key === 'ArrowRight' || event.key === 'd') {
+  if (eventVar.key === 'ArrowRight' || eventVar.key === 'd' || eventVar.target.id == "right-arrow-button") {
     moveDistance = slowMoveSpeed
-    if(event.shiftKey) {
+    if(eventVar.shiftKey) {
       moveDistance = fastMoveSpeed
     }
     stopRight()
@@ -418,11 +482,14 @@ function buttonRelease() {
     churchOverlap();
     //fix zindex
     zIndexSort()
+
+    //and reset button pressed for mobile
+    buttonPressed = "initial";
   }
 
-  if (event.key === 'ArrowUp' || event.key === 'w') {
+  if (eventVar.key === 'ArrowUp' || eventVar.key === 'w' || eventVar.target.id == "up-arrow-button") {
     moveDistance = slowMoveSpeed
-    if(event.shiftKey) {
+    if(eventVar.shiftKey) {
       moveDistance = fastMoveSpeed
     }
     stopUp()
@@ -432,11 +499,14 @@ function buttonRelease() {
     churchOverlap();
     //fix zindex
     zIndexSort()
+
+    //and reset button pressed for mobile
+    buttonPressed = "initial";
   }
 
-  if (event.key === 'ArrowDown' || event.key === 's') {
+  if (eventVar.key === 'ArrowDown' || eventVar.key === 's' || eventVar.target.id == "down-arrow-button") {
     moveDistance = slowMoveSpeed
-    if(event.shiftKey) {
+    if(eventVar.shiftKey) {
       moveDistance = fastMoveSpeed
     }
     stopDown()
@@ -446,12 +516,15 @@ function buttonRelease() {
     churchOverlap();
     //fix zindex
     zIndexSort()
+
+    //and reset button pressed for mobile
+    buttonPressed = "initial";
   }
 
   //this prevents any weird lingering of the move animation (and it's readded immediately if a direction is held)
-  if (event.key === 'Shift') {
+  if (eventVar.key === 'Shift') {
     moveDistance = slowMoveSpeed
-    if(event.shiftKey) {
+    if(eventVar.shiftKey) {
       moveDistance = fastMoveSpeed
     }
 

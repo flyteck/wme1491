@@ -143,7 +143,7 @@
 					<div id="speech-bubble">
 						<h3 id="character-name"></h3>
 						<div id="dialogue-loader"></div>
-						<i class="fa-solid fa-caret-down" id="dialogue-arrow" onclick="buttonPress()"></i>
+						<i class="fa-solid fa-caret-down" id="dialogue-arrow" ontouchstart="buttonPress()"></i>
 					</div>
 				</div>
 			</div>
@@ -152,17 +152,17 @@
 
 		<div id="mobile-controls">
 			<div class="flex-row">
-				<div class="game-button" id="left-arrow-button" onmousedown="buttonPress()" onmouseup="buttonRelease()"></div>
+				<button class="game-button" id="left-arrow-button" ontouchstart="buttonPress()"></button>
 				<div class="flex-column">
-					<div class="game-button" id="up-arrow-button" onmousedown="buttonPress()" onmouseup="buttonRelease()"></div>
-					<div class="game-button" id="down-arrow-button" onmousedown="buttonPress()" onmouseup="buttonRelease()"></div>
+					<button class="game-button" id="up-arrow-button" ontouchstart="buttonPress()"></button>
+					<button class="game-button" id="down-arrow-button" ontouchstart="buttonPress()"></button>
 				</div>
-				<div class="game-button" id="right-arrow-button" onmousedown="buttonPress()" onmouseup="buttonRelease()"></div>
+				<button class="game-button" id="right-arrow-button" ontouchstart="buttonPress()"></button>
 			</div>
 
 			<div class="flex-column">
-				<div class="game-button" id="sprint-button" onmousedown="buttonPress()" onmouseup="buttonRelease()"></div>
-				<div class="game-button" id="interact-button" onmousedown="buttonPress()" onmouseup="buttonRelease()"></div>
+				<button class="game-button" id="sprint-button" ontouchstart="buttonPress()"></button>
+				<button class="game-button" id="interact-button" ontouchstart="buttonPress()"></button>
 			</div>
 		</div>
 
@@ -205,6 +205,6 @@
 
 </body>
 
-<script src="wmegamejs3.js?2"></script>
+<script src="wmegamejs3.js?3"></script>
 
 </html>
