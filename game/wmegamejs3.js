@@ -26,10 +26,6 @@ var gameHeight = parseInt(510)
 if (!matchMedia('(pointer:fine)').matches) {
   //this makes the buttons work on mobile
   window.addEventListener("contextmenu", function(e) { e.preventDefault(); })
-
-  //and for reasons unbeknownst to me, mobile moves faster still so we half
-  var slowMoveSpeed = "4"
-  var fastMoveSpeed = "8"
 }
 
 //this checks if the mouse is held down, to repeat click directions
@@ -104,6 +100,23 @@ for (i = 0; i < items.length; i++) {
 }
 
 ///////////////////////Controlling the Character & Other Inputs
+
+//this is for the mobile sprint button only
+function sprintToggle() {
+  var sprintButton = document.getElementById("sprint-button");
+
+  if (!sprintButton.classList.contains("active")) {
+    sprintButton.classList.add("active");
+    character.classList.add("sprint");
+    return;
+  }
+
+  if (sprintButton.classList.contains("active")) {
+    sprintButton.classList.remove("active");
+    character.classList.remove("sprint");
+    return;
+  }
+}
 
 function buttonPress() {
   //on mobile, check if we're on a recall, and if so, repeat that event

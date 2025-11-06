@@ -107,6 +107,11 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 	margin: 4px 2px 0;
 }
 
+#sprint-button.active {
+	filter: brightness(0.6);
+	margin: 10px 5px 0 15px;
+}
+
 #left-arrow-button {
 	background-image: url(ui/arrowleft.png);
 }
