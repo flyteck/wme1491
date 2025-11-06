@@ -18,6 +18,8 @@ buttonPressed = "initial";
 var slowMoveSpeed = "8"
 var fastMoveSpeed = "16"
 
+var sprintButton = document.getElementById("sprint-button");
+
 //these numbers need to be the width minus the respective height/width of the character
 var gameWidth = parseInt(795)
 var gameHeight = parseInt(510)
@@ -103,7 +105,6 @@ for (i = 0; i < items.length; i++) {
 
 //this is for the mobile sprint button only
 function sprintToggle() {
-  var sprintButton = document.getElementById("sprint-button");
 
   if (!sprintButton.classList.contains("active")) {
     sprintButton.classList.add("active");
@@ -332,7 +333,7 @@ function buttonPress() {
 
     //set move distance, and modify if holding shift to sprint
     var moveDistance = +slowMoveSpeed
-    if (eventVar.shiftKey) {
+    if (eventVar.shiftKey || sprintButton.classList.contains("active")) {
       var moveDistance = +fastMoveSpeed
       character.classList.add("sprint");
     }
@@ -360,7 +361,7 @@ function buttonPress() {
     
     //set move distance, and modify if holding shift to sprint
     var moveDistance = +slowMoveSpeed
-    if (eventVar.shiftKey) {
+    if (eventVar.shiftKey || sprintButton.classList.contains("active")) {
       var moveDistance = +fastMoveSpeed;
       character.classList.add("sprint");
     }
@@ -387,7 +388,7 @@ function buttonPress() {
     
     //set move distance, and modify if holding shift to sprint
     var moveDistance = +slowMoveSpeed
-    if (eventVar.shiftKey) {
+    if (eventVar.shiftKey || sprintButton.classList.contains("active")) {
       var moveDistance = +fastMoveSpeed;
       character.classList.add("sprint");
     }
@@ -414,7 +415,7 @@ function buttonPress() {
     
     //set move distance, and modify if holding shift to sprint
     var moveDistance = +slowMoveSpeed
-    if (eventVar.shiftKey) {
+    if (eventVar.shiftKey || sprintButton.classList.contains("active")) {
       var moveDistance = +fastMoveSpeed;
       character.classList.add("sprint");
     }
@@ -478,7 +479,7 @@ function buttonRelease() {
 
   if (eventVar.key === 'ArrowLeft' || eventVar.key === 'a' || eventVar.target.id == "left-arrow-button") {
     moveDistance = slowMoveSpeed
-    if(eventVar.shiftKey) {
+    if(eventVar.shiftKey || sprintButton.classList.contains("active")) {
       moveDistance = fastMoveSpeed
     }
     stopLeft();
@@ -495,7 +496,7 @@ function buttonRelease() {
 
   if (eventVar.key === 'ArrowRight' || eventVar.key === 'd' || eventVar.target.id == "right-arrow-button") {
     moveDistance = slowMoveSpeed
-    if(eventVar.shiftKey) {
+    if(eventVar.shiftKey || sprintButton.classList.contains("active")) {
       moveDistance = fastMoveSpeed
     }
     stopRight()
@@ -512,7 +513,7 @@ function buttonRelease() {
 
   if (eventVar.key === 'ArrowUp' || eventVar.key === 'w' || eventVar.target.id == "up-arrow-button") {
     moveDistance = slowMoveSpeed
-    if(eventVar.shiftKey) {
+    if(eventVar.shiftKey || sprintButton.classList.contains("active")) {
       moveDistance = fastMoveSpeed
     }
     stopUp()
@@ -529,7 +530,7 @@ function buttonRelease() {
 
   if (eventVar.key === 'ArrowDown' || eventVar.key === 's' || eventVar.target.id == "down-arrow-button") {
     moveDistance = slowMoveSpeed
-    if(eventVar.shiftKey) {
+    if(eventVar.shiftKey || sprintButton.classList.contains("active")) {
       moveDistance = fastMoveSpeed
     }
     stopDown()
@@ -547,7 +548,7 @@ function buttonRelease() {
   //this prevents any weird lingering of the move animation (and it's readded immediately if a direction is held)
   if (eventVar.key === 'Shift') {
     moveDistance = slowMoveSpeed
-    if(eventVar.shiftKey) {
+    if(eventVar.shiftKey || sprintButton.classList.contains("active")) {
       moveDistance = fastMoveSpeed
     }
 
