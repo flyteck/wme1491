@@ -26,6 +26,10 @@ var gameHeight = parseInt(510)
 if (!matchMedia('(pointer:fine)').matches) {
   //this makes the buttons work on mobile
   window.addEventListener("contextmenu", function(e) { e.preventDefault(); })
+
+  //and for reasons unbeknownst to me, mobile moves faster still so we half
+  var slowMoveSpeed = "4"
+  var fastMoveSpeed = "8"
 }
 
 //this checks if the mouse is held down, to repeat click directions
