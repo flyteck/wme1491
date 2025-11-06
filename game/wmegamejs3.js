@@ -443,7 +443,7 @@ function buttonPress() {
         }, 32);
       }
     }
-  }, 16);
+  }, 32);
 }
 
 function buttonRelease() {
