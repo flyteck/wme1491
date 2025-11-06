@@ -432,7 +432,7 @@ function buttonPress() {
         setTimeout(() => {
           buttonPress.call();
           console.log("running");
-        }, 16);
+        }, 32);
       }
 
       if (mouseDown == 0) {
@@ -440,7 +440,7 @@ function buttonPress() {
         setTimeout(() => {
           buttonRelease();
           console.log("running 2");
-        }, 16);
+        }, 32);
       }
     }
   }, 16);
