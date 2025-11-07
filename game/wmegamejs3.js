@@ -320,7 +320,6 @@ function buttonPress() {
           dialoguePopUp.classList.add("last-line");
         }
       }
-
     }
   }
 
@@ -454,6 +453,7 @@ function buttonPress() {
       }
 
       if (mouseDown == 0) {
+        console.log(eventVar.target.id);
         //if button isn't being pressed, end 
         setTimeout(() => {
           buttonRelease();
@@ -489,9 +489,6 @@ function buttonRelease() {
     churchOverlap();
     //fix zindex
     zIndexSort()
-
-    //and reset button pressed for mobile
-    buttonPressed = "initial";
   }
 
   if (eventVar.key === 'ArrowRight' || eventVar.key === 'd' || eventVar.target.id == "right-arrow-button") {
@@ -506,9 +503,6 @@ function buttonRelease() {
     churchOverlap();
     //fix zindex
     zIndexSort()
-
-    //and reset button pressed for mobile
-    buttonPressed = "initial";
   }
 
   if (eventVar.key === 'ArrowUp' || eventVar.key === 'w' || eventVar.target.id == "up-arrow-button") {
@@ -523,9 +517,6 @@ function buttonRelease() {
     churchOverlap();
     //fix zindex
     zIndexSort()
-
-    //and reset button pressed for mobile
-    buttonPressed = "initial";
   }
 
   if (eventVar.key === 'ArrowDown' || eventVar.key === 's' || eventVar.target.id == "down-arrow-button") {
@@ -540,9 +531,6 @@ function buttonRelease() {
     churchOverlap();
     //fix zindex
     zIndexSort()
-
-    //and reset button pressed for mobile
-    buttonPressed = "initial";
   }
 
   //this prevents any weird lingering of the move animation (and it's readded immediately if a direction is held)
@@ -558,6 +546,9 @@ function buttonRelease() {
     obstacleCheck("left",moveDistance);
     obstacleCheck("right",moveDistance);
   }
+
+  //and for all buttons, reset button pressed for mobile
+    buttonPressed = "initial";
 }
 
 //check for the church overlap
