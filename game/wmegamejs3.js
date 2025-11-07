@@ -30,6 +30,20 @@ if (!matchMedia('(pointer:fine)').matches) {
   window.addEventListener("contextmenu", function(e) { e.preventDefault(); })
 }
 
+//set sfx audio volume 
+window.addEventListener("load", audioVolume);
+
+function audioVolume() {
+  var soundEffect = document.querySelectorAll(".sound-effect");
+  for (i = 0; i < soundEffect.length; i++) {
+    soundEffect[i].volume = 0.4;
+  }
+
+  document.getElementById("background-player").volume = 0.8;
+}
+
+
+
 //this checks if the mouse is held down, to repeat click directions
 var mouseDown = 0;
 
@@ -73,6 +87,10 @@ function hideTutorial() {
 
     //run through all the functions of the controller whenever someone lifts a button
     document.addEventListener("keyup", buttonRelease);
+
+    //start playing music
+    document.getElementById("background-player").play();
+    document.getElementById("ambience-player").play();
 
     //remove that once the tutorial is gone
     window.removeEventListener("keydown", hideTutorial);
@@ -157,13 +175,17 @@ function buttonPress() {
     }
   }
   
-
   //on spacebar click, call item check. if it returns true, modify the clicked item
   if (eventVar.key === ' ' || eventVar.target.id == "dialogue-arrow" || eventVar.target.id == "interact-button") {
 
     var interactFound = interactCheck();
 
     if (interactFound != undefined || document.querySelector(".last-line") != null) {
+
+      //pause sound effects & stop character
+      document.getElementById("walk-player").pause();
+      document.getElementById("lope-player").pause();
+      character.classList.remove("left", "right", "up", "down", "moving", "sprint");
 
       //if you are, set needed general variables
       var dialoguePopUp = document.querySelector(".dialogue-popup")
@@ -724,6 +746,17 @@ function interactCheck() {
       character.classList.add("moving","left","face-left");
       character.classList.remove("right","stopped","face-right","face-up","face-down");
 
+      //check if we're running or walking, play sfx
+      if (character.classList.contains("sprint")) {
+        //pause walk, start playing lope sfx
+        document.getElementById("walk-player").pause();
+        document.getElementById("lope-player").play();
+      } else {
+        //pause lope, start playing walk sfx
+        document.getElementById("lope-player").pause();
+        document.getElementById("walk-player").play();
+      }
+
       //and when we move we check zindex
       zIndexSort();
   }
@@ -747,6 +780,17 @@ function interactCheck() {
       //indicate the character is moving and going right
       character.classList.add("moving","right","face-right");
       character.classList.remove("left","stopped","face-left","face-up","face-down");
+
+      //check if we're running or walking, play sfx
+      if (character.classList.contains("sprint")) {
+        //pause walk, start playing lope sfx
+        document.getElementById("walk-player").pause();
+        document.getElementById("lope-player").play();
+      } else {
+        //pause lope, start playing walk sfx
+        document.getElementById("lope-player").pause();
+        document.getElementById("walk-player").play();
+      }
 
       //and when we move we check zindex
       zIndexSort();
@@ -772,6 +816,17 @@ function interactCheck() {
       character.classList.add("moving","up","face-up");
       character.classList.remove("down","stopped","face-down");
 
+      //check if we're running or walking, play sfx
+      if (character.classList.contains("sprint")) {
+        //pause walk, start playing lope sfx
+        document.getElementById("walk-player").pause();
+        document.getElementById("lope-player").play();
+      } else {
+        //pause lope, start playing walk sfx
+        document.getElementById("lope-player").pause();
+        document.getElementById("walk-player").play();
+      }
+
       //and when we move we check zindex
       zIndexSort();
   }
@@ -796,6 +851,17 @@ function interactCheck() {
       character.classList.add("moving","down","face-down");
       character.classList.remove("up","stopped","face-up");
 
+      //check if we're running or walking, play sfx
+      if (character.classList.contains("sprint")) {
+        //pause walk, start playing lope sfx
+        document.getElementById("walk-player").pause();
+        document.getElementById("lope-player").play();
+      } else {
+        //pause lope, start playing walk sfx
+        document.getElementById("lope-player").pause();
+        document.getElementById("walk-player").play();
+      }
+
       //and when we move we check zindex
       zIndexSort();
   }
@@ -807,6 +873,11 @@ function interactCheck() {
       if (character.classList.contains("sprint")){
         character.classList.remove("sprint");
       }
+      //pause sound effects
+      document.getElementById("walk-player").pause();
+      document.getElementById("lope-player").pause();
+      
+
       character.classList.add("stopped");
     }, 16);
   }
@@ -817,6 +888,11 @@ function interactCheck() {
       if (character.classList.contains("sprint")){
         character.classList.remove("sprint");
       }
+      
+      //pause sound effects
+      document.getElementById("walk-player").pause();
+      document.getElementById("lope-player").pause();
+
       character.classList.add("stopped");
     }, 16);
   }
@@ -827,6 +903,11 @@ function interactCheck() {
       if (character.classList.contains("sprint")){
         character.classList.remove("sprint");
       }
+      
+      //pause sound effects
+      document.getElementById("walk-player").pause();
+      document.getElementById("lope-player").pause();
+
       character.classList.add("stopped");
     }, 16);
   }
@@ -837,6 +918,11 @@ function interactCheck() {
       if (character.classList.contains("sprint")){
         character.classList.remove("sprint");
       }
+      
+      //pause sound effects
+      document.getElementById("walk-player").pause();
+      document.getElementById("lope-player").pause();
+
       character.classList.add("stopped");
     }, 16);
   }

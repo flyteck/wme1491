@@ -15,6 +15,13 @@
 </head>
 
 <body>
+	<audio id="background-player" src="music/bg.mp3" loop="loop" allow="autoplay"></audio>
+	<audio id="ambience-player" src="music/wind+birds.mp3" loop="loop" allow="autoplay"></audio>
+	<audio id="crow-player" src="music/crowcalls.mp3" loop="loop" allow="autoplay"></audio>
+
+	<audio id="walk-player" class="sound-effect" src="music/walk.wav" loop="loop" allow="autoplay"></audio>
+	<audio id="lope-player" class="sound-effect" src="music/lope.wav" loop="loop" allow="autoplay"></audio>
+
 	<div id="game-wrapper">
 		<div id="game-container" class="Oddly-Shaded-Woods initial-screen">
 			<div id="test-character" style="left:448px;top:320px;"></div>
@@ -101,7 +108,7 @@
 				<div class="flex-row" style="margin: 10px 20px;">
 					Move:
 					<!-- letter buttons -->
-					<div class="flex-column" style="margin: 10px 20px;">
+					<div class="flex-column touch-hide" style="margin: 10px 20px;">
 						<div class="game-button" id="w-button"></div>
 						<div class="flex-row">
 							<div class="game-button" id="a-button"></div>
@@ -111,7 +118,7 @@
 					</div>
 
 					<!-- arrow buttons -->
-					<div class="flex-row">
+					<div class="flex-row" style="margin: 10px 20px;">
 						<div class="game-button" id="left-arrow-button"></div>
 						<div class="flex-column">
 							<div class="game-button" id="up-arrow-button"></div>
@@ -124,7 +131,7 @@
 				<br>
 
 				<div class="flex-row">
-					Sprint (hold):
+					Sprint<span class="touch-hide"> (hold)</span>:
 					<div class="game-button" id="shift-button"></div>
 					Interact:
 					<div class="game-button" id="space-button"></div>
@@ -206,6 +213,6 @@
 
 </body>
 
-<script src="wmegamejs3.js?10"></script>
+<script src="wmegamejs3.js?11"></script>
 
 </html>

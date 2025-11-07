@@ -204,6 +204,18 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 	.desktop-confirm {
 		display: none;
 	}
+
+	.touch-hide {
+		display: none;
+	}
+
+	#shift-button {
+		background-image: url(ui/sprint.png);
+	}
+
+	#space-button {
+		background-image: url(ui/interact.png);
+	}
 }
 
 /*** Inventory ***/
