@@ -417,6 +417,7 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 	background-image: url(obstacles/leavesfull.png);
 	background-size: 100%;
 	z-index: 998;
+	pointer-events: none;
 }
 
 #screen-display {
@@ -786,8 +787,6 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 	z-index: 1;
 }
 
-}
-
 /**Church Top (this has a smaller base, to change when it fades**/
 
 .churchtop {
@@ -811,6 +810,26 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 	position: absolute;
    left: -14px;
    bottom: -129px;
+}
+
+/** vertical fence **/
+.innerwall {
+	background-color: transparent;
+	height: 108px;
+	width: 40px;
+	position: absolute;
+}
+
+.obstacle.innerwall div {
+	height: calc(100% + 116px);
+	width: 34px;
+	background-image: url(obstacles/innerwall.png);
+	background-position: center bottom;
+	background-repeat: repeat-y;
+	background-size: 100% auto;
+	position: absolute;
+	top: -36px;
+	left: 8px;
 }
 
 /** Objectives **/
