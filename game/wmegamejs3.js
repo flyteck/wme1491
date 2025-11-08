@@ -38,23 +38,30 @@ function audioVolume() {
   for (i = 0; i < soundEffect.length; i++) {
     soundEffect[i].volume = 0.4;
   }
-
-  document.getElementById("background-player").volume = 0.8;
+  document.getElementById("background-player").volume = 0.7;
+  document.getElementById("advance").volume = 0.2;
+  document.getElementById("leaves").volume = 0.2;
 }
 
+window.addEventListener("load", groundZIndex);
 
+function groundZIndex() {
+  var ground = document.querySelectorAll(".ground") 
+  zIndexSort()
+  for (i = 0; i < ground.length; i++) {
+    ground[i].style.zIndex = 1;
+  }
+}
 
 //this checks if the mouse is held down, to repeat click directions
 var mouseDown = 0;
 
 document.body.ontouchstart = function() { 
     mouseDown = 1;
-    console.log(mouseDown + " being pressed");
 }
 document.body.ontouchend = function() {
     mouseDown = 0;
     buttonRelease;
-    console.log(mouseDown + " let go");
 }
 
 ///////////////////////Tutorial, titles, & other things over top
@@ -165,11 +172,28 @@ function buttonPress() {
     //if it's open
     if (menu.classList.contains("open")) {
       menu.classList.remove("open");
+      //play ambience & background
+      document.getElementById("ambience-player").play();
+      document.getElementById("background-player").play();
+
+      //and pause menu music (+ set it to beginning)
+      document.getElementById("menu-player").pause();
+      document.getElementById("menu-player").currentTime = 0;
       return
     }
     
     //if it's closed
     if (!menu.classList.contains("open")) {
+      //pause ambience & background (+ set them to beginning)
+      document.getElementById("ambience-player").pause();
+      document.getElementById("background-player").pause();
+
+      document.getElementById("ambience-player").currentTime = 0;
+      document.getElementById("background-player").currentTime = 0;
+
+      //and play menu music
+      document.getElementById("menu-player").play();
+
       menu.classList.add("open");
       return
     }
@@ -190,6 +214,16 @@ function buttonPress() {
       //if you are, set needed general variables
       var dialoguePopUp = document.querySelector(".dialogue-popup")
       var dialogueLoader = document.getElementById("dialogue-loader")
+
+      //play sounds (stop first to make sure they restart)
+      document.getElementById("advance").pause();
+      document.getElementById("advance2").pause();
+
+      document.getElementById("advance").currentTime = 0;
+      document.getElementById("advance2").currentTime = 0;
+
+      document.getElementById("advance").play();
+      document.getElementById("advance2").play();
 
       //check if we're on the last line of dialogue, and if so, do something different
       if (dialoguePopUp.classList.contains("last-line")) {
@@ -269,6 +303,11 @@ function buttonPress() {
         //if an item is found, unposition it and add the collected class to the item and it's match in the inventory
         var foundInventory = document.getElementById(interactFound.id + "Inventory");
         var dialoguePopUp = document.querySelector(".dialogue-popup");
+
+        //play sound effect, only when item is got
+        if (!dialoguePopUp.classList.contains("item-text")) {
+          document.getElementById("item-effect").play();
+        }
 
         //add item class to dialogue box, and add collected to the item in the inventory
         dialoguePopUp.classList.add("item-text");
@@ -598,6 +637,38 @@ function obstacleCheck(direction,moveDistance) {
   var obstacle = document.querySelectorAll(".obstacle");
   var characterBounds = character.getBoundingClientRect();
 
+
+  //check for ground items
+  var groundItem = document.querySelectorAll(".ground");
+
+  for (i = 0; i < groundItem.length; i++) {
+    var groundItemBounds = groundItem[i].getBoundingClientRect();
+
+    var overlap = !(groundItemBounds.right <= characterBounds.left || groundItemBounds.left >= characterBounds.right ||
+                      groundItemBounds.bottom <= characterBounds.top || groundItemBounds.top >= characterBounds.bottom);
+
+    //if there's overlap, we're not pressing shift to target this, and our bottom is higher than the object bottom
+    if (overlap === true && eventVar.key != 'Shift' && characterBounds.bottom <= groundItemBounds.bottom) {
+      //for leaves
+      if (groundItem[i].classList.contains("leaves")) {
+        document.getElementById("leaves").play();
+        document.getElementById("leaves").classList.add("leaves-" + i);
+      }
+    } 
+
+    //if there's none, pause all the ground sfx players (for leaves)
+    if (overlap === false && document.getElementById("leaves").classList.contains("leaves-" + i)) {
+      var groundPlayers = document.querySelectorAll(".ground-sound");
+      for (i = 0; i < groundPlayers.length; i++) {
+        //pause all players
+        groundPlayers[i].pause();
+      }
+
+      //and reset the leaves
+      document.getElementById("leaves").classList = "sound-effect ground-sound";
+    }
+  }
+
   //check for obstacles
   for (i = 0; i < obstacle.length; i++) {
     //for general obstacles
@@ -873,11 +944,19 @@ function interactCheck() {
       if (character.classList.contains("sprint")){
         character.classList.remove("sprint");
       }
-      //pause sound effects
+      
+      //pause walk sound effects
       document.getElementById("walk-player").pause();
       document.getElementById("lope-player").pause();
-      
 
+      //and ground sound effects
+      setTimeout(() => {
+        var groundPlayers = document.querySelectorAll(".ground-sound");
+        for (i = 0; i < groundPlayers.length; i++) {
+          groundPlayers[i].pause();
+        }
+      }, 150);
+      
       character.classList.add("stopped");
     }, 16);
   }
@@ -889,9 +968,17 @@ function interactCheck() {
         character.classList.remove("sprint");
       }
       
-      //pause sound effects
+      //pause walk sound effects
       document.getElementById("walk-player").pause();
       document.getElementById("lope-player").pause();
+
+      //and ground sound effects
+      setTimeout(() => {
+        var groundPlayers = document.querySelectorAll(".ground-sound");
+        for (i = 0; i < groundPlayers.length; i++) {
+          groundPlayers[i].pause();
+        }
+      }, 150);
 
       character.classList.add("stopped");
     }, 16);
@@ -904,9 +991,17 @@ function interactCheck() {
         character.classList.remove("sprint");
       }
       
-      //pause sound effects
+      //pause walk sound effects
       document.getElementById("walk-player").pause();
       document.getElementById("lope-player").pause();
+
+      //and ground sound effects
+      setTimeout(() => {
+        var groundPlayers = document.querySelectorAll(".ground-sound");
+        for (i = 0; i < groundPlayers.length; i++) {
+          groundPlayers[i].pause();
+        }
+      }, 150);
 
       character.classList.add("stopped");
     }, 16);
@@ -919,9 +1014,17 @@ function interactCheck() {
         character.classList.remove("sprint");
       }
       
-      //pause sound effects
+      //pause walk sound effects
       document.getElementById("walk-player").pause();
       document.getElementById("lope-player").pause();
+
+      //and ground sound effects
+      setTimeout(() => {
+        var groundPlayers = document.querySelectorAll(".ground-sound");
+        for (i = 0; i < groundPlayers.length; i++) {
+          groundPlayers[i].pause();
+        }
+      }, 150);
 
       character.classList.add("stopped");
     }, 16);
@@ -934,23 +1037,39 @@ function interactCheck() {
 
     //define the variables based on move direction
     if(direction == "left") {
-        //jump character to the right spot on the new screen
-        character.style.left = gameWidth + "px";
+      //jump character to the right spot on the new screen
+      character.style.transition = "0ms ease all";
+      character.style.left = gameWidth + "px";
+      setTimeout(() => {
+        character.style.transition = "";
+      }, 16);
     }
 
     if(direction == "up") {
-        //jump character to the right spot on the new screen
-        character.style.top = gameHeight + "px";
+      //jump character to the right spot on the new screen
+      character.style.transition = "0ms ease all";
+      character.style.top = gameHeight + "px";
+      setTimeout(() => {
+        character.style.transition = "";
+      }, 16);
     }
 
     if(direction == "down") {
       //jump character to the right spot on the new screen
-        character.style.top = "0";
-      }
+      character.style.transition = "0ms ease all";
+      character.style.top = "0";
+      setTimeout(() => {
+        character.style.transition = "";
+      }, 16);
+    }
 
     if(direction == "right") {
       //jump character to the right spot on the new screen
-        character.style.left = "0";
+      character.style.transition = "0ms ease all";
+      character.style.left = "0";
+      setTimeout(() => {
+        character.style.transition = "";
+      }, 16);
     }
 
     //this generates the screen title (delay to be sure that the classes are all updated before generating)
@@ -1102,10 +1221,14 @@ function zIndexSort() {
 
   //go down the list, and set their z-index to their top position
   for (i = 0; i < screenElements.length; i++) {
-    var screenElementBounds = parseInt(screenElements[i].style.top);
-      
-    if (screenElementBounds > 0) {
-      screenElements[i].style.zIndex = screenElementBounds;
+    //we wanna leave out items on the ground from this
+    if (!screenElements[i].classList.contains("ground")) {
+      var screenElementBounds = parseInt(screenElements[i].style.top);
+        
+      //don't touch if it's below 0 as well
+      if (screenElementBounds > 0) {
+        screenElements[i].style.zIndex = screenElementBounds;
+      }
     }
   }
 }
