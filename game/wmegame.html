@@ -3,7 +3,8 @@
   <meta content="width=device-width, initial-scale=1" name="viewport" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
   <link rel="stylesheet" href="../gnashcss.css?2">
-  <link rel="stylesheet" href="wmegamecss.css?3">
+  <link rel="stylesheet" href="wmegamecss.css?4">
+  <link rel="stylesheet" href="leafsprawl.css">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,6 +21,7 @@
 	<audio id="menu-player" src="music/menu.wav" loop="loop" allow="autoplay"></audio>
 
 	<audio id="crow-player" src="music/crowcalls.mp3" loop="loop" allow="autoplay"></audio>
+	<audio id="frog-player" src="music/frogcroaks.wav" loop="loop" allow="autoplay"></audio>
 
 	<audio id="walk-player" class="sound-effect" src="music/walk.wav" loop="loop" allow="autoplay"></audio>
 	<audio id="lope-player" class="sound-effect" src="music/lope.wav" loop="loop" allow="autoplay"></audio>
@@ -31,13 +33,13 @@
 	<audio id="leaves" class="sound-effect ground-sound" src="music/leaves.wav" allow="autoplay"></audio>
 
 	<div id="game-wrapper">
-		<div id="game-container" class="Oddly-Shaded-Woods left-1">
+		<div id="game-container" class="Oddly-Shaded-Woods initial-screen">
 			<div id="test-character" style="left:448px;top:320px;"></div>
 
 			<!------------------------ Level 1 ------------------------>
 			<!--------- Screen 11 / Initial Screen --------->
 			<!-- Decorations -->
-
+			<div class="leafmap ground Oddly-Shaded-Woods initial-screen"></div>
 			<div class="leaves leafsprawl leafsprawlleft1 ground Oddly-Shaded-Woods initial-screen"></div>
 			<div class="leaves leafsprawl leafsprawlleft1down1 ground Oddly-Shaded-Woods initial-screen"></div>
 			<div class="leaves leafsprawl leafsprawlleft1down2 ground Oddly-Shaded-Woods initial-screen"></div>
@@ -79,19 +81,19 @@
 
 			<!--------- Screen 10 / Left 1 --------->
 			<!-- Decorations -->
-			<div class="leafmap ground Oddly-Shaded-Woods left-1"></div>
-			<div class="leaves leafsprawl2 leafsprawl2down1 ground Oddly-Shaded-Woods left-1"></div>
-			<div class="leaves leafsprawl2 leafsprawl2down2 ground Oddly-Shaded-Woods left-1"></div>
-			<div class="leaves leafsprawl2 leafsprawl2down3 ground Oddly-Shaded-Woods left-1"></div>
-			<div class="leaves leafsprawl2 leafsprawl2down4 ground Oddly-Shaded-Woods left-1"></div>
-			<div class="leaves leafsprawl2 leafsprawl2down5 ground Oddly-Shaded-Woods left-1"></div>
-			<div class="leaves leafsprawl2 leafsprawl2 ground Oddly-Shaded-Woods left-1"></div>
-			<div class="leaves leafsprawl2 leafsprawl2left1 ground Oddly-Shaded-Woods left-1"></div>
-			<div class="leaves leafsprawl2 leafsprawl2left2 ground Oddly-Shaded-Woods left-1"></div>
-			<div class="leaves leafsprawl2 leafsprawl2left3 ground Oddly-Shaded-Woods left-1"></div>
-			<div class="leaves leafsprawl2 leafsprawl2left4 ground Oddly-Shaded-Woods left-1"></div>
-			<div class="leaves leafsprawl2 leafsprawl2left5 ground Oddly-Shaded-Woods left-1"></div>
-			<div class="leaves leafsprawl2 leafsprawl2left6 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leafmap2 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl leafsprawl2down1 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl leafsprawl2down2 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl leafsprawl2down3 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl leafsprawl2down4 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl leafsprawl2down5 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl leafsprawl2 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl leafsprawl2left1 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl leafsprawl2left2 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl leafsprawl2left3 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl leafsprawl2left4 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl leafsprawl2left5 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl leafsprawl2left6 ground Oddly-Shaded-Woods left-1"></div>
 
 			<!-- Obstacles -->
 			<div class="obstacle fence bigtreeorange tree Oddly-Shaded-Woods left-1" style="left:768px;top:64px;"><div><!--fence image--></div></div>
@@ -122,6 +124,19 @@
 			<div class="obstacle fence deadtree tree Oddly-Shaded-Woods right-2" style="left:320px;top:224px;"><div><!--fence image--></div></div>
 
 			<div class="obstacle innerwall Oddly-Shaded-Woods right-2" style="left: 564px; top: -80px; height: 334px;"><div><!--fence image--></div></div>
+			<div class="obstacle innerwallhorizontal fence Oddly-Shaded-Woods right-2" style="left: 572px; top: 224px; width:160px;"><div><!--fence image--></div></div>
+			<div class="obstacle innerwallhorizontal fence Oddly-Shaded-Woods right-2" style="left: 860px; top: 224px; width:160px;"><div><!--fence image--></div></div>
+
+			<div class="obstacle churchpew bible fence Oddly-Shaded-Woods right-2" style="left: 610px;top: 164px;"><div><!--fence image--></div></div>
+			<div class="obstacle churchpew fence Oddly-Shaded-Woods right-2" style="left: 610px;top: 84px;"><div><!--fence image--></div></div>
+			<div class="obstacle churchpew fence Oddly-Shaded-Woods right-2" style="left: 610px;top: 4px;"><div><!--fence image--></div></div>
+			<div class="obstacle churchpew fence Oddly-Shaded-Woods right-2" style="left: 610px;top: -76px;"><div><!--fence image--></div></div>
+
+			<div class="obstacle churchpew fence Oddly-Shaded-Woods right-2" style="left: 862px;top: 164px;"><div><!--fence image--></div></div>
+			<div class="obstacle churchpew bible fence Oddly-Shaded-Woods right-2" style="left: 862px;top: 84px;"><div><!--fence image--></div></div>
+			<div class="obstacle churchpew fence Oddly-Shaded-Woods right-2" style="left: 862px;top: 4px;"><div><!--fence image--></div></div>
+			<div class="obstacle churchpew fence Oddly-Shaded-Woods right-2" style="left: 862px;top: -76px;"><div><!--fence image--></div></div>
+
 
 			<div class="churchtop Oddly-Shaded-Woods right-2"><div><!--fence image--></div></div>
 
@@ -246,6 +261,6 @@
 
 </body>
 
-<script src="wmegamejs3.js?12"></script>
+<script src="wmegamejs3.js?13"></script>
 
 </html>

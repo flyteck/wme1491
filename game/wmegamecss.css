@@ -664,7 +664,11 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 }
 
 /** flip each odd number tree, for variation **/
-.tree:nth-child(odd)  {
+.tree:nth-child(odd), .churchpew:nth-child(odd)  {
+	transform: scaleX(-1);
+}
+
+.churchpew.bible:nth-child(odd) div:after  {
 	transform: scaleX(-1);
 }
 
@@ -773,6 +777,33 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 	background-image: url(obstacles/bigtreeyellow.png);
 }
 
+/** church pew **/
+.obstacle.churchpew {
+	height: 56px;
+	width: 123.5px;
+}
+
+.obstacle.churchpew div {
+	background-image: url(obstacles/churchpew.png);
+	background-size: contain;
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	height: 66px;
+	width: 123.5px;
+	position: absolute;
+	bottom: 8px;
+}
+
+.obstacle.churchpew.bible div:after {
+	display: block;
+	content:"";
+	background-image: url(obstacles/churchpewbible.png);
+	background-size: contain;
+	width: 100%;
+	height: 100%;
+}
+
+
 .obstacle.small {
 	height: 32px;
 	width: 32px;
@@ -803,200 +834,7 @@ button:not(.game-button):hover, button:not(.game-button):focus {
    z-index: 1;
 }
 
-.leafsprawlleft1 {
-	background-image: url(obstacles/leafsprawl/leafsprawlleft1.png);
-	background-size: contain;
-	left: 0;
-	top: 0;
-	height: 148px;
-	width: 446px;
-	border: none;
-}
-
-.leafsprawlleft1down1 {
-	background-image: url(obstacles/leafsprawl/leafsprawlleft1down1.png);
-	background-size: contain;
-	left: 0;
-	top: 148px;
-	height: 72px;
-	width: 396px;
-	border: none;
-}
-
-.leafsprawlleft1down2 {
-	background-image: url(obstacles/leafsprawl/leafsprawlleft1down2.png);
-	background-size: contain;
-	left: 0;
-	top: 220px;
-	height: 76px;
-	width: 356px;
-	border: none;
-}
-
-.leafsprawlleft1down3 {
-	background-image: url(obstacles/leafsprawl/leafsprawlleft1down3.png);
-	background-size: contain;
-	left: 0;
-	top: 296px;
-	height: 42px;
-	width: 168px;
-	border: none;
-}
-
-.leafsprawlleft1down4 {
-	background-image: url(obstacles/leafsprawl/leafsprawlleft1down4.png);
-	background-size: contain;
-	left: 0;
-	top: 338px;
-	height: 58px;
-	width: 100px;
-	border: none;
-}
-
-.leafsprawlleft1down5 {
-	background-image: url(obstacles/leafsprawl/leafsprawlleft1down5.png);
-	background-size: contain;
-	left: 0;
-	top: 396px;
-	height: 44px;
-	width: 26px;
-	border: none;
-}
-
-.leafsprawlleft2 {
-	background-image: url(obstacles/leafsprawl/leafsprawlleft2.png);
-	background-size: contain;
-	left: 466px;
-	top: 0;
-	height: 72px;
-	width: 58px;
-	border: none;
-}
-
-.leafsprawl2 {
-	background-image: url(obstacles/leafsprawl/leafsprawl2.png);
-	background-size: contain;
-	right: 0;
-	top: 30px;
-	height: 86px;
-	width: 80px;
-	border: none;
-}
-
-.leafsprawl2left1 {
-	background-image: url(obstacles/leafsprawl/leafsprawl2left1.png);
-	background-size: contain;
-	right: 112px;
-	top: 10px;
-	height: 106px;
-	width: 136px;
-	border: none;
-}
-
-.leafsprawl2left2 {
-	background-image: url(obstacles/leafsprawl/leafsprawl2left2.png);
-	background-size: contain;
-	right: 365px;
-	top: 139px;
-	height: 341px;
-	width: 111px;
-	border: none;
-}
-
-.leafsprawl2left3 {
-	background-image: url(obstacles/leafsprawl/leafsprawl2left3.png);
-	background-size: contain;
-   right: 476px;
-   top: 200px;
-   height: 326px;
-   width: 112px;
-   border: none;
-}
-
-.leafsprawl2left5 {
-	background-image: url(obstacles/leafsprawl/leafsprawl2left5.png);
-	background-size: contain;
-	right: 588px;
-   top: 273px;
-   height: 251px;
-   width: 166px;
-   border: none;
-}
-
-.leafsprawl2left6 {
-	background-image: url(obstacles/leafsprawl/leafsprawl2left6.png);
-	background-size: contain;
-	right: 754px;
-   top: 349px;
-   height: 176px;
-   width: 138px;
-   border: none;
-}
-
-.leafsprawl2down1 {
-	background-image: url(obstacles/leafsprawl/leafsprawl2down1.png);
-	background-size: contain;
-	right: 0;
-	top: 115px;
-	height: 311px;
-	width: 365px;
-	border: none;
-}
-
-.leafsprawl2down2 {
-	background-image: url(obstacles/leafsprawl/leafsprawl2down2.png);
-	background-size: contain;
-	left: 0;
-	bottom: 0;
-	height: 48px;
-	width: 448px;
-	border: none;
-}
-
-.leafsprawl2down3 {
-	background-image: url(obstacles/leafsprawl/leafsprawl2down3.png);
-	background-size: contain;
-	right: 362px;
-   bottom: 0;
-   height: 92px;
-   width: 70px;
-   border: none;
-}
-
-.leafsprawl2down4 {
-	background-image: url(obstacles/leafsprawl/leafsprawl2down4.png);
-	background-size: contain;
-	right: 203px;
-   bottom: 45px;
-   height: 102px;
-   width: 162px;
-   border: none;
-}
-
-.leafsprawl2down5 {
-	background-image: url(obstacles/leafsprawl/leafsprawl2down5.png);
-	background-size: contain;
-	right: -2px;
-   bottom: 104px;
-   height: 42px;
-   width: 114px;
-   border: none;
-}
-
-.leafmap {
-	background-image: url(obstacles/leafsprawl/leafmap.png);
-	background-size: contain;
-	position: absolute;
-	left: 0;
-	top: 0;
-	height: 102%;
-	width: 102%;
-	border: none;
-}
-
-.leafsprawl2 {
-	opacity: 0;
-}
+/** leafsprawl is in its own fucking place man too long, new CSS file **/
 
 .leavesround {
 	background-image: url(obstacles/leavesflatround.png);
@@ -1033,7 +871,7 @@ button:not(.game-button):hover, button:not(.game-button):focus {
    bottom: -129px;
 }
 
-/** vertical fence **/
+/** inner wall vertical **/
 .innerwall {
 	background-color: transparent;
 	height: 108px;
@@ -1051,6 +889,26 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 	position: absolute;
 	top: -36px;
 	left: 8px;
+}
+
+/** inner wall horizontal **/
+
+.obstacle.innerwallhorizontal {
+	margin-top: 72px;
+	height: 40px;
+	width: 400px;
+}
+
+.obstacle.innerwallhorizontal div {
+	background-size: 100% 34px;
+	background-image: url(obstacles/innerwallhorizontal.png);
+	height: 34px;
+	width: 100%;
+	position: absolute;
+	bottom: 17px;
+	border: 1.5px solid #221022;
+   border-top: none;
+   border-bottom: none;
 }
 
 /** Objectives **/

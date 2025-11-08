@@ -1,12 +1,15 @@
 ////// Code to move the character
 
 ////KNOWN BUGS
-//So. Groan. You can clip through normal obstacles if you manage to stagger right.
-//The fix I'll have to use is resetting your position at the start of each move,
-//Or, what I'd rather if I can get it to fucking behave, is have it set your position to the edge of the object
+//Can walk over church pews due to them being fences. Need to have some separate object type maybe idk how to fix this one yet
+//Leaf stutter on mobile -- this is an optimization thing. I should have a clause to cancel calling a pause when you go quickly between two
+// object that make the same sfx, possibly by adding a class
 
 ////PLANS
 //Fullscreen: needs to use zoom or else pixel alignments break. Would need to dynamically find the right zoom number and use that with JS
+
+
+///for bullfrog: on change screen, check gamecontainer classlist, if it's got one of the bottom middle three, play; otherwise, pause
 
 //character + container
 const character = document.getElementById("test-character");
@@ -36,7 +39,7 @@ window.addEventListener("load", audioVolume);
 function audioVolume() {
   var soundEffect = document.querySelectorAll(".sound-effect");
   for (i = 0; i < soundEffect.length; i++) {
-    soundEffect[i].volume = 0.4;
+    soundEffect[i].volume = 0.5;
   }
   document.getElementById("background-player").volume = 0.7;
   document.getElementById("advance").volume = 0.2;
@@ -509,16 +512,13 @@ function buttonPress() {
         //and button is being pressed, fire again 
         setTimeout(() => {
           buttonPress.call();
-          console.log("running");
         }, 32);
       }
 
       if (mouseDown == 0) {
-        console.log(eventVar.target.id);
         //if button isn't being pressed, end 
         setTimeout(() => {
           buttonRelease();
-          console.log("running 2");
         }, 32);
       }
     }
@@ -634,6 +634,11 @@ function churchOverlap() {
 
 //check for obstacles
 function obstacleCheck(direction,moveDistance) {
+  //get classes on game container
+  var gameContainerClasses = gameContainer.classList.value.split(' ');
+  //shift off the location name
+  gameContainerClasses.shift();
+
   var obstacle = document.querySelectorAll(".obstacle");
   var characterBounds = character.getBoundingClientRect();
 
@@ -641,36 +646,40 @@ function obstacleCheck(direction,moveDistance) {
   //check for ground items
   var groundItem = document.querySelectorAll(".ground");
 
-  for (i = 0; i < groundItem.length; i++) {
-    var groundItemBounds = groundItem[i].getBoundingClientRect();
+    for (i = 0; i < groundItem.length; i++) {
+      if (groundItem[i].classList.contains(gameContainerClasses)) {
+        var groundItemBounds = groundItem[i].getBoundingClientRect();
 
-    var overlap = !(groundItemBounds.right <= characterBounds.left || groundItemBounds.left >= characterBounds.right ||
-                      groundItemBounds.bottom <= characterBounds.top || groundItemBounds.top >= characterBounds.bottom);
+        var overlap = !(groundItemBounds.right <= characterBounds.left || groundItemBounds.left >= characterBounds.right ||
+                          groundItemBounds.bottom <= characterBounds.top || groundItemBounds.top >= characterBounds.bottom);
 
-    //if there's overlap, we're not pressing shift to target this, and our bottom is higher than the object bottom
-    if (overlap === true && eventVar.key != 'Shift' && characterBounds.bottom <= groundItemBounds.bottom) {
-      //for leaves
-      if (groundItem[i].classList.contains("leaves")) {
-        document.getElementById("leaves").play();
-        document.getElementById("leaves").classList.add("leaves-" + i);
-      }
-    } 
+        //define needed players
+        var leafPlayer = document.getElementById("leaves");
 
-    //if there's none, pause all the ground sfx players (for leaves)
-    if (overlap === false && document.getElementById("leaves").classList.contains("leaves-" + i)) {
-      var groundPlayers = document.querySelectorAll(".ground-sound");
-      for (i = 0; i < groundPlayers.length; i++) {
-        //pause all players
-        groundPlayers[i].pause();
-      }
+        //if there's overlap, we're not pressing shift to target this, and our bottom is higher than the object bottom
+        if (overlap === true && eventVar.key != 'Shift' && characterBounds.bottom <= groundItemBounds.bottom) {
+          //for leaves
+          if (groundItem[i].classList.contains("leaves")) {
+            leafPlayer.play();
+            leafPlayer.classList.add("leaves-" + i, "playing");
+            setTimeout(() => {
+              leafPlayer.classList.remove("playing");
+            }, 16);
+          }
+        } 
 
-      //and reset the leaves
-      document.getElementById("leaves").classList = "sound-effect ground-sound";
+        //if there's no overlap, a leaf player is playing, and we didn't just come from one, pause all the ground sfx players (for leaves)
+        if (overlap === false && leafPlayer.classList.contains("leaves-" + i) && !leafPlayer.classList.contains("playing")) {
+          leafPlayer.pause();
+          //and reset the leaves
+          leafPlayer.classList = "sound-effect ground-sound";
+        }
     }
   }
 
   //check for obstacles
   for (i = 0; i < obstacle.length; i++) {
+    if (obstacle[i].classList.contains(gameContainerClasses)) {
     //for general obstacles
     if (!obstacle[i].classList.contains("fence")) {
       var obstacleBounds = obstacle[i].getBoundingClientRect();
@@ -748,7 +757,7 @@ function obstacleCheck(direction,moveDistance) {
 
       }
     }
-
+    }
   }
   //otherwise we're good
   return false;
@@ -804,8 +813,12 @@ function interactCheck() {
 
       //only move if there's room to move
       if (leftPosition > 0) {
-        //subtract a value from it to set it right
         setTimeout(() => {
+          //if we're on a diagonal, half the move distance since it'll be applied twice
+          if (character.classList.contains("up", "down")) {
+            moveDistance = parseInt(moveDistance)/parseInt("2");
+          }
+          //subtract a value from it to set it right
           character.style.left = leftPosition - moveDistance + "px";
         }, 16);
       } else {
@@ -839,6 +852,10 @@ function interactCheck() {
 
       //only move if there's room to move
       if (leftPosition < gameWidth) {
+        //if we're on a diagonal, half the move distance since it'll be applied twice
+          if (character.classList.contains("up", "down")) {
+            moveDistance = parseInt(moveDistance)/parseInt("2");
+          }
         //add a value to it, and pixels to set it right
         setTimeout(() => {
           character.style.left = leftPosition + moveDistance + "px";
@@ -874,8 +891,12 @@ function interactCheck() {
 
       //only move if there's room to move
       if (topPosition > 0) {
-        //subtract a value from it, and pixels to push it up
         setTimeout(() => {
+          //if we're on a diagonal, half the move distance since it'll be applied twice
+          if (character.classList.contains("left", "right")) {
+            moveDistance = parseInt(moveDistance)/parseInt("2");
+          }
+          //subtract a value from it, and pixels to push it up
           character.style.top = topPosition - moveDistance + "px";
         }, 16);
       } else {
@@ -909,8 +930,12 @@ function interactCheck() {
 
       //only move if there's room to move
       if (topPosition < gameHeight) {
-        //add a value to it, and pixels to push it down
         setTimeout(() => {
+          //if we're on a diagonal, half the move distance since it'll be applied twice
+          if (character.classList.contains("left", "right")) {
+            moveDistance = parseInt(moveDistance)/parseInt("2");
+          }
+          //add a value to it, and pixels to push it down
           character.style.top = topPosition + moveDistance + "px";
         }, 16);
       } else {
