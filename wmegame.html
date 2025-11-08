@@ -3,7 +3,7 @@
   <meta content="width=device-width, initial-scale=1" name="viewport" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
   <link rel="stylesheet" href="../gnashcss.css?2">
-  <link rel="stylesheet" href="wmegamecss.css?2">
+  <link rel="stylesheet" href="wmegamecss.css?3">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,12 +15,39 @@
 </head>
 
 <body>
+	<audio id="background-player" src="music/bg.mp3" loop="loop" allow="autoplay"></audio>
+	<audio id="ambience-player" src="music/wind+birds.mp3" loop="loop" allow="autoplay"></audio>
+	<audio id="menu-player" src="music/menu.wav" loop="loop" allow="autoplay"></audio>
+
+	<audio id="crow-player" src="music/crowcalls.mp3" loop="loop" allow="autoplay"></audio>
+
+	<audio id="walk-player" class="sound-effect" src="music/walk.wav" loop="loop" allow="autoplay"></audio>
+	<audio id="lope-player" class="sound-effect" src="music/lope.wav" loop="loop" allow="autoplay"></audio>
+
+	<audio id="item-effect" class="sound-effect" src="music/itemget.wav" allow="autoplay"></audio>
+	<audio id="advance2" class="sound-effect" src="music/advance3.wav" allow="autoplay"></audio>
+	<audio id="advance" class="sound-effect" src="music/advance.wav" allow="autoplay"></audio>
+
+	<audio id="leaves" class="sound-effect ground-sound" src="music/leaves.wav" allow="autoplay"></audio>
+
 	<div id="game-wrapper">
-		<div id="game-container" class="Oddly-Shaded-Woods initial-screen">
+		<div id="game-container" class="Oddly-Shaded-Woods left-1">
 			<div id="test-character" style="left:448px;top:320px;"></div>
 
 			<!------------------------ Level 1 ------------------------>
 			<!--------- Screen 11 / Initial Screen --------->
+			<!-- Decorations -->
+
+			<div class="leaves leafsprawlleft1 ground Oddly-Shaded-Woods initial-screen"></div>
+			<div class="leaves leafsprawlleft1down1 ground Oddly-Shaded-Woods initial-screen"></div>
+			<div class="leaves leafsprawlleft1down2 ground Oddly-Shaded-Woods initial-screen"></div>
+			<div class="leaves leafsprawlleft1down3 ground Oddly-Shaded-Woods initial-screen"></div>
+			<div class="leaves leafsprawlleft1down4 ground Oddly-Shaded-Woods initial-screen"></div>
+			<div class="leaves leafsprawlleft1down5 ground Oddly-Shaded-Woods initial-screen"></div>
+			<div class="leaves leafsprawlleft2 ground Oddly-Shaded-Woods initial-screen"></div>
+
+			<div class="leaves leavesround ground Oddly-Shaded-Woods initial-screen" style="left:200px;top:432px;"></div>
+
 			<!-- Obstacles -->
 			<div class="obstacle fence bigtreegreen tree Oddly-Shaded-Woods initial-screen" style="left:650px;top:-72px;"><div><!--fence image--></div></div>
 			<div class="obstacle fence bigtreeorange tree Oddly-Shaded-Woods initial-screen" style="left:204px;top:-32px;"><div><!--fence image--></div></div>
@@ -29,9 +56,6 @@
 			<div class="obstacle fence bigtreeyellow tree Oddly-Shaded-Woods initial-screen" style="left:112px;top:140px;"><div><!--fence image--></div></div>
 			<div class="obstacle fence deadtree tree Oddly-Shaded-Woods initial-screen" style="left:512px;top:140px;"><div><!--fence image--></div></div>
 			<div class="obstacle fence bigtreeorange tree Oddly-Shaded-Woods initial-screen" style="left:-64px;top:352px;"><div><!--fence image--></div></div>
-			<!-- Decorations -->
-			<div class="test-decoration Oddly-Shaded-Woods initial-screen" style="left:64px;top:304px;"></div>
-			<div class="leaves1 Oddly-Shaded-Woods initial-screen" style="left:564px;top:404px;"></div>
 			<!--Objectives -->
 			<div id="CandyApple" class="objective CandyApple Oddly-Shaded-Woods initial-screen" style="left:240px;top:304px;"></div>
 			<!-- Characters -->
@@ -54,6 +78,19 @@
 			<!--------- Screen 11 / Initial Screen (see top) --------->
 
 			<!--------- Screen 10 / Left 1 --------->
+			<!-- Decorations -->
+			<div class="leaves leafmap ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl2down1 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl2down2 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl2 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl2left1 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl2left2 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl2left3 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl2left4 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl2left5 ground Oddly-Shaded-Woods left-1"></div>
+			<div class="leaves leafsprawl2left6 ground Oddly-Shaded-Woods left-1"></div>
+
+			<!-- Obstacles -->
 			<div class="obstacle fence bigtreeorange tree Oddly-Shaded-Woods left-1" style="left:768px;top:64px;"><div><!--fence image--></div></div>
 			<div class="obstacle fence bigtreeyellow tree Oddly-Shaded-Woods left-1" style="left:552px;top:96px;"><div><!--fence image--></div></div>
 			<div class="obstacle fence bigtreeyellow tree Oddly-Shaded-Woods left-1" style="left:640px;top:192px;"><div><!--fence image--></div></div>
@@ -81,6 +118,8 @@
 
 			<div class="obstacle fence deadtree tree Oddly-Shaded-Woods right-2" style="left:320px;top:224px;"><div><!--fence image--></div></div>
 
+			<div class="obstacle innerwall Oddly-Shaded-Woods right-2" style="left: 564px; top: -80px; height: 334px;"><div><!--fence image--></div></div>
+
 			<div class="churchtop Oddly-Shaded-Woods right-2"><div><!--fence image--></div></div>
 
 			<!--------- Screen 14 / Right 3 --------->
@@ -99,7 +138,7 @@
 				<div class="flex-row" style="margin: 10px 20px;">
 					Move:
 					<!-- letter buttons -->
-					<div class="flex-column" style="margin: 10px 20px;">
+					<div class="flex-column touch-hide" style="margin: 10px 20px;">
 						<div class="game-button" id="w-button"></div>
 						<div class="flex-row">
 							<div class="game-button" id="a-button"></div>
@@ -109,7 +148,7 @@
 					</div>
 
 					<!-- arrow buttons -->
-					<div class="flex-row">
+					<div class="flex-row" style="margin: 10px 20px;">
 						<div class="game-button" id="left-arrow-button"></div>
 						<div class="flex-column">
 							<div class="game-button" id="up-arrow-button"></div>
@@ -122,7 +161,7 @@
 				<br>
 
 				<div class="flex-row">
-					Sprint (hold):
+					Sprint<span class="touch-hide"> (hold)</span>:
 					<div class="game-button" id="shift-button"></div>
 					Interact:
 					<div class="game-button" id="space-button"></div>
@@ -204,6 +243,6 @@
 
 </body>
 
-<script src="wmegamejs3.js?8"></script>
+<script src="wmegamejs3.js?12"></script>
 
 </html>
