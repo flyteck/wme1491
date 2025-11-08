@@ -11,6 +11,38 @@
 
 ///for bullfrog: on change screen, check gamecontainer classlist, if it's got one of the bottom middle three, play; otherwise, pause
 
+
+///quick OS detector for stupid stupid ipads
+window.addEventListener("load", getMobileOperatingSystem);
+
+function getMobileOperatingSystem() {
+    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    // Windows Phone must come first because its UA also contains "Android"
+    if (/windows phone/i.test(userAgent)) {
+        return "Windows Phone";
+    }
+
+    if (/android/i.test(userAgent)) {
+        return "Android";
+    }
+
+    // iOS detection from: http://stackoverflow.com/a/9039885/177710
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        return "iOS";
+    }
+
+    //Mac detection 
+    if (navigator.platform.startsWith("Mac") || navigator.platform === "iPhone") {
+        return "Mac";
+    }
+
+}
+
+var OS = getMobileOperatingSystem();
+
+////////////////////////////////////////////////////////////////////////////////
+
 //character + container
 const character = document.getElementById("test-character");
 const gameContainer = document.getElementById("game-container");
@@ -28,9 +60,10 @@ var gameWidth = parseInt(795)
 var gameHeight = parseInt(510)
 
 //only mobile stuff (if no mouse support)
-if (!matchMedia('(pointer:fine)').matches) {
+if (!matchMedia('(pointer:fine)').matches || OS == "Mac" && matchMedia('(any-pointer:coarse)').matches || OS == "iOS") {
   //this makes the buttons work on mobile
   window.addEventListener("contextmenu", function(e) { e.preventDefault(); })
+  document.querySelector("body").classList.add("touch-only");
 }
 
 //set sfx audio volume 

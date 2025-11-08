@@ -191,32 +191,31 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 	background-image: url(ui/interact.png);
 }
 
-@media (hover:none) or (only screen and (min-width: 1024px) and (max-height: 1366px) and (-webkit-min-device-pixel-ratio: 1.5)) {
+/** touch only stuff **/
 
-	#mobile-controls.open {
-		opacity: 1;
-		display: flex;
-	}
+body.touch-only #mobile-controls.open {
+	opacity: 1;
+	display: flex;
+}
 
-   #tutorial-button {
-		display: block;
-	}
+body.touch-only #tutorial-button {
+	display: block;
+}
 
-	.desktop-confirm {
-		display: none;
-	}
+body.touch-only .desktop-confirm {
+	display: none;
+}
 
-	.touch-hide {
-		display: none;
-	}
+body.touch-only .touch-hide {
+	display: none;
+}
 
-	#shift-button {
-		background-image: url(ui/sprint.png);
-	}
+body.touch-only #shift-button {
+	background-image: url(ui/sprint.png);
+}
 
-	#space-button {
-		background-image: url(ui/interact.png);
-	}
+body.touch-only #space-button {
+	background-image: url(ui/interact.png);
 }
 
 /*** Inventory ***/
