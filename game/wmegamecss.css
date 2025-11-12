@@ -21,6 +21,14 @@ body {
 	font-size: 1.5em;
 }
 
+#workingOn {
+	display: block!important;
+}
+
+#workingOn div {
+	display: flex!important;
+}
+
 h1, h2, h3, h4, h5 {
 	font-family: 'Jacquard 12';
 }
@@ -112,41 +120,23 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 	margin: 10px 5px 0 15px;
 }
 
-#left-arrow-button {
-	background-image: url(ui/arrowleft.png);
-}
+#left-arrow-button {background-image: url(ui/arrowleft.png);}
 
-#right-arrow-button {
-	background-image: url(ui/arrowright.png);
-}
+#right-arrow-button {background-image: url(ui/arrowright.png);}
 
-#up-arrow-button {
-	background-image: url(ui/arrowup.png);
-}
+#up-arrow-button {background-image: url(ui/arrowup.png);}
 
-#down-arrow-button {
-	background-image: url(ui/arrowdown.png);
-}
+#down-arrow-button {background-image: url(ui/arrowdown.png);}
 
-#w-button {
-	background-image: url(ui/w.png);
-}
+#w-button {background-image: url(ui/w.png);}
 
-#a-button {
-	background-image: url(ui/a.png);
-}
+#a-button {background-image: url(ui/a.png);}
 
-#s-button {
-	background-image: url(ui/s.png);
-}
+#s-button {background-image: url(ui/s.png);}
 
-#d-button {
-	background-image: url(ui/d.png);
-}
+#d-button {background-image: url(ui/d.png);}
 
-#q-button {
-	background-image: url(ui/q.png);
-}
+#q-button {background-image: url(ui/q.png);}
 
 #shift-button {
 	margin: 10px;
@@ -409,19 +399,18 @@ body.touch-only #space-button {
    flex: 0 0 auto;
 }
 
+#game-container:after {
+	display: none;
+}
+
 #game-container.initial-screen:after,
 #game-container.left-1:after,
-#game-container.up-1:after,
-#game-container.up-1.right-1:after,
-#game-container.up-1.right-2:after,
-#game-container.up-1.right-3:after,
+#game-container.up-1:not(.left-1,.left-2,.left-3,.right-3):after, 
 #game-container.right-1:after,
 #game-container.right-2:after,
 #game-container.right-3:after,
-#game-container.down-1.left-1:after,
-#game-container.down-1:after,
-#game-container.down-1.right-1:after,
-#game-container.down-1.right-2:after {
+#game-container.down-1:not(.left-2,.left-3):after {
+	display: block;
 	content:"";
 	width: 100%;
 	height: 100%;
@@ -455,108 +444,92 @@ body.touch-only #space-button {
 	display: flex;
 }
 
-#game-container.Oddly-Shaded-Woods.initial-screen > div.Oddly-Shaded-Woods.initial-screen,
-#game-container.Oddly-Shaded-Woods.left-1:not(.up-1, .down-1) > div.Oddly-Shaded-Woods.left-1,
-#game-container.Oddly-Shaded-Woods.left-2:not(.up-1, .down-1) > div.Oddly-Shaded-Woods.left-2,
-#game-container.Oddly-Shaded-Woods.right-1:not(.up-1, .down-1) > div.Oddly-Shaded-Woods.right-1,
-#game-container.Oddly-Shaded-Woods.right-2:not(.up-1, .down-1) > div.Oddly-Shaded-Woods.right-2, 
-#game-container.Oddly-Shaded-Woods.up-1:not(.left-1, .right-1, .left-2, .right-2, .left-3, .right-3) > div.Oddly-Shaded-Woods.up-1,
-#game-container.Oddly-Shaded-Woods.down-1:not(.left-1, .right-1, .left-2, .right-2, .left-3, .right-3) > div.Oddly-Shaded-Woods.down-1 {
-	display: flex;
-}
-
 /*** Level 1 ***/
 	
 
+/** screen 1 **/
+#game-container.Oddly-Shaded-Woods.left-3.up-1 {background-image: url(background1.png);}
+#game-container.Oddly-Shaded-Woods.left-3.up-1 > div.Oddly-Shaded-Woods.left-3.up-1 {display: flex;}
+
+/** screen 2 **/
+#game-container.Oddly-Shaded-Woods.left-2.up-1 {background-image: url(background2.png);}
+#game-container.Oddly-Shaded-Woods.left-2.up-1 > div.Oddly-Shaded-Woods.left-2.up-1 {display: flex;}
+
+/** screen 3 **/
+#game-container.Oddly-Shaded-Woods.left-1.up-1 {background-image: url(background3.png);}
+#game-container.Oddly-Shaded-Woods.left-1.up-1 > div.Oddly-Shaded-Woods.left-1.up-1 {display: flex;}
+
 /** screen 4 **/
-#game-container.Oddly-Shaded-Woods.up-1 {
-	background-image: url(background4.png);
-}
+#game-container.Oddly-Shaded-Woods.up-1 {background-image: url(background4.png);}
+#game-container.Oddly-Shaded-Woods.up-1:not(.left-1,.left-2,.left-3,.right-1,.right-2,.right-3) > div.Oddly-Shaded-Woods.up-1:not(.left-1,.left-2,.left-3,.right-1,.right-2,.right-3) {display: flex;}
 
 /** screen 5 **/
-#game-container.Oddly-Shaded-Woods.right-1.up-1 {
-	background-image: url(background5.png);
-}
+#game-container.Oddly-Shaded-Woods.right-1.up-1 {background-image: url(background5.png);}
+#game-container.Oddly-Shaded-Woods.right-1.up-1 > div.Oddly-Shaded-Woods.right-1.up-1 {display: flex;}
 
 /** screen 6 **/
-#game-container.Oddly-Shaded-Woods.right-2.up-1 {
-	background-image: url(background6.png);
-}
+#game-container.Oddly-Shaded-Woods.right-2.up-1 {background-image: url(background6.png);}
+#game-container.Oddly-Shaded-Woods.right-2.up-1 > div.Oddly-Shaded-Woods.right-2.up-1 {display: flex;}
 
 /** screen 7 **/
-#game-container.Oddly-Shaded-Woods.right-3.up-1 {
-	background-image: url(background7.png);
-}
+#game-container.Oddly-Shaded-Woods.right-3.up-1 {background-image: url(background7.png);}
+#game-container.Oddly-Shaded-Woods.right-3.up-1 > div.Oddly-Shaded-Woods.right-3.up-1 {display: flex;}
 
 /** screen 8 **/
-#game-container.Oddly-Shaded-Woods.left-3 {
-	background-image: url(background8.png);
-}
+#game-container.Oddly-Shaded-Woods.left-3 {background-image: url(background8.png);}
+#game-container.Oddly-Shaded-Woods.left-3:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.Oddly-Shaded-Woods.left-3:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
 
 /** screen 9 **/
-#game-container.Oddly-Shaded-Woods.left-2 {
-	background-image: url(background9.png);
-}
+#game-container.Oddly-Shaded-Woods.left-2 {background-image: url(background9.png);}
+#game-container.Oddly-Shaded-Woods.left-2:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.Oddly-Shaded-Woods.left-2:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
 
 /** screen 10 **/
-#game-container.Oddly-Shaded-Woods.left-1 {
-	background-image: url(background10.png);
-}
+#game-container.Oddly-Shaded-Woods.left-1 {background-image: url(background10.png);}
+#game-container.Oddly-Shaded-Woods.left-1:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.Oddly-Shaded-Woods.left-1:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
 
 /** screen 11  || INTITIAL SCREEN **/
-#game-container.Oddly-Shaded-Woods { 
-	background-image: url(background11.png);
-}
+#game-container.Oddly-Shaded-Woods {background-image: url(background11.png);}
+#game-container.Oddly-Shaded-Woods.initial-screen > div.Oddly-Shaded-Woods.initial-screen {display: flex;}
 
 /** screen 12 **/
-#game-container.Oddly-Shaded-Woods.right-1 {
-	background-image: url(background12.png);
-}
+#game-container.Oddly-Shaded-Woods.right-1 {background-image: url(background12.png);}
+#game-container.Oddly-Shaded-Woods.right-1:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.Oddly-Shaded-Woods.right-1:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
 
 /** screen 13 **/
-#game-container.Oddly-Shaded-Woods.right-2 {
-	background-image: url(background13.png);
-}
+#game-container.Oddly-Shaded-Woods.right-2 {background-image: url(background13.png);}
+#game-container.Oddly-Shaded-Woods.right-2:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.Oddly-Shaded-Woods.right-2:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
 
 /** screen 14 **/
-#game-container.Oddly-Shaded-Woods.right-3 {
-	background-image: url(background14.png);
-}
+#game-container.Oddly-Shaded-Woods.right-3 {background-image: url(background14.png);}
+#game-container.Oddly-Shaded-Woods.right-3:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.Oddly-Shaded-Woods.right-3:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
 
 /** screen 15 **/
-#game-container.Oddly-Shaded-Woods.left-3.down-1 {
-	background-image: url(background15.png);
-}
+#game-container.Oddly-Shaded-Woods.left-3.down-1 {background-image: url(background15.png);}
+#game-container.Oddly-Shaded-Woods.left-3.down-1 > div.Oddly-Shaded-Woods.left-3.down-1 {display: flex;}
 
 /** screen 16 **/
-#game-container.Oddly-Shaded-Woods.left-2.down-1 {
-	background-image: url(background16.png);
-}
+#game-container.Oddly-Shaded-Woods.left-2.down-1 {background-image: url(background16.png);}
+#game-container.Oddly-Shaded-Woods.left-2.down-1 > div.Oddly-Shaded-Woods.left-2.down-1 {display: flex;}
 
 /** screen 17 **/
-#game-container.Oddly-Shaded-Woods.left-1.down-1 {
-	background-image: url(background17.png);
-}
+#game-container.Oddly-Shaded-Woods.left-1.down-1 {background-image: url(background17.png);}
+#game-container.Oddly-Shaded-Woods.left-1.down-1 > div.Oddly-Shaded-Woods.left-1.down-1 {display: flex;}
 
 /** screen 18 **/
-#game-container.Oddly-Shaded-Woods.down-1 {
-	background-image: url(background18.png);
-}
+#game-container.Oddly-Shaded-Woods.down-1 {background-image: url(background18.png);}
+#game-container.Oddly-Shaded-Woods.down-1:not(.left-1,.left-2,.left-3,.right-1,.right-2,.right-3) > div.Oddly-Shaded-Woods.down-1:not(.left-1,.left-2,.left-3,.right-1,.right-2,.right-3) {display: flex;}
 
 /** screen 19 **/
-#game-container.Oddly-Shaded-Woods.right-1.down-1 {
-	background-image: url(background19.png);
-}
+#game-container.Oddly-Shaded-Woods.right-1.down-1 {background-image: url(background19.png);}
+#game-container.Oddly-Shaded-Woods.right-1.down-1 > div.Oddly-Shaded-Woods.right-1.down-1 {display: flex;}
 
 /** screen 20 **/
-#game-container.Oddly-Shaded-Woods.right-2.down-1 {
-	background-image: url(background20.png);
-}
+#game-container.Oddly-Shaded-Woods.right-2.down-1 {background-image: url(background20.png);}
+#game-container.Oddly-Shaded-Woods.right-2.down-1 > div.Oddly-Shaded-Woods.right-2.down-1 {display: flex;}
 
 /** screen 21 **/
-#game-container.Oddly-Shaded-Woods.right-3.down-1 {
-	background-image: url(background21.png);
-}
+#game-container.Oddly-Shaded-Woods.right-3.down-1 {background-image: url(background21.png);}
+#game-container.Oddly-Shaded-Woods.right-3.down-1 > div.Oddly-Shaded-Woods.right-3.down-1 {display: flex;}
 
 /********************** /Game Container *********************/
 
@@ -583,6 +556,16 @@ body.touch-only #space-button {
 	background-image: url(charactersprites/standleft.png);
 	background-repeat: no-repeat;
 	background-size: contain;
+}
+
+/** this allows for finer control for some interactions **/
+#nose {
+	display: block;
+	position: relative;
+	right: 0;
+	top: 0;
+	height: 70%;
+	width: 30px;
 }
 
 #test-character.moving:after {
@@ -631,6 +614,22 @@ body.touch-only #space-button {
   50% { transform: rotate(0eg); }
   75% { transform: rotate(-5deg); }
   100% { transform: rotate(0deg); }
+}
+
+#forest-entry {
+	height: 130px;
+   width: 1px;
+   position: absolute;
+   left: 480px;
+   top: 248px;
+}
+
+#church-entrance {
+	height: 100px;
+   width: 298px;
+   position: absolute;
+   left: 592px;
+   top: 188px;
 }
 
 /**** Obstacles ****/
@@ -700,6 +699,95 @@ body.touch-only #space-button {
 	top: -36px;
 }
 
+/** tombstone **/
+.obstacle.fence.tombstone {
+	height: 24px;
+	width: 38px;
+}
+
+.obstacle.fence.tombstone div {
+	background-size: contain;
+	background-image: url(obstacles/tombstone1.png);
+	height: 60px;
+	width: 100%;
+	position: absolute;
+	bottom: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	bottom: 8px;
+	margin-top: 80px;
+}
+
+.obstacle.fence.tombstone.dirt:before {
+	content: "";
+	flex: 0 0 74px;
+	height: 24px;
+	background-image: url(obstacles/dirtpatch.png);
+	background-size: contain;
+	position: relative;
+	top: -5%;
+}
+
+.obstacle.fence.t1 {width: 46px;}
+.obstacle.fence.t1 div {height: 58px;background-image: url(obstacles/tombstone1.png);}
+
+.obstacle.fence.t2 {width: 50px;}
+.obstacle.fence.t2 div {height: 66px;background-image: url(obstacles/tombstone2.png);}
+
+.obstacle.fence.t3 {width: 50px;}
+.obstacle.fence.t3 div {height: 56px;background-image: url(obstacles/tombstone3.png);}
+
+.obstacle.fence.t4 {width: 50px;}
+.obstacle.fence.t4 div {height: 72px;background-image: url(obstacles/tombstone4.png);}
+
+.obstacle.fence.t5 {width: 46px;}
+.obstacle.fence.t5 div {height: 64px;background-image: url(obstacles/tombstone5.png);}
+
+.obstacle.fence.t6 {width: 46px;}
+.obstacle.fence.t6 div {height: 74px;background-image: url(obstacles/tombstone6.png);}
+
+.obstacle.fence.t7 {width: 56px;}
+.obstacle.fence.t7 div {height: 82px;background-image: url(obstacles/tombstone7.png);}
+
+.obstacle.fence.t8 {width: 46px;}
+.obstacle.fence.t8 div {height: 64px;background-image: url(obstacles/tombstone8.png);}
+
+.obstacle.fence.t9 {width: 50px;}
+.obstacle.fence.t9 div {height: 56px;background-image: url(obstacles/tombstone9.png);}
+
+.obstacle.fence.t10 {width: 46px;}
+.obstacle.fence.t10 div {height: 58px;background-image: url(obstacles/tombstone10.png);}
+
+.tombstone-text {
+	line-height: 0.8;
+   opacity: 0;
+   position: relative;
+   display: block;
+   top: calc(-100% - 4px);
+   background: black;
+   padding: 8px 16px;
+   border-radius: 8px;
+   transition: 200ms ease opacity;
+   text-align: center;
+   width: fit-content;
+}
+
+.tombstone.active .tombstone-text {
+	opacity: 1;
+}
+
+.tombstone-text:after {
+  content: " ";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
 /** tall trunk **/
 .obstacle.fence.talltrunk {
 	width: 154px;
@@ -713,6 +801,78 @@ body.touch-only #space-button {
 	height: 600px;
 	width: 100%;
 	position: absolute;
+}
+
+/** haunted tree 1 **/
+.obstacle.fence.hauntedtree1 {
+	margin-top: 26px;
+	width: 128px;
+}
+
+.obstacle.fence.hauntedtree1 div {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	background-size: contain;
+	background-image: url(obstacles/hauntedtree1.png);
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	height: 372px;
+	width: 268px;
+	position: absolute;
+	left: -30px;
+   bottom: -32px;
+}
+
+/** haunted tree 2 **/
+.obstacle.fence.hauntedtree2 {
+	margin-top: 48px;
+   width: 126px;
+}
+
+.obstacle.fence.hauntedtree2 div {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	background-size: contain;
+	background-image: url(obstacles/hauntedtree2.png);
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	height: 316px;
+	width: 304px;
+	position: absolute;
+	left: -88px;
+   bottom: -4px;
+}
+
+/** brambles **/
+
+/** normal version **/
+.obstacle.brambles {
+	width: 64px;
+	height: 64px;
+	margin-top: -8px;
+}
+
+/** fence version **/
+.obstacle.brambles.fence {
+	width: 192px;
+	margin-top: 64px;
+}
+
+.obstacle.brambles div {
+	width: 211px;
+	height: 131px;
+	background-size: contain;
+	background-image: url(obstacles/brambles.png);
+	display: block;
+	flex: 0 0 211px;
+	margin-left: 25%;
+	margin-left: 64px;
+}
+
+.obstacle.brambles:nth-child(odd) div {
+	background-image: url(obstacles/brambles2.png);
 }
 
 /** dead tree **/
@@ -774,6 +934,48 @@ body.touch-only #space-button {
 
 .obstacle.fence.bigtreeyellow div {
 	background-image: url(obstacles/bigtreeyellow.png);
+}
+
+/** fog left 2 down 1 **/
+
+.fog {
+	background: url(obstacles/smoke.gif);
+	background-size: 64px;
+   height: 100%;
+   width: 100%;
+   position: absolute;
+   left: 0;
+   top: 0;
+   z-index: 500;
+   opacity: 0.95;
+   display: block;
+   mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110096362_chRv2u9qijtxGM8.png?1762821628);
+   mask-repeat: no-repeat;
+   mask-size: 100% 100%;
+   pointer-events: none;
+   transition: 400ms ease-in;
+}
+
+.fog .obstacle.fence.hauntedtree2 div {
+	background-image: url(obstacles/fogtree.png);
+}
+
+.fog.left-2:not(.down-1){
+   mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110102532_EBqkT7mPbCKC5us.png);
+   mask-repeat: no-repeat;
+   mask-size: 100% 100%;
+}
+
+.fog.left-2.up-1 {
+   mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110103005_qwXzOAOOpaKv0a6.png?1762829937);
+   mask-repeat: no-repeat;
+   mask-size: 100% 100%;
+}
+
+.fog.left-1.up-1 {
+   mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110127189_1GL3amMRpN5x0GG.png);
+   mask-repeat: no-repeat;
+   mask-size: 100% 100%;
 }
 
 /** church pew **/
@@ -852,7 +1054,7 @@ body.touch-only #space-button {
 	height: 750px;
 	position: absolute;
 	left: 572px;
-   top: -560px;
+   top: -558px;
    z-index: 237;
    position: absolute;
    transition: 400ms ease;
@@ -887,7 +1089,7 @@ body.touch-only #space-button {
 	background-size: 100% auto;
 	position: absolute;
 	top: -36px;
-	left: 8px;
+	left: 0;
 }
 
 /** inner wall horizontal **/
@@ -899,7 +1101,7 @@ body.touch-only #space-button {
 }
 
 .obstacle.innerwallhorizontal div {
-	background-size: 100% 34px;
+	background-size: auto 34px;
 	background-image: url(obstacles/innerwallhorizontal.png);
 	height: 34px;
 	width: 100%;

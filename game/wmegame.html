@@ -20,6 +20,9 @@
 	<audio id="ambience-player" src="music/wind+birds.mp3" loop="loop" allow="autoplay"></audio>
 	<audio id="menu-player" src="music/menu.wav" loop="loop" allow="autoplay"></audio>
 
+	<audio id="forest-player" src="music/forest.mp3" loop="loop" allow="autoplay"></audio>
+	<audio id="forest-ambience-player" src="music/forest-ambience.mp3" loop="loop" allow="autoplay"></audio>
+
 	<audio id="crow-player" src="music/crowcalls.mp3" loop="loop" allow="autoplay"></audio>
 	<audio id="frog-player" src="music/frogcroaks.wav" loop="loop" allow="autoplay"></audio>
 
@@ -33,8 +36,8 @@
 	<audio id="leaves" class="sound-effect ground-sound" src="music/leaves.wav" allow="autoplay"></audio>
 
 	<div id="game-wrapper">
-		<div id="game-container" class="Oddly-Shaded-Woods initial-screen">
-			<div id="test-character" style="left:448px;top:320px;"></div>
+		<div id="game-container" class="Oddly-Shaded-Woods right-2">
+			<div id="test-character" style="left:448px;top:320px;"><span id="nose"></span></div>
 
 			<!------------------------ Level 1 ------------------------>
 			<!--------- Screen 11 / Initial Screen --------->
@@ -48,22 +51,85 @@
 			<div class="leaves leafsprawl leafsprawlleft1down5 ground Oddly-Shaded-Woods initial-screen"></div>
 			<div class="leaves leafsprawl leafsprawlleft2 ground Oddly-Shaded-Woods initial-screen"></div>
 
-			<div class="leaves leavesround ground Oddly-Shaded-Woods initial-screen" style="left:200px;top:432px;"></div>
-
 			<!-- Obstacles -->
-			<div class="obstacle fence bigtreegreen tree Oddly-Shaded-Woods initial-screen" style="left:650px;top:-72px;"><div><!--fence image--></div></div>
-			<div class="obstacle fence bigtreeorange tree Oddly-Shaded-Woods initial-screen" style="left:204px;top:-32px;"><div><!--fence image--></div></div>
-			<div class="obstacle fence bigtreegreen tree Oddly-Shaded-Woods initial-screen" style="left:450px;top:-16px;"><div><!--fence image--></div></div>
-			<div class="obstacle fence bigtreeorange tree Oddly-Shaded-Woods initial-screen" style="left:304px;top:76px;"><div><!--fence image--></div></div>
-			<div class="obstacle fence bigtreeyellow tree Oddly-Shaded-Woods initial-screen" style="left:112px;top:140px;"><div><!--fence image--></div></div>
-			<div class="obstacle fence deadtree tree Oddly-Shaded-Woods initial-screen" style="left:512px;top:140px;"><div><!--fence image--></div></div>
-			<div class="obstacle fence bigtreeorange tree Oddly-Shaded-Woods initial-screen" style="left:-64px;top:352px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence bigtreegreen tree Oddly-Shaded-Woods initial-screen" style="left:658px;top:-72px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence bigtreeorange tree Oddly-Shaded-Woods initial-screen" style="left:210px;top:-32px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence bigtreegreen tree Oddly-Shaded-Woods initial-screen" style="left:466px;top:-16px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence bigtreeorange tree Oddly-Shaded-Woods initial-screen" style="left:306px;top:72px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence bigtreeyellow tree Oddly-Shaded-Woods initial-screen" style="left:114px;top:146px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence deadtree tree Oddly-Shaded-Woods initial-screen" style="left:512px;top:146px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence bigtreeorange tree Oddly-Shaded-Woods initial-screen" style="left:-64px;top:322px;"><div><!--fence image--></div></div>
 			<!--Objectives -->
 			<div id="CandyApple" class="objective CandyApple Oddly-Shaded-Woods initial-screen" style="left:240px;top:304px;"></div>
 			<!-- Characters -->
 			<div id="Alsike" class="Oddly-Shaded-Woods initial-screen npc" style="left:700px;top:304px;"></div>
 
+			<!--------- Screen 2 / Up 1 Left 2 --------->
+
+			<div class="fog Oddly-Shaded-Woods decoration up-1 left-2">
+				<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-2" style="right: -10px; top: 430px;"><div><!--fence image--></div></div>
+				<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods up-1 left-2" style="right: -5px; top: 450px;"><div><!--fence image--></div></div>
+				<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-2" style="right: 130px; top: 480px;"><div><!--fence image--></div></div>
+				<div class="obstacle hauntedtree2 fence Oddly-Shaded-Woods up-1 left-2" style="left: 604px; top: 490px;"><div><!--fence image--></div></div>
+			</div>
+
+			<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-2" style="right: -10px;top: 430px;"><div><!--fence image--></div></div>
+			<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods up-1 left-2" style="right: -5px;top: 450px;"><div><!--fence image--></div></div>
+			<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods left-2 up-1" style="left: 410px; top: 670px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-2" style="right: 130px;top: 480px;"><div><!--fence image--></div></div>
+			<div class="obstacle hauntedtree2 fence Oddly-Shaded-Woods up-1 left-2" style="left: 604px; top: 490px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-2" style="right: 280px;top: 590px;"><div><!--fence image--></div></div>
+
+			<!--------- Screen 3 / Up 1 Left 1 --------->
+
+			<div class="fog Oddly-Shaded-Woods decoration up-1 left-1">
+				<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-1" style="left: 764px; top: 156px;"><div><!--fence image--></div></div>
+				<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods up-1 left-1" style="left: 688px; top: 172px;"><div><!--fence image--></div></div>
+				<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-1" style="left: 624px; top: 210px;"><div><!--fence image--></div></div>
+				<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-1" style="left: 534px; top: 231px;"><div><!--fence image--></div></div>
+				<div class="obstacle hauntedtree2 fence Oddly-Shaded-Woods up-1 left-1" style="left: 494px; top: 250px;"><div><!--fence image--></div></div>
+				<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-1" style="left: 414px;top: 289px;"><div><!--fence image--></div></div>
+				<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-1" style="left: 324px;top: 320px;"><div><!--fence image--></div></div>
+				<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods up-1 left-1" style="left: 262px; top: 352px;"><div><!--fence image--></div></div>
+				<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-1" style="left: 184px; top: 373px;"><div><!--fence image--></div></div>
+				<div class="obstacle hauntedtree2 fence Oddly-Shaded-Woods up-1 left-1" style="left: 114px; top: 376px;"><div><!--fence image--></div></div>
+				<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-1" style="left: 56px;top: 410px;"><div><!--fence image--></div></div>
+				<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-1" style="left: -20px;top: 433px;"><div><!--fence image--></div></div>
+				<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods up-1 left-1" style="left: -117px;top: 460px;"><div><!--fence image--></div></div>
+			</div>
+
+			<div class="obstacle fence bigtreeorange tree Oddly-Shaded-Woods up-1 left-1" style="left: 768px; top: 632px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence bigtreeyellow tree Oddly-Shaded-Woods up-1 left-1" style="left: 552px; top: 664px;"><div><!--fence image--></div></div>
+
+			<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-1" style="left: 764px; top: 156px;"><div><!--fence image--></div></div>
+			<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods up-1 left-1" style="left: 688px; top: 172px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-1" style="left: 624px; top: 210px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-1" style="left: 534px; top: 231px;"><div><!--fence image--></div></div>
+			<div class="obstacle hauntedtree2 fence Oddly-Shaded-Woods up-1 left-1" style="left: 494px; top: 250px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-1" style="left: 414px;top: 289px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-1" style="left: 324px;top: 320px;"><div><!--fence image--></div></div>
+			<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods up-1 left-1" style="left: 262px; top: 352px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-1" style="left: 184px; top: 373px;"><div><!--fence image--></div></div>
+			<div class="obstacle hauntedtree2 fence Oddly-Shaded-Woods up-1 left-1" style="left: 114px; top: 376px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-1" style="left: 56px;top: 410px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods up-1 left-1" style="left: -20px;top: 433px;"><div><!--fence image--></div></div>
+			<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods up-1 left-1" style="left: -117px;top: 460px;"><div><!--fence image--></div></div>
+
 			<!--------- Screen 4 / Up 1 --------->
+			<div class="obstacle brambles Oddly-Shaded-Woods up-1" style="left: 360px;top: -27px;"><div><!--fence image--></div></div>
+			<div class="obstacle hauntedtree2 fence Oddly-Shaded-Woods up-1" style="left: 294px; top: 16px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods up-1" style="left: 220px; top: 43px;"><div><!--fence image--></div></div>
+			<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods up-1" style="left: 133px;top: 80px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods up-1" style="left: 70px; top: 113px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence brambles Oddly-Shaded-Woods up-1" style="left: -76px; top: 136px;"><div><!--fence image--></div></div>
+
+			<div class="leaves leafmap3 ground Oddly-Shaded-Woods up-1"></div>
+			<div class="leaves leafsprawl leafsprawl3left1 ground Oddly-Shaded-Woods up-1"></div>
+			<div class="leaves leafsprawl leafsprawl3left2 ground Oddly-Shaded-Woods up-1"></div>
+			<div class="leaves leafsprawl leafsprawl3left3 ground Oddly-Shaded-Woods up-1"></div>
+
+			<div class="leaves leavesround ground Oddly-Shaded-Woods up-1" style="left:760px;top:145px;"></div>
+			<div class="obstacle fence bigtreeorange tree Oddly-Shaded-Woods up-1" style="left:800px;top:128px;"><div><!--fence image--></div></div>
 			<div class="obstacle fence deadtree tree Oddly-Shaded-Woods up-1" style="left:672px; top:224px;/* z-index: 320; */"><div><!--fence image--></div></div>
 			<div class="obstacle fence bigtreegreen tree Oddly-Shaded-Woods up-1" style="left:374px; top:300px;"><div><!--fence image--></div></div>
 			<div class="obstacle fence bigtreegreen tree Oddly-Shaded-Woods up-1" style="left:544px;top:320px;"><div><!--fence image--></div></div>
@@ -72,12 +138,55 @@
 			<div class="obstacle fence bigtreegreen tree Oddly-Shaded-Woods up-1" style="left:450px;top:552px;"><div><!--fence image--></div></div>
 			<div class="obstacle fence bigtreeorange tree Oddly-Shaded-Woods up-1" style="left:204px;top:580px;"><div><!--fence image--></div></div>
 
-			<!--------- Screen 9 / Left 2 --------->
-			<div class="obstacle fence talltrunk tree Oddly-Shaded-Woods left-2" style="left:0;top:400px;"><div><!--fence image--></div></div>
-			<div class="obstacle fence talltrunk tree Oddly-Shaded-Woods left-2" style="left:209px;top:108px;"><div><!--fence image--></div></div>
-			<div class="obstacle fence talltrunk tree Oddly-Shaded-Woods left-2" style="left:650px;top:488px;"><div><!--fence image--></div></div>
+			<!---------Screen 7 / Up 1 Right 1 ---------->
 
-			<!--------- Screen 11 / Initial Screen (see top) --------->
+			<div class="obstacle fencevertical Oddly-Shaded-Woods up-1 right-1" style="left: 682px; top: 59px; height: 484px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence Oddly-Shaded-Woods up-1 right-1" style="left: 700px; top: 20px; width: 194px;"><div><!--fence image--></div></div>
+
+			<!--------- Screen 6 / Up 1 Right 2 --------->
+			<div class="obstacle innerwall Oddly-Shaded-Woods up-1 right-2" style="left: 572px;top: 355px;height: 254px;"><div style="background-position: center 150px;"><!--fence image--></div></div>
+			<div class="obstacle innerwallhorizontal fence Oddly-Shaded-Woods up-1 right-2" style="left: 572px;top: 247px;width: 330px;"><div style="bottom: 40px;"><!--fence image--></div></div>
+			<div class="obstacle churchpew bible fence Oddly-Shaded-Woods up-1 right-2" style="left: 607px;top: 495px;"><div><!--fence image--></div></div>
+			<div class="obstacle churchpew fence Oddly-Shaded-Woods up-1 right-2" style="left: 607px;top: 404px;"><div><!--fence image--></div></div>
+			<div class="obstacle churchpew fence Oddly-Shaded-Woods up-1 right-2" style="left: 862px;top: 494px;"><div><!--fence image--></div></div>
+			<div class="obstacle churchpew bible fence Oddly-Shaded-Woods up-1 right-2" style="left: 862px;top: 404px;"><div><!--fence image--></div></div>
+
+			<div class="churchtop Oddly-Shaded-Woods up-1 right-2" style="top: 30px;z-index: 900;"><div><!--fence image--></div></div>
+
+			<div class="obstacle fence Oddly-Shaded-Woods up-1 right-2" style="left: 0;top: 20px;width: 894px;"><div><!--fence image--></div></div>
+
+			<!--------- Screen 6 / Up 1 Right 3 --------->
+			<div class="obstacle innerwall Oddly-Shaded-Woods up-1 right-3" style="left: 88px;top: 355px;height: 254px;transform: scaleX(-1);"><div style="background-position: center 150px;"><!--fence image--></div></div>
+			<div class="obstacle innerwallhorizontal fence Oddly-Shaded-Woods up-1 right-3" style="left: -8px;top: 247px;width: 136px;"><div style="bottom: 40px;"><!--fence image--></div></div>
+			<div class="obstacle churchpew bible fence Oddly-Shaded-Woods up-1 right-3" style="left: -43px;top: 495px;z-index: 495;"><div><!--fence image--></div></div>
+			<div class="obstacle churchpew fence Oddly-Shaded-Woods up-1 right-3" style="left: -43px;top: 404px;z-index: 404;"><div><!--fence image--></div></div>
+
+			<div class="churchtop Oddly-Shaded-Woods up-1 right-3" style="top: 30px;left:-320px;z-index: 900;"><div><!--fence image--></div></div>
+
+			<!--------- Screen 8 / Left 3 --------->
+			<div class="obstacle fence talltrunk tree Oddly-Shaded-Woods left-3" style="left:0;top:400px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence talltrunk tree Oddly-Shaded-Woods left-3" style="left:209px;top:108px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence talltrunk tree Oddly-Shaded-Woods left-3" style="left:650px;top:488px;"><div><!--fence image--></div></div>
+
+			<!--------- Screen 9 / Left 2 --------->
+			<div class="obstacle hauntedtree2 fence Oddly-Shaded-Woods left-2" style="left: 604px;top: -53px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods left-2" style="right: 260px;top: 6px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods left-2" style="right: 330px;top: 47px;"><div><!--fence image--></div></div>
+			<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods left-2" style="left: 410px; top: 90px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods left-2" style="right: 440px;top: 130px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods left-2" style="right: 470px;top: 196px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods left-2" style="right: 470px;top: 256px;"><div><!--fence image--></div></div>
+			<div class="obstacle hauntedtree2 fence Oddly-Shaded-Woods left-2" style="left: 360px; top: 280px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods left-2" style="left: 390px;top: 349px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods left-2" style="left: 430px;top: 399px;"><div><!--fence image--></div></div>
+			<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods left-2" style="left: 470px; top: 430px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods left-2" style="left: 530px; top: 480px;"><div><!--fence image--></div></div>
+			<div class="obstacle hauntedtree2 fence Oddly-Shaded-Woods left-2" style="left: 520px; top: 510px;"><div><!--fence image--></div></div>
+
+			<div class="fog Oddly-Shaded-Woods decoration left-2">
+				<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods left-2" style="left: 410px; top: 90px;"><div><!--fence image--></div></div>
+				<div class="obstacle hauntedtree2 fence Oddly-Shaded-Woods left-2" style="left: 360px; top: 280px;"><div><!--fence image--></div></div>
+			</div>
 
 			<!--------- Screen 10 / Left 1 --------->
 			<!-- Decorations -->
@@ -105,6 +214,8 @@
 			<div class="obstacle fence deadtree tree Oddly-Shaded-Woods left-1" style="left:448px;top:384px;"><div><!--fence image--></div></div>
 			<div class="obstacle fence bigtreegreen tree Oddly-Shaded-Woods left-1" style="left:288px;top:544px;"><div><!--fence image--></div></div>
 
+			<!--------- Screen 11 / Initial Screen (see top) --------->
+
 			<!--------- Screen 12 / Right 1 --------->
 			<div class="obstacle fence Oddly-Shaded-Woods right-1" style="left:700px;top:360px;width:194px;"><div><!--fence image--></div></div>
 
@@ -116,16 +227,15 @@
 
 			<!--------- Screen 13 / Right 2 --------->
 			<div class="obstacle fence Oddly-Shaded-Woods right-2" style="left:0;top:360px;width:640px;"><div><!--fence image--></div></div>
-
 			<div class="obstacle fencevertical Oddly-Shaded-Woods right-2" style="left:618px;top:456px;height:138px;"><div><!--fence image--></div></div>
-
 			<div class="obstacle fence deadtree tree Oddly-Shaded-Woods right-2" style="left:160px;top:160px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence hollowtree tree Oddly-Shaded-Woods right-2" style="left:320px;top:224px;"><div><!--fence image--></div></div>
+			
+			<div id="church-entrance" class="Oddly-Shaded-Woods right-2"></div>
 
-			<div class="obstacle fence deadtree tree Oddly-Shaded-Woods right-2" style="left:320px;top:224px;"><div><!--fence image--></div></div>
-
-			<div class="obstacle innerwall Oddly-Shaded-Woods right-2" style="left: 564px; top: -80px; height: 334px;"><div><!--fence image--></div></div>
-			<div class="obstacle innerwallhorizontal fence Oddly-Shaded-Woods right-2" style="left: 572px; top: 224px; width:160px;"><div><!--fence image--></div></div>
-			<div class="obstacle innerwallhorizontal fence Oddly-Shaded-Woods right-2" style="left: 860px; top: 224px; width:160px;"><div><!--fence image--></div></div>
+			<div class="obstacle innerwall Oddly-Shaded-Woods right-2" style="left: 572px; top: -80px; height: 334px;"><div style="background-position: center 10px;"><!--fence image--></div></div>
+			<div class="obstacle innerwallhorizontal fence Oddly-Shaded-Woods right-2" style="left: 572px; top: 224px; width:158px;"><div><!--fence image--></div></div>
+			<div class="obstacle innerwallhorizontal fence Oddly-Shaded-Woods right-2" style="left: 862px; top: 224px; width:158px;"><div><!--fence image--></div></div>
 
 			<div class="obstacle churchpew bible fence Oddly-Shaded-Woods right-2" style="left: 607px;top: 164px;"><div><!--fence image--></div></div>
 			<div class="obstacle churchpew fence Oddly-Shaded-Woods right-2" style="left: 607px;top: 84px;"><div><!--fence image--></div></div>
@@ -141,11 +251,167 @@
 			<div class="churchtop Oddly-Shaded-Woods right-2"><div><!--fence image--></div></div>
 
 			<!--------- Screen 14 / Right 3 --------->
-			<div class="churchtop Oddly-Shaded-Woods right-3"><div><!--fence image--></div></div>
+			<div class="churchtop Oddly-Shaded-Woods right-3" style="left:-320px;"><div><!--fence image--></div></div>
+
+
+			<div class="obstacle fence tombstone t1 Oddly-Shaded-Woods right-3" style="left: 200px; top: 154px;">
+				<div><span class="tombstone-text">
+					NECROPRANCER
+					<span style="font-size:80%;display: block;">1950-1980</span>
+				</span></div>
+			</div>
+
+			<div class="obstacle fence tombstone t1 Oddly-Shaded-Woods right-3" style="left: 630px; top: 64px;">
+				<div><span class="tombstone-text">
+					NECROPRANCER
+					<span style="font-size:80%;display: block;">1950-1980</span>
+				</span></div>
+			</div><div class="obstacle fence tombstone dirt t2 Oddly-Shaded-Woods right-3" style="left: 530px;top: 74px;">
+				<div><span class="tombstone-text">
+					NECROPRANCER
+					<span style="font-size:80%;display: block;">1950-1980</span>
+				</span></div>
+			</div>
+
+			<div class="obstacle fence tombstone t2 Oddly-Shaded-Woods right-3" style="left: 310px; top: 264px;">
+				<div><span class="tombstone-text">
+					NECROPRANCER
+					<span style="font-size:80%;display: block;">1950-1980</span>
+				</span></div>
+			</div>
+
+			<div class="obstacle fence tombstone dirt t3 Oddly-Shaded-Woods right-3" style="left: 450px;top: 4px;">
+				<div><span class="tombstone-text">
+					NECROPRANCER
+					<span style="font-size:80%;display: block;">1950-1980</span>
+				</span></div>
+			</div>
+
+			<div class="obstacle fence hollowtree tree Oddly-Shaded-Woods right-3" style="left: 400px;top: 129px;"><div><!--fence image--></div></div>
+
+			<div class="obstacle fence tombstone t4 Oddly-Shaded-Woods right-3" style="left: 350px;top: 74px;">
+				<div><span class="tombstone-text">
+					NECROPRANCER
+					<span style="font-size:80%;display: block;">1950-1980</span>
+				</span></div>
+			</div>
+
+			<div class="obstacle fence tombstone dirt t5 Oddly-Shaded-Woods right-3" style="left: 240px; top: 84px;">
+				<div><span class="tombstone-text">
+					NECROPRANCER
+					<span style="font-size:80%;display: block;">1950-1980</span>
+				</span></div>
+			</div>
+
+			<div class="obstacle fence tombstone dirt t6 Oddly-Shaded-Woods right-3" style="left: 480px; top: 274px;">
+				<div><span class="tombstone-text">
+					NECROPRANCER
+					<span style="font-size:80%;display: block;">1950-1980</span>
+				</span></div>
+			</div>
+
+			<div class="obstacle fence tombstone dirt t10 Oddly-Shaded-Woods right-3" style="left: 700px;top: 24px;">
+				<div><span class="tombstone-text">
+					NECROPRANCER
+					<span style="font-size:80%;display: block;">1950-1980</span>
+				</span></div>
+			</div>
+
+			<div class="obstacle fence tombstone t7 Oddly-Shaded-Woods right-3" style="left: 389px; top: 224px;">
+				<div><span class="tombstone-text">
+					NECROPRANCER
+					<span style="font-size:80%;display: block;">1950-1980</span>
+				</span></div>
+			</div>
+
+			<div class="obstacle fence tombstone dirt t8 Oddly-Shaded-Woods right-3" style="left: 670px; top: 164px;">
+				<div><span class="tombstone-text">
+					NECROPRANCER
+					<span style="font-size:80%;display: block;">1950-1980</span>
+				</span></div>
+			</div>
+
+			<div class="obstacle fence tombstone dirt t8 Oddly-Shaded-Woods right-3" style="left: 300px;top: 174px;">
+				<div><span class="tombstone-text">
+					NECROPRANCER
+					<span style="font-size:80%;display: block;">1950-1980</span>
+				</span></div>
+			</div>
+
+			<div class="obstacle fence tombstone dirt t9 Oddly-Shaded-Woods right-3" style="left: 490px;top: 174px;">
+				<div><span class="tombstone-text">
+					NECROPRANCER
+					<span style="font-size:80%;display: block;">1950-1980</span>
+				</span></div>
+			</div>
+
+			<div class="obstacle fence tombstone t9 Oddly-Shaded-Woods right-3" style="left: 490px;top: 174px;">
+				<div><span class="tombstone-text">
+					NECROPRANCER
+					<span style="font-size:80%;display: block;">1950-1980</span>
+				</span></div>
+			</div>
+
+			<div class="obstacle fence tombstone t10 Oddly-Shaded-Woods right-3" style="left: 580px; top: 194px;">
+				<div><span class="tombstone-text">
+					NECROPRANCER
+					<span style="font-size:80%;display: block;">1950-1980</span>
+				</span></div>
+			</div>
+
+			<div class="obstacle fence tombstone dirt t1 Oddly-Shaded-Woods right-3" style="left: 620px; top: 294px;">
+				<div><span class="tombstone-text">
+					NECROPRANCER
+					<span style="font-size:80%;display: block;">1950-1980</span>
+				</span></div>
+			</div>
+
+			<div class="obstacle fence tombstone t4 Oddly-Shaded-Woods right-3" style="left: 540px; top: 354px;">
+				<div><span class="tombstone-text">
+					NECROPRANCER
+					<span style="font-size:80%;display: block;">1950-1980</span>
+				</span></div>
+			</div>
+
+			<div class="obstacle fence tombstone t5 Oddly-Shaded-Woods right-3" style="left: 450px;top: 404px;">
+				<div><span class="tombstone-text">
+					NECROPRANCER
+					<span style="font-size:80%;display: block;">1950-1980</span>
+				</span></div>
+			</div>
+
+			<!--------- Screen 17 / Left 1 Down 1 --------->
+
+			<div class="leafmap4 ground Oddly-Shaded-Woods down-1 left-1"></div>
+			<div class="leaves leafsprawl leafsprawl4left1 ground Oddly-Shaded-Woods down-1 left-1"></div>
+			<div class="leaves leafsprawl leafsprawl4left2 ground Oddly-Shaded-Woods down-1 left-1"></div>
+
+			<div class="obstacle fence bigtreegreen tree Oddly-Shaded-Woods down-1 left-1" style="left: 288px; top:-18px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence bigtreeyellow tree Oddly-Shaded-Woods down-1 left-1" style="left: 118px; top: -42px;"><div><!--fence image--></div></div>
+
+			<!--------- Screen 16 / Left 2 Down 1 --------->
+			<div class="obstacle hauntedtree2 fence Oddly-Shaded-Woods left-2 down-1" style="left: 520px;top: -58px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods left-2 down-1" style="left: 560px;top: 10px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods left-2 down-1" style="left: 580px;top: 80px;"><div><!--fence image--></div></div>
+			<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods left-2 down-1" style="left: 500px;top: 110px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence brambles Oddly-Shaded-Woods left-2 down-1" style="left: 420px; top: 150px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence brambles Oddly-Shaded-Woods left-2 down-1" style="left: 430px;top: 310px;"><div><!--fence image--></div></div>
+			<div class="obstacle hauntedtree2 fence Oddly-Shaded-Woods left-2 down-1" style="left: 550px;top: 332px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods left-2 down-1" style="left: 570px;top: 390px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods left-2 down-1" style="left: 620px;top: 450px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods left-2 down-1" style="left: 680px;top: 460px;"><div><!--fence image--></div></div>
+			<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods left-2 down-1" style="left: 650px; top: 480px;"><div><!--fence image--></div></div>
+
+			<div class="obstacle fence deadtree tree Oddly-Shaded-Woods left-2 down-1" style="left: 662px; top: 86px;"><div><!--fence image--></div></div>
+
+			<div class="fog Oddly-Shaded-Woods decoration left-2 down-1">
+				<div class="obstacle hauntedtree2 fence Oddly-Shaded-Woods left-2 down-1" style="left: 550px; top: 332px;"><div><!--fence image--></div></div>
+			</div>
+
+			<div id="forest-entry" class="Oddly-Shaded-Woods left-2 down-1"></div>
 
 			<!--------- Screen 18 / Down 1 --------->
-			<div class="water Oddly-Shaded-Woods down-1">
-			</div>
+			<div class="water Oddly-Shaded-Woods down-1"></div>
 
 		<!------------------------ Top Elements ------------------------>
 			<!--------- Title --------->
