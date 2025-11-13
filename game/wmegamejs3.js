@@ -718,7 +718,7 @@ function obstacleCheck(direction,moveDistance) {
   }
 
   //check if we're overlapping an open tombstone
-  var openTombstone = document.querySelector(".active", ".tombstone");
+  var openTombstone = document.querySelector(".active.tombstone");
   //we use nosebounds here for accuracy
   var noseBounds = nose.getBoundingClientRect();
   //if one exists,
@@ -890,7 +890,6 @@ function interactCheck() {
     if (overlap === true) {
       //if player is touching one, return which one
       var characterTalking = npc[i];
-
       return characterTalking
     }
   }
@@ -920,13 +919,23 @@ function interactCheck() {
 
     if (overlap === true) {
       //if player is touching one (and it hasn't been found), return which one
-      tombstone[i].classList.toggle("active");
+      var tombstoneCurrent = tombstone[i];
+      //^we need this for later due to the timeout
+
+      if (tombstone[i].classList.contains("active") && !tombstone[i].classList.contains("clicked")) {
+          tombstone[i].classList.remove("active");
+      } else {
+          tombstone[i].classList.add("active");
+          tombstone[i].classList.add("clicked");
+          setTimeout(() => {
+            //we need this clicked class + timeout to prevent weird double taps on mobile
+            tombstoneCurrent.classList.remove("clicked");
+        }, 100);
+      }
     }
   }
-
     //otherwise, button does nothing
 }
-
 
 //move left
   function moveLeft(moveDistance) {
