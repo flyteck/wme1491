@@ -44,7 +44,6 @@ function getMobileOperatingSystem() {
     if (navigator.platform.startsWith("Mac") || navigator.platform === "iPhone") {
         return "Mac";
     }
-
 }
 
 var OS = getMobileOperatingSystem();
@@ -69,10 +68,18 @@ var gameWidth = parseInt(795)
 var gameHeight = parseInt(510)
 
 //only mobile stuff (if no mouse support)
-if (!matchMedia('(pointer:fine)').matches || OS == "Mac" && matchMedia('(any-pointer:coarse)').matches || OS == "iOS") {
+if (!matchMedia('(pointer:fine)').matches) {
   //this makes the buttons work on mobile
   window.addEventListener("contextmenu", function(e) { e.preventDefault(); })
   document.querySelector("body").classList.add("touch-only");
+  console.log("no mouse")
+}
+
+if (OS == "Mac" && matchMedia('(any-pointer:coarse)').matches || OS == "iOS") {
+  //this makes the buttons work on mobile
+  window.addEventListener("contextmenu", function(e) { e.preventDefault(); })
+  document.querySelector("body").classList.add("touch-only");
+  console.log("apple ass device w a touchscreen");
 }
 
 //set sfx audio volume 
