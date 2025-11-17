@@ -227,6 +227,12 @@ function buttonPress() {
     character.classList.remove("up","down","left","right","stopped");
   }
 
+  //if we're stuck, fix our position
+  if (character.classList.contains("blocked")) {
+    obstacleCorrect();
+    return;
+  }
+
   if (eventVar.key === 'q' || eventVar.key === 'Tab') {
     //open/close menu
     //if there's dialogue open, don't do shit
@@ -606,9 +612,10 @@ function buttonRelease() {
       moveDistance = fastMoveSpeed
     }
     //stop character
-    stopCharacter(direction);
+    if (eventVar.key !== 'Shift') {
+      stopCharacter(direction);
+    }
     //re-check for obstacles
-    obstacleCheck(direction,moveDistance)
   }
 
   //this prevents any weird lingering of the move animation (and it's readded immediately if a direction is held)
@@ -778,38 +785,36 @@ function obstacleCheck(direction,moveDistance) {
       //for general obstacles
       if (!obstacle[i].classList.contains("fence")) {
         var obstacleBounds = obstacle[i].getBoundingClientRect();
-
-        var overlap = !(obstacleBounds.right <= (parseInt(characterBounds.left) - parseInt(moveDistance)) || obstacleBounds.left >= (parseInt(characterBounds.right) + parseInt(moveDistance)) ||
-                      obstacleBounds.bottom <= (parseInt(characterBounds.top) + parseInt(moveDistance)) || obstacleBounds.top >= (parseInt(characterBounds.bottom) + parseInt(moveDistance)));
+        var overlap = !(obstacleBounds.right <= characterBounds.left || obstacleBounds.left >= characterBounds.right ||
+                      obstacleBounds.bottom <= characterBounds.top || obstacleBounds.top >= characterBounds.bottom);
 
         //if there's overlap
         if (overlap === true) {
           //check where the overlap is [overlap || character || object]
-          var overlapLeftRight = characterBounds.left <= obstacleBounds.right
-          var overlapRightLeft = characterBounds.right >= obstacleBounds.left
-          var overlapTopBottom = characterBounds.top <= obstacleBounds.bottom
-          var overlapBottomTop = characterBounds.bottom >= obstacleBounds.top
+          var overlapLeftRight = characterBounds.left <= obstacleBounds.right;
+          var overlapRightLeft = characterBounds.right >= obstacleBounds.left;
+          var overlapTopBottom = characterBounds.top <= obstacleBounds.bottom;
+          var overlapBottomTop = characterBounds.bottom >= obstacleBounds.top;
 
-          if (overlapLeftRight == true && character.classList.contains("right")) {
-            //if character left overlaps object right, increase left to push it over
+          if (overlapLeftRight == true && character.classList.contains("left")) {
+            character.classList.add("blocked");
             return true;
           }
 
-          if (overlapRightLeft == true && character.classList.contains("left")) {
-            //if character right overlaps object left, decrease left to push it over
+          if (overlapRightLeft == true && character.classList.contains("right")) {
+            character.classList.add("blocked");
             return true;
           }
 
           if (overlapTopBottom == true && character.classList.contains("up")) {
-            //if character top overlaps object bottom, increase top to push it down
+            character.classList.add("blocked");
             return true;
           }
 
           if (overlapBottomTop == true && character.classList.contains("down")) {
-            //if character bottom overlaps object top, decrease top to push it up
+            character.classList.add("blocked");
             return true;
           }
-
         }
       }
 
@@ -817,24 +822,21 @@ function obstacleCheck(direction,moveDistance) {
       if (obstacle[i].classList.contains("fence")) {
         var obstacleBounds = obstacle[i].getBoundingClientRect();
 
-        var overlap = !(obstacleBounds.right <= (parseInt(characterBounds.left) - parseInt(moveDistance)) || obstacleBounds.left >= (parseInt(characterBounds.right) + parseInt(moveDistance)) ||
-                      obstacleBounds.bottom <= (parseInt(characterBounds.top) + parseInt(moveDistance)) || obstacleBounds.top >= (parseInt(characterBounds.bottom) + parseInt(moveDistance)));
+        var overlap = !(obstacleBounds.right <= characterBounds.left || obstacleBounds.left >= characterBounds.right ||
+                      obstacleBounds.bottom <= characterBounds.top || obstacleBounds.top >= characterBounds.bottom);
 
         //if there's overlap
         if (overlap === true) {
-
           //check where the overlap is [overlap || character || object]
-
-          //allow to move up unless the character bottom is higher than the obstacle bottom
-
           var overlapTopBottom = characterBounds.top <= obstacleBounds.bottom
           var overlapBottomTop = characterBounds.bottom >= obstacleBounds.top
 
+          //we will allow to move up unless the character bottom is higher than the obstacle bottom
           var behind = (parseInt(obstacle[i].style.zIndex) + parseInt(moveDistance)) > parseInt(character.style.zIndex);
           var inFront = (parseInt(obstacle[i].style.zIndex) - parseInt(moveDistance)) < parseInt(character.style.zIndex);
 
           if (overlapBottomTop == true && character.classList.contains("down") && behind == true) {
-            //if character bottom overlaps object top, decrease top to push it up
+            character.classList.add("blocked");
             return true;
           }
 
@@ -844,6 +846,7 @@ function obstacleCheck(direction,moveDistance) {
             //see if the bottom is also higher, and if we're in front
             if (overlapBottomBottom == true && inFront === true) {
               //if it is, increase top to push it down
+              character.classList.add("blocked");
               return true;
             }
           }
@@ -928,6 +931,10 @@ function interactCheck() {
 function moveCharacter(direction,moveDistance) {
     //get the element's left position
     var leftPosition = parseInt(character.style.left);
+
+    if (character.classList.contains("blocked")) {
+      return;
+    }
 
     if (direction == "left") {
       //only move if there's room to move
@@ -1086,7 +1093,19 @@ function stopCharacter() {
       }
     }, 150);
 
-    //after we stop moving, we do a final obstacle check where we correct any issues
+    //unlike obstacleCheck, this actually remedies any overlap
+    obstacleCorrect()
+
+    //allow movement again
+    character.classList.remove("blocked");
+    
+    character.classList.add("stopped");
+  }, 100);
+}
+
+//Secondary Obstacle Check 
+function obstacleCorrect() {
+  //after we stop moving, we do a final obstacle check where we correct any issues
     //check which way we're facing
     if (character.classList.contains("face-left")) { var facing = "left"; }
     if (character.classList.contains("face-right")) { var facing = "right"; }
@@ -1096,8 +1115,8 @@ function stopCharacter() {
     for (i = 0; i < obstacle.length; i++) {
       var obstacleBounds = obstacle[i].getBoundingClientRect();
       var characterBounds = character.getBoundingClientRect();
-      var overlap = !(obstacleBounds.right <= (parseInt(characterBounds.left) - parseInt(moveDistance)) || obstacleBounds.left >= (parseInt(characterBounds.right) + parseInt(moveDistance)) ||
-                      obstacleBounds.bottom <= (parseInt(characterBounds.top) + parseInt(moveDistance)) || obstacleBounds.top >= (parseInt(characterBounds.bottom) + parseInt(moveDistance)));
+      var overlap = !(obstacleBounds.right <= characterBounds.left || obstacleBounds.left >= characterBounds.right ||
+                      obstacleBounds.bottom <= characterBounds.top || obstacleBounds.top >= characterBounds.bottom);
 
       if (overlap == true) {
         //check where the overlap is [overlap || character || object]
@@ -1109,19 +1128,19 @@ function stopCharacter() {
         //for general obstacles
         if (!obstacle[i].classList.contains("fence")) {
           if (facing == "left" && overlapLeftRight == true) {
-              character.style.left = parseInt(obstacle[i].style.left) + parseInt(obstacleBounds.width) + parseInt(moveDistance*2) + "px";
+              character.style.left = parseInt(obstacle[i].style.left) + parseInt(obstacleBounds.width) + parseInt(moveDistance) + "px";
           }
 
           if (facing == "right" && overlapRightLeft == true) {
-              character.style.left = parseInt(obstacle[i].style.left) - parseInt(characterBounds.width) - parseInt(moveDistance*2) + "px";
+              character.style.left = parseInt(obstacle[i].style.left) - parseInt(characterBounds.width) - parseInt(moveDistance) + "px";
           }
 
           if (facing == "up" && overlapTopBottom == true) {
-            character.style.top = parseInt(obstacle[i].style.top) + parseInt(moveDistance*2) + "px";
+            character.style.top = parseInt(obstacle[i].style.top) + parseInt(moveDistance) + "px";
           }
 
           if (facing == "down" && overlapBottomTop == true) {
-              character.style.top = parseInt(obstacle[i].style.top) - parseInt(moveDistance*2) - parseInt(characterBounds.height) + "px";
+              character.style.top = parseInt(obstacle[i].style.top) - parseInt(moveDistance) - parseInt(characterBounds.height) + "px";
           }
         }
 
@@ -1132,7 +1151,7 @@ function stopCharacter() {
 
           if (overlapBottomTop == true && character.classList.contains("down") && behind == true) {
             //if character bottom overlaps object top, decrease top to push it up
-            character.style.top = parseInt(obstacle[i].style.top) - parseInt(moveDistance*2) + "px";
+            character.style.top = parseInt(obstacle[i].style.top) - parseInt(moveDistance) + "px";
           }
 
           if (overlapTopBottom == true && character.classList.contains("up")) {
@@ -1141,18 +1160,14 @@ function stopCharacter() {
             //see if the bottom is also higher, and if we're in front
             if (overlapBottomBottom == true && inFront === true) {
               //if it is, increase top to push it down
-              character.style.top = parseInt(obstacle[i].style.top) + parseInt(moveDistance*2) + "px";
+              character.style.top = parseInt(obstacle[i].style.top) + parseInt(obstacleBounds.height) + parseInt(moveDistance) + "px";
             }
           }
         }
-
       }
     }
 
     zIndexSort()
-    
-    character.classList.add("stopped");
-  }, 100);
 }
 
 //Move screen
