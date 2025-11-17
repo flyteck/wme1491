@@ -68,7 +68,7 @@ var gameWidth = parseInt(795)
 var gameHeight = parseInt(510)
 
 //only mobile stuff (if no mouse support)
-if (!matchMedia('(hover:none)').matches) {
+if (matchMedia('(hover:none)').matches) {
   //this makes the buttons work on mobile
   window.addEventListener("contextmenu", function(e) { e.preventDefault(); })
   document.querySelector("body").classList.add("touch-only");
