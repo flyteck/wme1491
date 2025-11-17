@@ -24,6 +24,9 @@
 //this is evil and it needs to be defined globally I fucking guess
 var crowInterval
 var expressions = ""
+var direction = "initial"
+
+const obstacle = document.getElementsByClassName("obstacle");
 
 ///quick OS detector for stupid stupid ipads
 window.addEventListener("load", getMobileOperatingSystem);
@@ -470,98 +473,73 @@ function buttonPress() {
   }
 
   if (eventVar.key === 'ArrowLeft' || eventVar.key === 'a' || character.classList.contains("left") || eventVar.target.id == "left-arrow-button" || direction == "left") {
-
     //set move distance, and modify if holding shift to sprint
     var moveDistance = +slowMoveSpeed
     if (eventVar.shiftKey || sprintButton.classList.contains("active")) {
       var moveDistance = +fastMoveSpeed
       character.classList.add("sprint");
     }
-
+    //and the direction
     var direction = "left"
-
     //check for obstacles
     if (document.querySelectorAll(".obstacle") != null) {
-
       if (obstacleCheck(direction,moveDistance) == false || obstacleCheck(direction,moveDistance) == true && !character.classList.contains("left")) {
         //if no obstacles, then pass to the move function
-        moveLeft(moveDistance)
-      } else {
-        //this helps prevent clipping
-        character.style.left = parseInt(character.style.left) + parseInt(moveDistance) + "px";
+        moveCharacter(direction,moveDistance);
       }
     }
-
   }
 
   if (eventVar.key === 'ArrowRight' || eventVar.key === 'd' || character.classList.contains("right") || eventVar.target.id == "right-arrow-button" ||  direction == "right") {
-    
     //set move distance, and modify if holding shift to sprint
     var moveDistance = +slowMoveSpeed
     if (eventVar.shiftKey || sprintButton.classList.contains("active")) {
       var moveDistance = +fastMoveSpeed;
       character.classList.add("sprint");
     }
-
+    //and the direction
     var direction = "right"
-
     //check for obstacles
     if (document.querySelectorAll(".obstacle") != null) {
-
       if (obstacleCheck(direction,moveDistance) == false || obstacleCheck(direction,moveDistance) == true && !character.classList.contains("right")) {
         //if no obstacles, or obstacles but moving the other way, then pass to the move function
-        moveRight(moveDistance)
-      } else {
-        //this helps prevent clipping
-        character.style.left = parseInt(character.style.left) - parseInt(moveDistance) + "px";
+        moveCharacter(direction,moveDistance)
       }
     }
   }
 
   if (eventVar.key === 'ArrowUp' || eventVar.key === 'w' ||character.classList.contains("up") || eventVar.target.id == "up-arrow-button" || direction == "up") {
-    
     //set move distance, and modify if holding shift to sprint
     var moveDistance = +slowMoveSpeed
     if (eventVar.shiftKey || sprintButton.classList.contains("active")) {
       var moveDistance = +fastMoveSpeed;
       character.classList.add("sprint");
     }
-
+    //and the direction
     var direction = "up"
-
     //check for obstacles
     if (document.querySelectorAll(".obstacle") != null) {
-
       if (obstacleCheck(direction,moveDistance) == false || obstacleCheck(direction,moveDistance) == true && !character.classList.contains("up")) {
         //if no obstacles, or obstacles but moving the other way, then pass to the move function
-        moveUp(moveDistance);
-      } else {
-        //this helps prevent clipping
-        character.style.top = parseInt(character.style.top) + parseInt(moveDistance) + "px";
+        moveCharacter(direction,moveDistance)
       }
     }
   }
 
   if (eventVar.key === 'ArrowDown' || eventVar.key === 's' || character.classList.contains("down") || eventVar.target.id == "down-arrow-button" ||  direction == "down") {
-    
     //set move distance, and modify if holding shift to sprint
     var moveDistance = +slowMoveSpeed
     if (eventVar.shiftKey || sprintButton.classList.contains("active")) {
       var moveDistance = +fastMoveSpeed;
       character.classList.add("sprint");
     }
-
+    //and the direction
     var direction = "down"
-
     //check for obstacles
     if (document.querySelectorAll(".obstacle") != null) {
-
       if (obstacleCheck(direction,moveDistance) == false || obstacleCheck(direction,moveDistance) == true && !character.classList.contains("down")) {
         //if no obstacles, or obstacles but moving the other way, then pass to the move function
-        moveDown(moveDistance);
-      } else {
-        //this helps prevent clipping
-        character.style.top = parseInt(character.style.top) - parseInt(moveDistance) + "px";
+        moveCharacter(direction,moveDistance)
       }
     }
   }
@@ -603,52 +581,34 @@ function buttonRelease() {
     eventVar = event;
   }
 
+  //dynamically set the direction variable based on what you're pressing
   if (eventVar.key === 'ArrowLeft' || eventVar.key === 'a' || eventVar.target.id == "left-arrow-button") {
-    moveDistance = slowMoveSpeed
-    if(eventVar.shiftKey || sprintButton.classList.contains("active")) {
-      moveDistance = fastMoveSpeed
-    }
-    stopLeft();
-    //re-check for obstacles
-    obstacleCheck("left",moveDistance)
-    //fix zindex
-    zIndexSort()
+    direction = "left"
   }
 
   if (eventVar.key === 'ArrowRight' || eventVar.key === 'd' || eventVar.target.id == "right-arrow-button") {
-    moveDistance = slowMoveSpeed
-    if(eventVar.shiftKey || sprintButton.classList.contains("active")) {
-      moveDistance = fastMoveSpeed
-    }
-    stopRight()
-    //re-check for obstacles
-    obstacleCheck("right",moveDistance)
-    //fix zindex
-    zIndexSort()
+    direction = "right"
   }
 
   if (eventVar.key === 'ArrowUp' || eventVar.key === 'w' || eventVar.target.id == "up-arrow-button") {
-    moveDistance = slowMoveSpeed
-    if(eventVar.shiftKey || sprintButton.classList.contains("active")) {
-      moveDistance = fastMoveSpeed
-    }
-    stopUp()
-    //re-check for obstacles
-    obstacleCheck("up",moveDistance)
-    //fix zindex
-    zIndexSort()
+    direction = "up"
   }
 
   if (eventVar.key === 'ArrowDown' || eventVar.key === 's' || eventVar.target.id == "down-arrow-button") {
+    direction = "down"
+  }
+
+  //this makes sure to skip for spacebar & for shift
+  if (direction != "initial") {
+    //set the movespeed
     moveDistance = slowMoveSpeed
     if(eventVar.shiftKey || sprintButton.classList.contains("active")) {
       moveDistance = fastMoveSpeed
     }
-    stopDown()
+    //stop character
+    stopCharacter(direction);
     //re-check for obstacles
-    obstacleCheck("down",moveDistance)
-    //fix zindex
-    zIndexSort()
+    obstacleCheck(direction,moveDistance)
   }
 
   //this prevents any weird lingering of the move animation (and it's readded immediately if a direction is held)
@@ -657,14 +617,8 @@ function buttonRelease() {
     if(eventVar.shiftKey || sprintButton.classList.contains("active")) {
       moveDistance = fastMoveSpeed
     }
-
     character.classList.remove("sprint");
-    obstacleCheck("down",moveDistance);
-    obstacleCheck("up",moveDistance);
-    obstacleCheck("left",moveDistance);
-    obstacleCheck("right",moveDistance);
   }
-
   //and for all buttons, reset button pressed for mobile
     buttonPressed = "initial";
 }
@@ -676,7 +630,6 @@ function obstacleCheck(direction,moveDistance) {
   //shift off the location name
   gameContainerClasses.shift();
 
-  var obstacle = document.querySelectorAll(".obstacle");
   var characterBounds = character.getBoundingClientRect();
 
   //check if we're in the church
@@ -772,7 +725,6 @@ function obstacleCheck(direction,moveDistance) {
 
   //check for ground items
   var groundItem = document.querySelectorAll(".ground");
-
     for (i = 0; i < groundItem.length; i++) {
         var groundItemBounds = groundItem[i].getBoundingClientRect();
 
@@ -827,14 +779,12 @@ function obstacleCheck(direction,moveDistance) {
       if (!obstacle[i].classList.contains("fence")) {
         var obstacleBounds = obstacle[i].getBoundingClientRect();
 
-        var overlap = !(obstacleBounds.right <= characterBounds.left || obstacleBounds.left >= characterBounds.right ||
-                      obstacleBounds.bottom <= characterBounds.top || obstacleBounds.top >= characterBounds.bottom);
+        var overlap = !(obstacleBounds.right <= (parseInt(characterBounds.left) - parseInt(moveDistance)) || obstacleBounds.left >= (parseInt(characterBounds.right) + parseInt(moveDistance)) ||
+                      obstacleBounds.bottom <= (parseInt(characterBounds.top) + parseInt(moveDistance)) || obstacleBounds.top >= (parseInt(characterBounds.bottom) + parseInt(moveDistance)));
 
         //if there's overlap
         if (overlap === true) {
-
           //check where the overlap is [overlap || character || object]
-
           var overlapLeftRight = characterBounds.left <= obstacleBounds.right
           var overlapRightLeft = characterBounds.right >= obstacleBounds.left
           var overlapTopBottom = characterBounds.top <= obstacleBounds.bottom
@@ -842,22 +792,22 @@ function obstacleCheck(direction,moveDistance) {
 
           if (overlapLeftRight == true && character.classList.contains("right")) {
             //if character left overlaps object right, increase left to push it over
-            character.style.left = parseInt(character.style.left) - parseInt(moveDistance) + "px";
+            return true;
           }
 
           if (overlapRightLeft == true && character.classList.contains("left")) {
             //if character right overlaps object left, decrease left to push it over
-            character.style.left = parseInt(character.style.left) + parseInt(moveDistance) + "px";
+            return true;
           }
 
           if (overlapTopBottom == true && character.classList.contains("up")) {
             //if character top overlaps object bottom, increase top to push it down
-            character.style.top = parseInt(character.style.top) + parseInt(moveDistance) + "px";
+            return true;
           }
 
           if (overlapBottomTop == true && character.classList.contains("down")) {
             //if character bottom overlaps object top, decrease top to push it up
-            character.style.top = parseInt(character.style.top) - parseInt(moveDistance) + "px";
+            return true;
           }
 
         }
@@ -867,8 +817,8 @@ function obstacleCheck(direction,moveDistance) {
       if (obstacle[i].classList.contains("fence")) {
         var obstacleBounds = obstacle[i].getBoundingClientRect();
 
-        var overlap = !(obstacleBounds.right <= characterBounds.left || obstacleBounds.left >= characterBounds.right ||
-                      obstacleBounds.bottom <= characterBounds.top || obstacleBounds.top >= characterBounds.bottom);
+        var overlap = !(obstacleBounds.right <= (parseInt(characterBounds.left) - parseInt(moveDistance)) || obstacleBounds.left >= (parseInt(characterBounds.right) + parseInt(moveDistance)) ||
+                      obstacleBounds.bottom <= (parseInt(characterBounds.top) + parseInt(moveDistance)) || obstacleBounds.top >= (parseInt(characterBounds.bottom) + parseInt(moveDistance)));
 
         //if there's overlap
         if (overlap === true) {
@@ -885,7 +835,7 @@ function obstacleCheck(direction,moveDistance) {
 
           if (overlapBottomTop == true && character.classList.contains("down") && behind == true) {
             //if character bottom overlaps object top, decrease top to push it up
-            character.style.top = parseInt(character.style.top) - parseInt(moveDistance) + "px";
+            return true;
           }
 
           if (overlapTopBottom == true && character.classList.contains("up")) {
@@ -894,7 +844,7 @@ function obstacleCheck(direction,moveDistance) {
             //see if the bottom is also higher, and if we're in front
             if (overlapBottomBottom == true && inFront === true) {
               //if it is, increase top to push it down
-              character.style.top = parseInt(character.style.top) + parseInt(moveDistance) + "px";
+              return true;
             }
           }
 
@@ -971,14 +921,15 @@ function interactCheck() {
       }
     }
   }
-    //otherwise, button does nothing
+  //otherwise, button does nothing
 }
 
 //move left
-  function moveLeft(moveDistance) {
-      //get the element's left position
-      var leftPosition = parseInt(character.style.left);
+function moveCharacter(direction,moveDistance) {
+    //get the element's left position
+    var leftPosition = parseInt(character.style.left);
 
+    if (direction == "left") {
       //only move if there's room to move
       if (leftPosition > 0) {
         setTimeout(() => {
@@ -1005,38 +956,20 @@ function interactCheck() {
       //indicate the character is moving and going left
       character.classList.add("moving","left","face-left");
       character.classList.remove("right","stopped","face-right","face-up","face-down");
+    }
 
-      //check if we're running or walking, play sfx
-      if (character.classList.contains("sprint")) {
-        //pause walk, start playing lope sfx
-        document.getElementById("walk-player").pause();
-        document.getElementById("lope-player").play();
-      } else {
-        //pause lope, start playing walk sfx
-        document.getElementById("lope-player").pause();
-        document.getElementById("walk-player").play();
-      }
-
-      //and when we move we check zindex
-      zIndexSort();
-  }
-
-  //move right
-  function moveRight(moveDistance) {
-      //get the element's left position
-      var leftPosition = parseInt(character.style.left);
-
+    if (direction == "right") {
       //only move if there's room to move
       if (leftPosition < gameWidth) {
         //if we're on a diagonal, half the move distance since it'll be applied twice
-          if (character.classList.contains("up") || character.classList.contains("down")) {
-            //idk why this is the math we need but it is
-            if (character.classList.contains("sprint")) {
-              moveDistance = parseInt(moveDistance)/parseInt("2")+parseInt("4");
-            } else {
-              moveDistance = parseInt(moveDistance)/parseInt("2")+parseInt("2");
-            }
+        if (character.classList.contains("up") || character.classList.contains("down")) {
+          //idk why this is the math we need but it is
+          if (character.classList.contains("sprint")) {
+            moveDistance = parseInt(moveDistance)/parseInt("2")+parseInt("4");
+          } else {
+            moveDistance = parseInt(moveDistance)/parseInt("2")+parseInt("2");
           }
+        }
         //add a value to it, and pixels to set it right
         setTimeout(() => {
           character.style.left = leftPosition + moveDistance + "px";
@@ -1052,24 +985,9 @@ function interactCheck() {
       //indicate the character is moving and going right
       character.classList.add("moving","right","face-right");
       character.classList.remove("left","stopped","face-left","face-up","face-down");
+    }
 
-      //check if we're running or walking, play sfx
-      if (character.classList.contains("sprint")) {
-        //pause walk, start playing lope sfx
-        document.getElementById("walk-player").pause();
-        document.getElementById("lope-player").play();
-      } else {
-        //pause lope, start playing walk sfx
-        document.getElementById("lope-player").pause();
-        document.getElementById("walk-player").play();
-      }
-
-      //and when we move we check zindex
-      zIndexSort();
-  }
-
-  //move up
-  function moveUp(moveDistance) {
+    if (direction == "up") {
       //get the element's top position
       var topPosition = parseInt(character.style.top);
 
@@ -1099,24 +1017,10 @@ function interactCheck() {
       //indicate the character is moving and going up
       character.classList.add("moving","up","face-up");
       character.classList.remove("down","stopped","face-down");
+    }
 
-      //check if we're running or walking, play sfx
-      if (character.classList.contains("sprint")) {
-        //pause walk, start playing lope sfx
-        document.getElementById("walk-player").pause();
-        document.getElementById("lope-player").play();
-      } else {
-        //pause lope, start playing walk sfx
-        document.getElementById("lope-player").pause();
-        document.getElementById("walk-player").play();
-      }
-
-      //and when we move we check zindex
-      zIndexSort();
-  }
-
-  //move down
-  function moveDown(moveDistance) {
+    if (direction == "down") {
+      //move down
       //get the element's top position
       var topPosition = parseInt(character.style.top);
 
@@ -1125,387 +1029,327 @@ function interactCheck() {
         setTimeout(() => {
           //if we're on a diagonal, half the move distance since it'll be applied twice
           if (character.classList.contains("left") || character.classList.contains("right")) {
-            //idk why this is the math we need but it is
-            if (character.classList.contains("sprint")) {
-              moveDistance = parseInt(moveDistance)/parseInt("2")+parseInt("4");
-            } else {
-              moveDistance = parseInt(moveDistance)/parseInt("2")+parseInt("2");
+          //idk why this is the math we need but it is
+          if (character.classList.contains("sprint")) {
+            moveDistance = parseInt(moveDistance)/parseInt("2")+parseInt("4");
+          } else {
+            moveDistance = parseInt(moveDistance)/parseInt("2")+parseInt("2");
+          }
+        }
+        //add a value to it, and pixels to push it down
+        character.style.top = topPosition + moveDistance + "px";
+      }, moveDelay);
+    } else {
+      //fire move screen event
+      moveScreen("down");
+      setTimeout(() => {
+      document.body.classList.remove("just-moved");
+      }, 1000);
+    }
+
+    //indicate the character is moving and going down
+    character.classList.add("moving","down","face-down");
+    character.classList.remove("up","stopped","face-up");
+  }
+
+  //check if we're running or walking, play sfx
+  if (character.classList.contains("sprint")) {
+    //pause walk, start playing lope sfx
+    document.getElementById("walk-player").pause();
+    document.getElementById("lope-player").play();
+  } else {
+    //pause lope, start playing walk sfx
+    document.getElementById("lope-player").pause();
+    document.getElementById("walk-player").play();
+  }
+
+  //and when we move we check zindex
+  zIndexSort();
+}
+
+//Stop moving 
+function stopCharacter() {
+  setTimeout(() => {
+    character.classList.remove("moving");
+    if (character.classList.contains("sprint")){
+      character.classList.remove("sprint");
+    }
+    
+    //pause walk sound effects
+    document.getElementById("walk-player").pause();
+    document.getElementById("lope-player").pause();
+    //and ground sound effects
+    setTimeout(() => {
+      var groundPlayers = document.querySelectorAll(".ground-sound");
+      for (i = 0; i < groundPlayers.length; i++) {
+        groundPlayers[i].pause();
+      }
+    }, 150);
+
+    //after we stop moving, we do a final obstacle check where we correct any issues
+    //check which way we're facing
+    if (character.classList.contains("face-left")) { var facing = "left"; }
+    if (character.classList.contains("face-right")) { var facing = "right"; }
+    if (character.classList.contains("face-up")) { var facing = "up"; }
+    if (character.classList.contains("face-down")) { var facing = "down"; }
+
+    for (i = 0; i < obstacle.length; i++) {
+      var obstacleBounds = obstacle[i].getBoundingClientRect();
+      var characterBounds = character.getBoundingClientRect();
+      var overlap = !(obstacleBounds.right <= (parseInt(characterBounds.left) - parseInt(moveDistance)) || obstacleBounds.left >= (parseInt(characterBounds.right) + parseInt(moveDistance)) ||
+                      obstacleBounds.bottom <= (parseInt(characterBounds.top) + parseInt(moveDistance)) || obstacleBounds.top >= (parseInt(characterBounds.bottom) + parseInt(moveDistance)));
+
+      if (overlap == true) {
+        //check where the overlap is [overlap || character || object]
+        var overlapLeftRight = characterBounds.left <= obstacleBounds.right
+        var overlapRightLeft = characterBounds.right >= obstacleBounds.left
+        var overlapTopBottom = characterBounds.top <= obstacleBounds.bottom
+        var overlapBottomTop = characterBounds.bottom >= obstacleBounds.top
+
+        //for general obstacles
+        if (!obstacle[i].classList.contains("fence")) {
+          if (facing == "left" && overlapLeftRight == true) {
+              character.style.left = parseInt(obstacle[i].style.left) + parseInt(obstacleBounds.width) + parseInt(moveDistance*2) + "px";
+          }
+
+          if (facing == "right" && overlapRightLeft == true) {
+              character.style.left = parseInt(obstacle[i].style.left) - parseInt(characterBounds.width) - parseInt(moveDistance*2) + "px";
+          }
+
+          if (facing == "up" && overlapTopBottom == true) {
+            character.style.top = parseInt(obstacle[i].style.top) + parseInt(moveDistance*2) + "px";
+          }
+
+          if (facing == "down" && overlapBottomTop == true) {
+              character.style.top = parseInt(obstacle[i].style.top) - parseInt(moveDistance*2) - parseInt(characterBounds.height) + "px";
+          }
+        }
+
+        //for fences
+        if (obstacle[i].classList.contains("fence")) {
+          var behind = (parseInt(obstacle[i].style.zIndex) + parseInt(moveDistance)) > parseInt(character.style.zIndex);
+          var inFront = (parseInt(obstacle[i].style.zIndex) - parseInt(moveDistance)) < parseInt(character.style.zIndex);
+
+          if (overlapBottomTop == true && character.classList.contains("down") && behind == true) {
+            //if character bottom overlaps object top, decrease top to push it up
+            character.style.top = parseInt(obstacle[i].style.top) - parseInt(moveDistance*2) + "px";
+          }
+
+          if (overlapTopBottom == true && character.classList.contains("up")) {
+            //if character top overlaps object bottom,
+            var overlapBottomBottom = characterBounds.bottom <= obstacleBounds.bottom
+            //see if the bottom is also higher, and if we're in front
+            if (overlapBottomBottom == true && inFront === true) {
+              //if it is, increase top to push it down
+              character.style.top = parseInt(obstacle[i].style.top) + parseInt(moveDistance*2) + "px";
             }
           }
-          //add a value to it, and pixels to push it down
-          character.style.top = topPosition + moveDistance + "px";
-        }, moveDelay);
-      } else {
-        //fire move screen event
-        moveScreen("down");
-        setTimeout(() => {
-          document.body.classList.remove("just-moved");
-        }, 1000);
-      }
-
-      //indicate the character is moving and going down
-      character.classList.add("moving","down","face-down");
-      character.classList.remove("up","stopped","face-up");
-
-      //check if we're running or walking, play sfx
-      if (character.classList.contains("sprint")) {
-        //pause walk, start playing lope sfx
-        document.getElementById("walk-player").pause();
-        document.getElementById("lope-player").play();
-      } else {
-        //pause lope, start playing walk sfx
-        document.getElementById("lope-player").pause();
-        document.getElementById("walk-player").play();
-      }
-
-      //and when we move we check zindex
-      zIndexSort();
-  }
-
-  //Stop moving 
-  function stopLeft() {
-    setTimeout(() => {
-      character.classList.remove("moving");
-      if (character.classList.contains("sprint")){
-        character.classList.remove("sprint");
-      }
-      
-      //pause walk sound effects
-      document.getElementById("walk-player").pause();
-      document.getElementById("lope-player").pause();
-
-      //and ground sound effects
-      setTimeout(() => {
-        var groundPlayers = document.querySelectorAll(".ground-sound");
-        for (i = 0; i < groundPlayers.length; i++) {
-          groundPlayers[i].pause();
         }
-      }, 150);
-      
-      character.classList.add("stopped");
-    }, moveDelay);
-  }
 
-  function stopRight() {
-    setTimeout(() => {
-      character.classList.remove("moving");
-      if (character.classList.contains("sprint")){
-        character.classList.remove("sprint");
       }
-      
-      //pause walk sound effects
-      document.getElementById("walk-player").pause();
-      document.getElementById("lope-player").pause();
+    }
 
-      //and ground sound effects
-      setTimeout(() => {
-        var groundPlayers = document.querySelectorAll(".ground-sound");
-        for (i = 0; i < groundPlayers.length; i++) {
-          groundPlayers[i].pause();
-        }
-      }, 150);
-
-      character.classList.add("stopped");
-    }, moveDelay);
-  }
-
-  function stopUp() {
-    setTimeout(() => {
-      character.classList.remove("moving");
-      if (character.classList.contains("sprint")){
-        character.classList.remove("sprint");
-      }
-      
-      //pause walk sound effects
-      document.getElementById("walk-player").pause();
-      document.getElementById("lope-player").pause();
-
-      //and ground sound effects
-      setTimeout(() => {
-        var groundPlayers = document.querySelectorAll(".ground-sound");
-        for (i = 0; i < groundPlayers.length; i++) {
-          groundPlayers[i].pause();
-        }
-      }, 150);
-
-      character.classList.add("stopped");
-    }, moveDelay);
-  }
-
-  function stopDown() {
-    setTimeout(() => {
-      character.classList.remove("moving");
-      if (character.classList.contains("sprint")){
-        character.classList.remove("sprint");
-      }
-      
-      //pause walk sound effects
-      document.getElementById("walk-player").pause();
-      document.getElementById("lope-player").pause();
-
-      //and ground sound effects
-      setTimeout(() => {
-        var groundPlayers = document.querySelectorAll(".ground-sound");
-        for (i = 0; i < groundPlayers.length; i++) {
-          groundPlayers[i].pause();
-        }
-      }, 150);
-
-      character.classList.add("stopped");
-    }, moveDelay);
-  }
-
+    zIndexSort()
+    
+    character.classList.add("stopped");
+  }, 100);
+}
 
 //Move screen
+function moveScreen(direction) {
+  if (document.body.classList.contains("just-moved")) {
+    //if we just moved, bail to prevent jumping
+    return;
+  }
+  var newPosition
+  //define the variables based on move direction
+  if(direction == "left") {
+    newPosition = gameWidth + "px";
+  }
 
-  function moveScreen(direction) {
+  if(direction == "up") {
+    newPosition = gameHeight + "px";
+  }
 
-    if (document.body.classList.contains("just-moved")) {
-      console.log("just moved, sorry")
-      return;
+  if(direction == "right" || direction == "down") {
+    newPosition = "0";
+  }
+
+  document.body.classList.add("just-moved");
+
+  //jump character to the right spot on the new screen
+  character.style.transition = "0ms ease all";
+  character.style.opacity = "0";
+  setTimeout(() => {
+    if(direction == "right" || direction == "left") {
+      character.style.left = newPosition;
+      console.log(character.style.left);
     }
-
-    console.log(direction);
-
-    //define the variables based on move direction
-    if(direction == "left") {
-      //jump character to the right spot on the new screen
-      character.style.transition = "0ms ease all";
-      setTimeout(() => {
-        character.style.left = gameWidth + "px";
-        setTimeout(() => {
-          character.style.transition = "";
-        }, 16);
-      }, moveDelay);
+    if(direction == "up" || direction == "down") {
+      character.style.top = newPosition;
     }
-
-    if(direction == "up") {
-      //jump character to the right spot on the new screen
-      character.style.transition = "0ms ease all";
-      setTimeout(() => {
-        character.style.top = gameHeight + "px";
-        setTimeout(() => {
-          character.style.transition = "";
-        }, 16);
-      }, moveDelay);
-    }
-
-    if(direction == "down") {
-      //jump character to the right spot on the new screen
-      character.style.transition = "0ms ease all";
-      setTimeout(() => {
-      character.style.top = "0";
-        setTimeout(() => {
-          character.style.transition = "";
-          character.style.zIndex = "2";
-        }, 16);
-      }, moveDelay);
-
-    }
-
-    if(direction == "right") {
-      //jump character to the right spot on the new screen
-      character.style.transition = "0ms ease all";
-      setTimeout(() => {
-        character.style.left = "0";
-        setTimeout(() => {
-          character.style.transition = "";
-        }, 16);
-      }, moveDelay);
-    }
-
-    document.body.classList.add("just-moved");
-
     setTimeout(() => {
-      moveScreen2(direction);
-    }, moveDelay);
-
-    //this generates the screen title (delay to be sure that the classes are all updated before generating)
-    setTimeout(() => {
-      screenTitle();
+      character.style.opacity = "";
+      character.style.transition = "";
     }, 16);
+  }, 32);
 
-    //get the classlist, split into individuals
-      let list = gameContainer.classList.value.split(' ');
-      //check for matches to each direction
-      let matchesRight = list.filter(cls => cls.toLowerCase().includes("right"));
-      let matchesLeft = list.filter(cls => cls.toLowerCase().includes("left"));
-      let matchesUp = list.filter(cls => cls.toLowerCase().includes("up"));
-      let matchesDown = list.filter(cls => cls.toLowerCase().includes("down"));
+  setTimeout(() => {
+    //idk why we need this but we seem to need this
+    moveScreen2(direction,newPosition);
+  }, moveDelay);
 
-    //define our variables based on the current direction (current, opposite, and the two perpendicular)
-    if(direction == "left") {
-      var opposite = "right"; var perp1 = "up"; var perp2 = "down";
-      var matchesDirection = matchesLeft; var matchesOpposite = matchesRight; var matchesPerp1 = matchesUp; var matchesPerp2 = matchesDown;
+  //this generates the screen title (delay to be sure that the classes are all updated before generating)
+  setTimeout(() => {
+    screenTitle();
+  }, 16);
+
+  //get the classlist, split into individuals
+  let list = gameContainer.classList.value.split(' ');
+  //check for matches to each direction
+    let matchesRight = list.filter(cls => cls.toLowerCase().includes("right"));
+    let matchesLeft = list.filter(cls => cls.toLowerCase().includes("left"));
+    let matchesUp = list.filter(cls => cls.toLowerCase().includes("up"));
+    let matchesDown = list.filter(cls => cls.toLowerCase().includes("down"));
+
+  //define our variables based on the current direction (current, opposite, and the two perpendicular)
+  if(direction == "left") {
+    var opposite = "right"; var perp1 = "up"; var perp2 = "down";
+    var matchesDirection = matchesLeft; var matchesOpposite = matchesRight; var matchesPerp1 = matchesUp; var matchesPerp2 = matchesDown;
+  }
+
+  if(direction == "right") {
+    var opposite = "left"; var perp1 = "up"; var perp2 = "down";
+    var matchesDirection = matchesRight; var matchesOpposite = matchesLeft; var matchesPerp1 = matchesUp; var matchesPerp2 = matchesDown;
+  }
+
+  if(direction == "up") {
+    var opposite = "down"; var perp1 = "left"; var perp2 = "right";
+    var matchesDirection = matchesUp; var matchesOpposite = matchesDown; var matchesPerp1 = matchesLeft; var matchesPerp2 = matchesRight;
+    var newZIndex = "896"
+  }
+
+  if(direction == "down") {
+    var opposite = "up"; var perp1 = "left"; var perp2 = "right";
+    var matchesDirection = matchesDown; var matchesOpposite = matchesUp; var matchesPerp1 = matchesLeft; var matchesPerp2 = matchesRight;
+    var newZIndex = "1"
+  }
+
+  //if there's NO OTHER SCREENS, we add one to the direction, and remove initial class
+  if (matchesDirection.length + matchesOpposite.length + matchesPerp1.length + matchesPerp2.length == "0") {
+    gameContainer.classList.remove("initial-screen");
+    gameContainer.classList.add(direction + "-" + "1");
+
+    //if moving up or down, fix the z-index
+    if (direction == "up" || direction == "down") {
+      character.style.zIndex = newZIndex;
     }
 
-    if(direction == "right") {
-      var opposite = "left"; var perp1 = "up"; var perp2 = "down";
-      var matchesDirection = matchesRight; var matchesOpposite = matchesLeft; var matchesPerp1 = matchesUp; var matchesPerp2 = matchesDown;
+    //and exit
+      return
     }
 
-    if(direction == "up") {
-      var opposite = "down"; var perp1 = "left"; var perp2 = "right";
-      var matchesDirection = matchesUp; var matchesOpposite = matchesDown; var matchesPerp1 = matchesLeft; var matchesPerp2 = matchesRight;
-      var newZIndex = "896"
-    }
-
-    if(direction == "down") {
-      var opposite = "up"; var perp1 = "left"; var perp2 = "right";
-      var matchesDirection = matchesDown; var matchesOpposite = matchesUp; var matchesPerp1 = matchesLeft; var matchesPerp2 = matchesRight;
-      var newZIndex = "1"
-    }
-
-    //if there's NO OTHER SCREENS, we add one to the direction, and remove initial class
-      if (matchesDirection.length + matchesOpposite.length + matchesPerp1.length + matchesPerp2.length == "0") {
-        gameContainer.classList.remove("initial-screen");
-        gameContainer.classList.add(direction + "-" + "1");
-
-        //if moving up or down, fix the z-index
-        if (direction == "up" || direction == "down") {
-          character.style.zIndex = newZIndex;
-        }
-
-        //and exit
-        return
-      }
-
-      //if there's other screens, check what they are 
-      if (matchesOpposite.length || matchesDirection.length || matchesPerp1.length || matchesPerp2.length != "0") {
+    //if there's other screens, check what they are 
+    if (matchesOpposite.length || matchesDirection.length || matchesPerp1.length || matchesPerp2.length != "0") {
         
-        //if there's no screens in the opposite direction
-        if (matchesOpposite.length == "0") {
+    //if there's no screens in the opposite direction
+    if (matchesOpposite.length == "0") {
 
-          //get the number of screens in the current direction
-          var screenNumber = matchesDirection.toString().replace(/^\D+/g, '');
+    //get the number of screens in the current direction
+    var screenNumber = matchesDirection.toString().replace(/^\D+/g, '');
 
-          //if there are screens in the current direction
-          if (screenNumber != 0) {
-            //remove the previous class
-            gameContainer.classList.remove(matchesDirection);
-            gameContainer.classList.add(direction + "-" + (parseInt(screenNumber) + parseInt("1")));
+    //if there are screens in the current direction
+    if (screenNumber != 0) {
+      //remove the previous class
+      gameContainer.classList.remove(matchesDirection);
+      gameContainer.classList.add(direction + "-" + (parseInt(screenNumber) + parseInt("1")));
 
-            //if moving up or down, fix the z-index
-            if (direction == "up" || direction == "down") {
-              character.style.zIndex = newZIndex;
-            }
-            //and exit
-            return
-          } else {
-            //otherwise, and add a new one that's 1 higher
-            gameContainer.classList.add(direction + "-" + "1");
-
-            //if moving up or down, fix the z-index
-            if (direction == "up" || direction == "down") {
-              character.style.zIndex = newZIndex;
-            }
-            //and exit
-            return
-          }
-        }
-
-        //if there ARE screens to the opposite direction
-        if (matchesOpposite.length != "0") {
-          //figure out the level
-          var screenNumber = matchesOpposite.toString().replace(/^\D+/g, '');
-
-          //check if there's matches above/below
-          if (matchesPerp1.length != "0" || matchesPerp2.length != "0") {
-            //if there are, 
-            if(screenNumber == "1") {
-              //if there's only one, remove it totally
-              gameContainer.classList.remove(matchesOpposite);
-
-              //check if there's perpendicular screens
-              var perpendicularScreens = (matchesPerp1.length != 0 || matchesPerp2.length != 0)
-
-              if (perpendicularScreens == true) {
-                //if moving up or down, fix the z-index
-                if (direction == "up" || direction == "down") {
-                  character.style.zIndex = newZIndex;
-                }
-                //and exit
-                return
-              } else {
-                //otherwise, re-add the initial class
-                gameContainer.classList.add("initial-screen");
-              }
-            } else {
-              //otherwise, subtract 1 from it
-              gameContainer.classList.remove(matchesOpposite);
-              gameContainer.classList.add(opposite + "-" + (parseInt(screenNumber) - parseInt("1")));
-            }
-          }
-
-          if(matchesPerp1.length == "0" || matchesPerp2.length == "0") {
-            //if there aren't,
-            if(screenNumber == 1) {
-              //if there's only one, remove it totally and re-add initial
-              gameContainer.classList.remove(matchesOpposite);
-              gameContainer.classList.add("initial-screen");
-            } else {
-              //otherwise, subtract 1 from it
-              gameContainer.classList.remove(matchesOpposite);
-              gameContainer.classList.add(opposite + "-" + (parseInt(screenNumber) - parseInt("1")));
-            }
-          }
-        }
-      }
-
+      //if moving up or down, fix the z-index
       if (direction == "up" || direction == "down") {
         character.style.zIndex = newZIndex;
       }
+      //and exit
+      return
+    } else {
+      //otherwise, and add a new one that's 1 higher
+      gameContainer.classList.add(direction + "-" + "1");
+      //if moving up or down, fix the z-index
+      if (direction == "up" || direction == "down") {
+        character.style.zIndex = newZIndex;
+      }
+      //and exit
+      return
+    }
   }
 
+  //if there ARE screens to the opposite direction
+  if (matchesOpposite.length != "0") {
+    //figure out the level
+    var screenNumber = matchesOpposite.toString().replace(/^\D+/g, '');
+
+    //check if there's matches above/below
+    if (matchesPerp1.length != "0" || matchesPerp2.length != "0") {
+      //if there are, 
+      if(screenNumber == "1") {
+        //if there's only one, remove it totally
+        gameContainer.classList.remove(matchesOpposite);
+        //check if there's perpendicular screens
+        var perpendicularScreens = (matchesPerp1.length != 0 || matchesPerp2.length != 0)
+
+        if (perpendicularScreens == true) {
+          //if moving up or down, fix the z-index
+          if (direction == "up" || direction == "down") {
+            character.style.zIndex = newZIndex;
+          }
+          //and exit
+          return
+        } else {
+          //otherwise, re-add the initial class
+          gameContainer.classList.add("initial-screen");
+        }
+      } else {
+        //otherwise, subtract 1 from it
+          gameContainer.classList.remove(matchesOpposite);
+          gameContainer.classList.add(opposite + "-" + (parseInt(screenNumber) - parseInt("1")));
+        }
+      }
+
+      if(matchesPerp1.length == "0" || matchesPerp2.length == "0") {
+        //if there aren't,
+        if(screenNumber == 1) {
+          //if there's only one, remove it totally and re-add initial
+          gameContainer.classList.remove(matchesOpposite);
+          gameContainer.classList.add("initial-screen");
+        } else {
+          //otherwise, subtract 1 from it
+          gameContainer.classList.remove(matchesOpposite);
+          gameContainer.classList.add(opposite + "-" + (parseInt(screenNumber) - parseInt("1")));
+        }
+      }
+    }
+  }
+
+  if (direction == "up" || direction == "down") {
+    character.style.zIndex = newZIndex;
+  }
+}
+
 //move screen but MORE you FUCKING CUNT
-
-  function moveScreen2(direction) {
-    //define the variables based on move direction
-    if(direction == "left") {
-      //jump character to the right spot on the new screen
-      character.style.transition = "0ms ease all";
+  function moveScreen2(direction,newPosition) {
+    //jump character to the right spot on the new screen (passed our variables from the initial function)
+    character.style.transition = "0ms ease all";
+    setTimeout(() => {
+      console.log(character.style.left)
+      if(direction == "right" || direction == "left") {
+        character.style.left = newPosition;
+      }
+      if(direction == "up" || direction == "down") {
+       character.style.top = newPosition;
+      }
       setTimeout(() => {
-        character.style.left = gameWidth + "px";
-        setTimeout(() => {
-          character.style.transition = "";
-        }, 16);
-      }, 32);
-    }
-
-    if(direction == "up") {
-      //jump character to the right spot on the new screen
-      character.style.transition = "0ms ease all";
-      setTimeout(() => {
-        character.style.top = gameHeight + "px";
-        setTimeout(() => {
-          character.style.transition = "";
-        }, 16);
-      }, 32);
-    }
-
-    if(direction == "down") {
-      //jump character to the right spot on the new screen
-      character.style.transition = "0ms ease all";
-      setTimeout(() => {
-      character.style.top = "0";
-        setTimeout(() => {
-          character.style.transition = "";
-          character.style.zIndex = "2";
-        }, 16);
-      }, 32);
-
-    }
-
-    if(direction == "right") {
-      //jump character to the right spot on the new screen
-      character.style.transition = "0ms ease all";
-      setTimeout(() => {
-        character.style.left = "0";
-        setTimeout(() => {
-          character.style.transition = "";
-        }, 16);
-      }, 32);
-    }
+        character.style.transition = "";
+      }, 16);
+    }, 32);
   }
 
 ///////////////////////NPCs
