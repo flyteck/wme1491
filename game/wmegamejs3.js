@@ -49,6 +49,12 @@ function getMobileOperatingSystem() {
 
 var OS = getMobileOperatingSystem();
 
+var smallMobile = matchMedia('(hover:none)').matches && screen.width < "1024";
+var appleDevice = OS == "Mac" && matchMedia('(any-pointer:coarse)').matches || OS == "iOS";
+
+console.log(smallMobile);
+console.log(appleDevice);
+
 ////////////////////////////////////////////////////////////////////////////////
 
 //character + container
@@ -71,16 +77,11 @@ var gameHeight = parseInt(510)
 console.log(screen.width)
 
 //only mobile stuff (if no mouse support)
-if (matchMedia('(hover:none)').matches && screen.width < "1024") {
+if (smallMobile == true || appleDevice == true) {
   //this makes the buttons work on mobile
   window.addEventListener("contextmenu", function(e) { e.preventDefault(); })
   document.querySelector("body").classList.add("touch-only");
   console.log("no mouse")
-} else if (OS == "Mac" && matchMedia('(any-pointer:coarse)').matches || OS == "iOS") {
-  //this makes the buttons work on mobile
-  window.addEventListener("contextmenu", function(e) { e.preventDefault(); })
-  document.querySelector("body").classList.add("touch-only");
-  console.log("apple ass device w a touchscreen");
 }
 
 //set sfx audio volume 
@@ -207,7 +208,7 @@ function sprintToggle() {
 
 function buttonPress() {
   //on mobile, check if we're on a recall, and if so, repeat that event
-  if (matchMedia('(hover:none)').matches && screen.width < "1024") {
+  if (smallMobile == true || appleDevice == true) {
     if (buttonPressed != "initial") {
       eventVar = buttonPressed;
     } else {
@@ -570,7 +571,7 @@ function buttonPress() {
 
   //don't ask me why this needs to have a timeout inside and out but it won't run right otherwise
   setTimeout(() => {
-    if (matchMedia('(hover:none)').matches && screen.width < "1024") {
+    if (smallMobile == true || appleDevice == true) {
       //if we're on mobile,
       if (mouseDown == 1) {
         //and button is being pressed, fire again 
@@ -591,7 +592,7 @@ function buttonPress() {
 
 function buttonRelease() {
   //on mobile, check if we're on a recall, and if so, repeat that event
-  if (matchMedia('(hover:none)').matches && screen.width < "1024") {
+  if (smallMobile == true || appleDevice == true) {
     if (buttonPressed != "initial") {
       var eventVar = buttonPressed;
     } else {
@@ -797,7 +798,7 @@ function obstacleCheck(direction,moveDistance) {
             leafPlayer.classList.add("leaves-" + i, "playing");
             setTimeout(() => {
               leafPlayer.classList.remove("playing");
-            }, 16);
+            }, 32);
           }
         } 
 
@@ -992,7 +993,7 @@ function interactCheck() {
           }
           //subtract a value from it to set it right
           character.style.left = leftPosition - moveDistance + "px";
-        }, 16);
+        }, 32);
       } else {
         //fire move screen event
         moveScreen("left");
@@ -1036,7 +1037,7 @@ function interactCheck() {
         //add a value to it, and pixels to set it right
         setTimeout(() => {
           character.style.left = leftPosition + moveDistance + "px";
-        }, 16);
+        }, 32);
       } else {
         //fire move screen event
         moveScreen("right");
@@ -1080,7 +1081,7 @@ function interactCheck() {
           }
           //subtract a value from it, and pixels to push it up
           character.style.top = topPosition - moveDistance + "px";
-        }, 16);
+        }, 32);
       } else {
         //fire move screen event
         moveScreen("up");
@@ -1124,7 +1125,7 @@ function interactCheck() {
           }
           //add a value to it, and pixels to push it down
           character.style.top = topPosition + moveDistance + "px";
-        }, 16);
+        }, 32);
       } else {
         //fire move screen event
         moveScreen("down");
@@ -1170,7 +1171,7 @@ function interactCheck() {
       }, 150);
       
       character.classList.add("stopped");
-    }, 16);
+    }, 32);
   }
 
   function stopRight() {
@@ -1193,7 +1194,7 @@ function interactCheck() {
       }, 150);
 
       character.classList.add("stopped");
-    }, 16);
+    }, 32);
   }
 
   function stopUp() {
@@ -1216,7 +1217,7 @@ function interactCheck() {
       }, 150);
 
       character.classList.add("stopped");
-    }, 16);
+    }, 32);
   }
 
   function stopDown() {
@@ -1239,7 +1240,7 @@ function interactCheck() {
       }, 150);
 
       character.classList.add("stopped");
-    }, 16);
+    }, 32);
   }
 
 
@@ -1254,7 +1255,7 @@ function interactCheck() {
       character.style.left = gameWidth + "px";
       setTimeout(() => {
         character.style.transition = "";
-      }, 16);
+      }, 32);
     }
 
     if(direction == "up") {
@@ -1263,7 +1264,7 @@ function interactCheck() {
       character.style.top = gameHeight + "px";
       setTimeout(() => {
         character.style.transition = "";
-      }, 16);
+      }, 32);
     }
 
     if(direction == "down") {
@@ -1273,7 +1274,7 @@ function interactCheck() {
       setTimeout(() => {
         character.style.transition = "";
         character.style.zIndex = "2";
-      }, 16);
+      }, 32);
     }
 
     if(direction == "right") {
@@ -1282,13 +1283,13 @@ function interactCheck() {
       character.style.left = "0";
       setTimeout(() => {
         character.style.transition = "";
-      }, 16);
+      }, 32);
     }
 
     //this generates the screen title (delay to be sure that the classes are all updated before generating)
     setTimeout(() => {
       screenTitle();
-    }, 16);
+    }, 32);
 
     //get the classlist, split into individuals
       let list = gameContainer.classList.value.split(' ');
