@@ -975,7 +975,7 @@ function interactCheck() {
       var leftPosition = parseInt(character.style.left);
 
       //only move if there's room to move
-      if (leftPosition > 0 && !gameContainer.classList.contains("just-moved")) {
+      if (leftPosition > 0) {
         setTimeout(() => {
           //if we're on a diagonal, half the move distance since it'll be applied twice
           if (character.classList.contains("up") || character.classList.contains("down")) {
@@ -1022,7 +1022,7 @@ function interactCheck() {
       var leftPosition = parseInt(character.style.left);
 
       //only move if there's room to move
-      if (leftPosition < gameWidth && !gameContainer.classList.contains("just-moved")) {
+      if (leftPosition < gameWidth) {
         //if we're on a diagonal, half the move distance since it'll be applied twice
           if (character.classList.contains("up") || character.classList.contains("down")) {
             //idk why this is the math we need but it is
@@ -1069,7 +1069,7 @@ function interactCheck() {
       var topPosition = parseInt(character.style.top);
 
       //only move if there's room to move
-      if (topPosition > 0 && !gameContainer.classList.contains("just-moved")) {
+      if (topPosition > 0) {
         setTimeout(() => {
           //if we're on a diagonal, half the move distance since it'll be applied twice
           if (character.classList.contains("left") || character.classList.contains("right")) {
@@ -1116,7 +1116,7 @@ function interactCheck() {
       var topPosition = parseInt(character.style.top);
 
       //only move if there's room to move
-      if (topPosition < gameHeight && !gameContainer.classList.contains("just-moved")) {
+      if (topPosition < gameHeight) {
         setTimeout(() => {
           //if we're on a diagonal, half the move distance since it'll be applied twice
           if (character.classList.contains("left") || character.classList.contains("right")) {
@@ -1267,41 +1267,50 @@ function interactCheck() {
       console.log(direction + " - inside the function");
       //jump character to the right spot on the new screen
       character.style.transition = "0ms ease all";
-      character.style.left = gameWidth + "px";
       setTimeout(() => {
-        character.style.transition = "";
-      }, 16);
+        character.style.left = gameWidth + "px";
+        setTimeout(() => {
+          character.style.transition = "";
+        }, 16);
+      }, 32);
     }
 
     if(direction == "up") {
       console.log(direction);
       //jump character to the right spot on the new screen
       character.style.transition = "0ms ease all";
-      character.style.top = gameHeight + "px";
       setTimeout(() => {
-        character.style.transition = "";
-      }, 16);
+        character.style.top = gameHeight + "px";
+        setTimeout(() => {
+          character.style.transition = "";
+        }, 16);
+      }, 32);
     }
 
     if(direction == "down") {
       console.log(direction + " - inside the function");
       //jump character to the right spot on the new screen
       character.style.transition = "0ms ease all";
-      character.style.top = "0";
       setTimeout(() => {
-        character.style.transition = "";
-        character.style.zIndex = "2";
-      }, 16);
+      character.style.top = "0";
+        setTimeout(() => {
+          character.style.transition = "";
+          character.style.zIndex = "2";
+        }, 16);
+      }, 32);
+
     }
 
     if(direction == "right") {
       console.log(direction + " - inside the function");
       //jump character to the right spot on the new screen
       character.style.transition = "0ms ease all";
-      character.style.left = "0";
       setTimeout(() => {
-        character.style.transition = "";
-      }, 16);
+        character.style.left = "0";
+        setTimeout(() => {
+          character.style.transition = "";
+        }, 16);
+      }, 32);
     }
 
     gameContainer.classList.add("just-moved");
