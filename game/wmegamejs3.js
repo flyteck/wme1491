@@ -1255,7 +1255,7 @@ function interactCheck() {
       character.style.left = gameWidth + "px";
       setTimeout(() => {
         character.style.transition = "";
-      }, 32);
+      }, 16);
     }
 
     if(direction == "up") {
@@ -1264,7 +1264,7 @@ function interactCheck() {
       character.style.top = gameHeight + "px";
       setTimeout(() => {
         character.style.transition = "";
-      }, 32);
+      }, 16);
     }
 
     if(direction == "down") {
@@ -1274,7 +1274,7 @@ function interactCheck() {
       setTimeout(() => {
         character.style.transition = "";
         character.style.zIndex = "2";
-      }, 32);
+      }, 16);
     }
 
     if(direction == "right") {
@@ -1283,13 +1283,13 @@ function interactCheck() {
       character.style.left = "0";
       setTimeout(() => {
         character.style.transition = "";
-      }, 32);
+      }, 16);
     }
 
     //this generates the screen title (delay to be sure that the classes are all updated before generating)
     setTimeout(() => {
       screenTitle();
-    }, 32);
+    }, 16);
 
     //get the classlist, split into individuals
       let list = gameContainer.classList.value.split(' ');
