@@ -999,7 +999,7 @@ function interactCheck() {
         moveScreen("left");
         setTimeout(() => {
           gameContainer.classList.remove("just-moved");
-        }, 200);
+        }, 1000);
       }
 
       //indicate the character is moving and going left
@@ -1046,7 +1046,7 @@ function interactCheck() {
         moveScreen("right");
         setTimeout(() => {
           gameContainer.classList.remove("just-moved");
-        }, 200);
+        }, 1000);
       }
 
       //indicate the character is moving and going right
@@ -1093,7 +1093,7 @@ function interactCheck() {
         moveScreen("up");
         setTimeout(() => {
           gameContainer.classList.remove("just-moved");
-        }, 200);
+        }, 1000);
       }
 
       //indicate the character is moving and going up
@@ -1140,7 +1140,7 @@ function interactCheck() {
         moveScreen("down");
         setTimeout(() => {
           gameContainer.classList.remove("just-moved");
-        }, 200);
+        }, 1000);
       }
 
       //indicate the character is moving and going down
