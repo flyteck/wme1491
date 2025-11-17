@@ -997,6 +997,9 @@ function interactCheck() {
       } else {
         //fire move screen event
         moveScreen("left");
+        setTimeout(() => {
+          gameContainer.classList.remove("just-moved");
+        }, 200);
       }
 
       //indicate the character is moving and going left
@@ -1041,6 +1044,9 @@ function interactCheck() {
       } else {
         //fire move screen event
         moveScreen("right");
+        setTimeout(() => {
+          gameContainer.classList.remove("just-moved");
+        }, 200);
       }
 
       //indicate the character is moving and going right
@@ -1085,6 +1091,9 @@ function interactCheck() {
       } else {
         //fire move screen event
         moveScreen("up");
+        setTimeout(() => {
+          gameContainer.classList.remove("just-moved");
+        }, 200);
       }
 
       //indicate the character is moving and going up
@@ -1129,6 +1138,9 @@ function interactCheck() {
       } else {
         //fire move screen event
         moveScreen("down");
+        setTimeout(() => {
+          gameContainer.classList.remove("just-moved");
+        }, 200);
       }
 
       //indicate the character is moving and going down
@@ -1248,6 +1260,10 @@ function interactCheck() {
 
   function moveScreen(direction) {
 
+    if (gameContainer.classList.contains("just-moved")) {
+      return;
+    }
+
     //define the variables based on move direction
     if(direction == "left") {
       //jump character to the right spot on the new screen
@@ -1285,6 +1301,8 @@ function interactCheck() {
         character.style.transition = "";
       }, 16);
     }
+
+    gameContainer.classList.add("just-moved");
 
     //this generates the screen title (delay to be sure that the classes are all updated before generating)
     setTimeout(() => {
