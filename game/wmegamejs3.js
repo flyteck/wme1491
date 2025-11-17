@@ -5,15 +5,20 @@
 //Leaf stutter on mobile -- this is an optimization thing. I should have a clause to cancel calling a pause when you go quickly between two
 // object that make the same sfx, possibly by adding a class
 //Need to optimize obstacle check - old method was buggy
+//Crow stutters between animations sometimes
 
 //Menu open/close doesn't interact w forest music (maybe I'll just replace the SRC etc)
 
 ////PLANS
 //Fullscreen: needs to use zoom or else pixel alignments break. Would need to dynamically find the right zoom number and use that with JS
 
+//Guh I kinda think I need to redo dialogue.... I would want it to check for lines going up by 1 each time, and once it hits the end, add repeat
 
 ///for bullfrog: on change screen, check gamecontainer classlist, if it's got one of the bottom middle three, play; otherwise, pause
 
+//this is evil and it needs to be defined globally I fucking guess
+var crowInterval
+var expressions = ""
 
 ///quick OS detector for stupid stupid ipads
 window.addEventListener("load", getMobileOperatingSystem);
@@ -118,6 +123,11 @@ function screenTitle() {
 
   //display it nicely on the game screen
   document.getElementById("screen-display").innerHTML = gameContainer.classList.toString().replace(/\s/g, ' SPACEHOLDER ').replace(/-/g, ' ').replace(' SPACEHOLDER ', ' - ').replace(' SPACEHOLDER ', ', ');
+
+  //we're gonna call this in here, to be sure it's all updated when it goes
+  if (document.getElementById("tutorial").style.display == "none") {
+    soundEffectManage();
+  }
 }
 
 //quick listener to hide the tutorial with a key press as well
@@ -163,7 +173,7 @@ for (i = 0; i < items.length; i++) {
     if (npcName == npcList[j].name) {
       var description = items[i].querySelector(".description")
       //if they match, set the description text
-      description.innerHTML = npcList[j].dialogue
+      description.innerHTML = npcList[j].dialogue.replace(/♡/g, "");
     }
   }
 
@@ -275,7 +285,8 @@ function buttonPress() {
         //remove the talking ID
         dialoguePopUp.id = "";
         //remove last line,
-        dialoguePopUp.classList.remove("last-line")
+        dialoguePopUp.classList.remove("last-line", "talking-now");
+        expressions = "";
 
         if (interactFound != null) {        
           //add repeat for characters so we know they're done their main dialogue (items dissapear after interact, so this excludes them)
@@ -360,10 +371,6 @@ function buttonPress() {
         interactFound.style.opacity = "0"
       }
 
-      //set the viewable image with the right SRC
-      var interactDisplay = document.getElementById("interact-display");
-      interactDisplay.src = "objectives/" + interactFound.id.toLowerCase() + ".png";
-
       //make the textbox visible
       dialoguePopUp.style.display = "flex";
 
@@ -381,7 +388,6 @@ function buttonPress() {
       var dialogue = getCharacterDialogue().toString();
 
       function getCharacterDialogue() {
-
         //iterate through the list to find a name match,
         for (i = 0; i < npcList.length; i++) {
           if (npcName == npcList[i].name) {
@@ -391,25 +397,47 @@ function buttonPress() {
         }
       }
 
-      //split dialogue by spaces,
-      var words = dialogue.split(' ');
+      //split dialogue at the hearts (♡) [this allows us to break up our lines nicely],
+      var words = dialogue.split('♡');
 
-      //get a 20 word chunk, add it to the textbox
+      //if there's expressions, shift one off
+      if (expressions != "") {
+        expressions.shift();
+      }
+
+      if (!dialoguePopUp.classList.contains("talking-now") && !interactFound.classList.contains("objective")) {
+        //on our first one, we want to grab our facial expressions, so we separate those out (odd numbers, even is text),
+        var words = dialogue.split('♡').filter((e, i) =>  i % 2 != 0);
+        //and add "talking now" so we don't do it again
+        expressions = dialogue.split('♡').filter((e, i) =>  i % 2 == 0);
+        dialoguePopUp.classList.add("talking-now");
+      }
+
+      //set the viewable image with the proper SRC (this must be after things are split to make sure it includes the first expression)
+      var interactDisplay = document.getElementById("interact-display");
+      //slight delay to make sure that expressions exist
+        //if it's not an item, and it isn't "null"
+      if (!interactFound.classList.contains("objective") && expressions[0] != "null") {
+        //get the correct sprite + expression
+        interactDisplay.src = "objectives/" + interactFound.id.toLowerCase() + expressions[0].toLowerCase() + ".png";
+      } else {
+        //otherwise, just do it without the expression
+        interactDisplay.src = "objectives/" + interactFound.id.toLowerCase() + ".png";
+      }
+
+      //get the first dialogue chunk, put it in the textbox
 
       dialogueSplit()
       function dialogueSplit() {
-        var dialogueChunk = words.slice(0,39);
+        var dialogueChunk = words.slice(0,1);
         //and clean it up (remove excess commas and put desired ones back in)
         dialogueLoader.innerHTML = dialogueChunk.toString().replaceAll(",", " ").replaceAll("  ", ", ");
 
-        if (words.length <= 39) {
+        if (words.length == 1) {
           dialoguePopUp.classList.add("last-line");
         }
-
-        //shift the first 39 elements off of the array,
-        for (i = 0; i < 39; i++) {
-          words.shift(); 
-        }
+        
+        words.shift(); 
 
         //if there's words left after the splice
         if (words.length != 0) {
@@ -417,7 +445,7 @@ function buttonPress() {
           for (i = 0; i < npcList.length; i++) {
             if (npcName == npcList[i].name) {
               //then grab their dialogue
-             npcList[i].dialogue = words;
+             npcList[i].dialogue = words.join("♡");
             }
           }
         } else {
@@ -718,7 +746,7 @@ function obstacleCheck(direction,moveDistance) {
   }
 
   //check if we're overlapping an open tombstone
-  var openTombstone = document.querySelector(".active.tombstone");
+  var openTombstone = document.querySelector(".active.tombstone div");
   //we use nosebounds here for accuracy
   var noseBounds = nose.getBoundingClientRect();
   //if one exists,
@@ -729,7 +757,7 @@ function obstacleCheck(direction,moveDistance) {
     //and we're not overlapping it,
     if (tombOverlap === false) {
       //close it
-      openTombstone.classList.remove("active");
+      openTombstone.parentElement.classList.remove("active");
     }
   }
 
@@ -873,7 +901,7 @@ function obstacleCheck(direction,moveDistance) {
 function interactCheck() {
   var npc = document.querySelectorAll(".npc");
   var objective = document.querySelectorAll(".objective");
-  var tombstone = document.querySelectorAll(".tombstone");
+  var tombstone = document.querySelectorAll(".tombstone div");
   var characterBounds = character.getBoundingClientRect();
 
   //we use nosebounds here for accuracy (this is a smaller hitbox on the front end of the character)
@@ -922,14 +950,14 @@ function interactCheck() {
       var tombstoneCurrent = tombstone[i];
       //^we need this for later due to the timeout
 
-      if (tombstone[i].classList.contains("active") && !tombstone[i].classList.contains("clicked")) {
-          tombstone[i].classList.remove("active");
+      if (tombstone[i].parentElement.classList.contains("active") && !tombstone[i].classList.contains("clicked")) {
+          tombstone[i].parentElement.classList.remove("active");
       } else {
-          tombstone[i].classList.add("active");
-          tombstone[i].classList.add("clicked");
+          tombstone[i].parentElement.classList.add("active");
+          tombstone[i].parentElement.classList.add("clicked");
           setTimeout(() => {
             //we need this clicked class + timeout to prevent weird double taps on mobile
-            tombstoneCurrent.classList.remove("clicked");
+            tombstoneCurrent.parentElement.classList.remove("clicked");
         }, 100);
       }
     }
@@ -1387,6 +1415,65 @@ function interactCheck() {
   }
 
 ///////////////////////NPCs
+
+function soundEffectManage() {
+  //for the crow
+  var crow = document.getElementById("Crow")
+  var crowPlayer = document.getElementById("crow-player");
+
+  //if we're on one of the right screens,
+  if (gameContainer.classList.contains("right-1") || gameContainer.classList.contains("right-2") || gameContainer.classList.contains("right-3") && !crow.classList.contains("repeat")) {
+    //set interval (only if it's undefined, it stacks otherwise for some reason)
+    if (crowInterval == undefined) {
+      crowInterval = setInterval(crowCall, 6000);
+    }
+
+    //first, set the volume based on distance from the crow
+    setTimeout(() => {
+      if (gameContainer.classList.contains("right-3") && !gameContainer.classList.contains("up-1") || !gameContainer.classList.contains("down-1")) {
+        crowPlayer.volume = "1"
+      }
+
+      if (gameContainer.classList.contains("right-3") && gameContainer.classList.contains("up-1") || gameContainer.classList.contains("down-1")) {
+        crowPlayer.volume = "0.5"
+      }
+
+      if (gameContainer.classList.contains("right-2") && !gameContainer.classList.contains("up-1") || !gameContainer.classList.contains("down-1")) {
+        crowPlayer.volume = "0.5"
+      }
+
+      if (gameContainer.classList.contains("right-2") && gameContainer.classList.contains("up-1") || gameContainer.classList.contains("down-1")) {
+        crowPlayer.volume = "0.3"
+      }
+
+      if (gameContainer.classList.contains("right-1")) {
+        crowPlayer.volume = "0.1"
+      }
+    }, 32);
+  } else {
+    clearInterval(crowInterval);
+  }
+
+}
+
+//if the crow isn't calling, call
+function crowCall() {
+  var crow = document.getElementById("Crow")
+  var crowPlayer = document.getElementById("crow-player");
+
+  if (crow.classList.contains("repeat") || crow.classList.contains("last-line")) {
+    clearInterval(crowInterval);
+    return
+  }
+
+  //add call, play the sound
+  crow.classList.add("call");
+  crowPlayer.play();
+  //and then remove after the sound should be done
+  setTimeout(() => {
+      crow.classList.remove("call");
+  }, 2000);
+}
 
 ///////////////////////
 
