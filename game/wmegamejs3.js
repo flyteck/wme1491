@@ -999,7 +999,7 @@ function interactCheck() {
         moveScreen("left");
         setTimeout(() => {
           gameContainer.classList.remove("just-moved");
-        }, 1000);
+        }, 200);
       }
 
       //indicate the character is moving and going left
@@ -1046,7 +1046,7 @@ function interactCheck() {
         moveScreen("right");
         setTimeout(() => {
           gameContainer.classList.remove("just-moved");
-        }, 1000);
+        }, 200);
       }
 
       //indicate the character is moving and going right
@@ -1093,7 +1093,7 @@ function interactCheck() {
         moveScreen("up");
         setTimeout(() => {
           gameContainer.classList.remove("just-moved");
-        }, 1000);
+        }, 200);
       }
 
       //indicate the character is moving and going up
@@ -1140,7 +1140,7 @@ function interactCheck() {
         moveScreen("down");
         setTimeout(() => {
           gameContainer.classList.remove("just-moved");
-        }, 1000);
+        }, 200);
       }
 
       //indicate the character is moving and going down
@@ -1266,6 +1266,7 @@ function interactCheck() {
 
     //define the variables based on move direction
     if(direction == "left") {
+      console.log(direction);
       //jump character to the right spot on the new screen
       character.style.transition = "0ms ease all";
       character.style.left = gameWidth + "px";
@@ -1275,6 +1276,7 @@ function interactCheck() {
     }
 
     if(direction == "up") {
+      console.log(direction);
       //jump character to the right spot on the new screen
       character.style.transition = "0ms ease all";
       character.style.top = gameHeight + "px";
@@ -1284,6 +1286,7 @@ function interactCheck() {
     }
 
     if(direction == "down") {
+      console.log(direction);
       //jump character to the right spot on the new screen
       character.style.transition = "0ms ease all";
       character.style.top = "0";
@@ -1294,6 +1297,7 @@ function interactCheck() {
     }
 
     if(direction == "right") {
+      console.log(direction);
       //jump character to the right spot on the new screen
       character.style.transition = "0ms ease all";
       character.style.left = "0";
