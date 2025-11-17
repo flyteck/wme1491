@@ -52,9 +52,6 @@ var OS = getMobileOperatingSystem();
 var smallMobile = matchMedia('(hover:none)').matches && screen.width < "1024";
 var appleDevice = OS == "Mac" && matchMedia('(any-pointer:coarse)').matches || OS == "iOS";
 
-console.log(smallMobile);
-console.log(appleDevice);
-
 ////////////////////////////////////////////////////////////////////////////////
 
 //character + container
@@ -71,10 +68,8 @@ var fastMoveSpeed = "16"
 var sprintButton = document.getElementById("sprint-button");
 
 //these numbers need to be the width minus the respective height/width of the character
-var gameWidth = parseInt(795)
-var gameHeight = parseInt(510)
-
-console.log(screen.width)
+var gameWidth = parseInt(795);
+var gameHeight = parseInt(510);
 
 //only mobile stuff (if no mouse support)
 if (smallMobile == true || appleDevice == true) {
@@ -999,7 +994,7 @@ function interactCheck() {
         moveScreen("left");
         setTimeout(() => {
           gameContainer.classList.remove("just-moved");
-        }, 200);
+        }, 1000);
       }
 
       //indicate the character is moving and going left
@@ -1046,7 +1041,7 @@ function interactCheck() {
         moveScreen("right");
         setTimeout(() => {
           gameContainer.classList.remove("just-moved");
-        }, 200);
+        }, 1000);
       }
 
       //indicate the character is moving and going right
@@ -1093,7 +1088,7 @@ function interactCheck() {
         moveScreen("up");
         setTimeout(() => {
           gameContainer.classList.remove("just-moved");
-        }, 200);
+        }, 1000);
       }
 
       //indicate the character is moving and going up
@@ -1140,7 +1135,7 @@ function interactCheck() {
         moveScreen("down");
         setTimeout(() => {
           gameContainer.classList.remove("just-moved");
-        }, 200);
+        }, 1000);
       }
 
       //indicate the character is moving and going down
@@ -1261,12 +1256,15 @@ function interactCheck() {
   function moveScreen(direction) {
 
     if (gameContainer.classList.contains("just-moved")) {
+      console.log("just moved, sorry")
       return;
     }
 
+    console.log(direction);
+
     //define the variables based on move direction
     if(direction == "left") {
-      console.log(direction);
+      console.log(direction + " - inside the function");
       //jump character to the right spot on the new screen
       character.style.transition = "0ms ease all";
       character.style.left = gameWidth + "px";
@@ -1286,7 +1284,7 @@ function interactCheck() {
     }
 
     if(direction == "down") {
-      console.log(direction);
+      console.log(direction + " - inside the function");
       //jump character to the right spot on the new screen
       character.style.transition = "0ms ease all";
       character.style.top = "0";
@@ -1297,7 +1295,7 @@ function interactCheck() {
     }
 
     if(direction == "right") {
-      console.log(direction);
+      console.log(direction + " - inside the function");
       //jump character to the right spot on the new screen
       character.style.transition = "0ms ease all";
       character.style.left = "0";
