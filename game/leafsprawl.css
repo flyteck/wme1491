@@ -1,0 +1,211 @@
+/** so basically, instead of using images for each leaf, I've made a rough map with interact zones, but they're invisible **/
+
+.leafsprawlleft1 {
+	left: 0;
+	top: 0;
+	height: 148px;
+	width: 446px;
+}
+
+.leafsprawlleft1down1 {
+	left: 0;
+	top: 148px;
+	height: 72px;
+	width: 396px;
+}
+
+.leafsprawlleft1down2 {
+	left: 0;
+	top: 220px;
+	height: 76px;
+	width: 356px;
+}
+
+.leafsprawlleft1down3 {
+	left: 0;
+	top: 296px;
+	height: 42px;
+	width: 168px;
+}
+
+.leafsprawlleft1down4 {
+	left: 0;
+	top: 338px;
+	height: 58px;
+	width: 100px;
+}
+
+.leafsprawlleft1down5 {
+	left: 0;
+	top: 396px;
+	height: 44px;
+	width: 26px;
+}
+
+.leafsprawlleft2 {
+	left: 466px;
+	top: 0;
+	height: 72px;
+	width: 58px;
+}
+
+.leafsprawl2 {
+	right: 0;
+	top: 30px;
+	height: 86px;
+	width: 80px;
+}
+
+.leafsprawl2left1 {
+	right: 112px;
+	top: 10px;
+	height: 106px;
+	width: 136px;
+	
+}
+
+.leafsprawl2left2 {
+	right: 365px;
+	top: 139px;
+	height: 341px;
+	width: 111px;
+}
+
+.leafsprawl2left3 {
+   right: 476px;
+   top: 200px;
+   height: 326px;
+   width: 112px;
+}
+
+.leafsprawl2left5 {
+	right: 588px;
+   top: 273px;
+   height: 251px;
+   width: 166px;
+}
+
+.leafsprawl2left6 {
+	right: 754px;
+   top: 349px;
+   height: 176px;
+   width: 138px;
+}
+
+.leafsprawl2down1 {
+	right: 0;
+	top: 115px;
+	height: 311px;
+	width: 365px;
+}
+
+.leafsprawl2down2 {
+	left: 0;
+	bottom: 0;
+	height: 48px;
+	width: 448px;
+}
+
+.leafsprawl2down3 {
+	right: 362px;
+   bottom: 0;
+   height: 92px;
+   width: 70px;
+}
+
+.leafsprawl2down4 {
+	right: 203px;
+   bottom: 45px;
+   height: 102px;
+   width: 162px;
+}
+
+.leafsprawl2down5 {
+	right: 0;
+   bottom: 104px;
+   height: 42px;
+   width: 114px;
+}
+
+.leafsprawl3left1 {
+	left: 0;
+   bottom: 0;
+   height: 76px;
+   width: 128px;
+}
+
+.leafsprawl3left2 {
+	left: 128px;
+   bottom: 0;
+   height: 112px;
+   width: 180px;
+}
+
+.leafsprawl3left3 {
+	left: 308px;
+   bottom: 0;
+   height: 88px;
+   width: 156px;
+}
+
+.leafsprawl4left1 {
+	left: 16px;
+   top: 0;
+   height: 84px;
+   width: 488px;
+}
+
+.leafsprawl4left2 {
+	left: 31px;
+   top: 84px;
+   height: 106px;
+   width: 334px;
+}
+
+.leafmap {
+	background-image: url(obstacles/leafmap.png);
+	background-size: contain;
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 440px;
+	width: 504px;
+}
+
+.leafmap2 {
+	background-image: url(obstacles/leafmap2.png);
+	background-size: contain;
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 102%;
+	width: 102%;
+}
+
+.leafmap3 {
+	background-image: url(obstacles/leafmap3.png);
+	background-size: contain;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	height: 112px;
+	width: 472px;
+	border: none;
+}
+
+.leafmap4 {
+	background-image: url(obstacles/leafmap4.png);
+	background-size: contain;
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 192px;
+	width: 504px;
+	border: none;
+}
+
+.leafsprawl {
+	opacity: 0;
+	border: none;
+	pointer-events: none;
+}

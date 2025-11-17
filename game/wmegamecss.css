@@ -1,0 +1,1399 @@
+* {
+	box-sizing: border-box;
+}
+
+:root {
+	--game-width: 896px;
+	--game-height: 576px;
+	--inventory-width: 200px;
+
+	--accent: #692A03;
+}
+
+body {
+	width: 100vw;
+	height: 100vh;
+	margin: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: 'Coders Crux', 'Micro 5';
+	font-size: 1.5em;
+	line-height: 0.8;
+}
+
+#workingOn {
+	display: block!important;
+}
+
+#workingOn div {
+	display: flex!important;
+}
+
+h1, h2, h3, h4, h5 {
+	font-family: 'Jacquard 12';
+}
+
+h2 {
+	font-weight: 300;
+	margin-bottom: 0;
+}
+
+button {
+	color: inherit;
+	font-family: inherit;
+	text-transform: uppercase;
+	font-size: inherit;
+	margin: 10px auto;
+	background: var(--mid-accent);
+	border-radius: 1px;
+	padding: 3px 6px;
+	display: block;
+	cursor: pointer;
+	transition: 50ms ease;
+}
+
+button:not(.game-button):hover, button:not(.game-button):focus {
+	margin: 12px auto 8px;
+	background: var(--bright-accent);
+}
+
+#game-wrapper {
+	display: flex;
+	position: relative;
+	width: calc(var(--game-width) + var(--inventory-width) );
+}
+
+/********************** Game UI *********************/
+
+/*** Instructional Overlay ***/
+
+#tutorial {
+	position: absolute;
+	top: 0;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	left: 0;
+	width: var(--game-width);
+	height: var(--game-height);
+	background: var(--black);
+	z-index: 1000;
+	text-align: center;
+	transition: 200ms ease-out;
+	padding: 20px;
+}
+
+#tutorial span {
+	max-width: 60%;
+}
+
+#tutorial-button {
+	display: none;
+}
+
+.desktop-confirm {
+		color:var(--mid-accent);
+	}
+
+.game-button {
+	background-color: transparent;
+	border: none;
+	width: 48px;
+	height: 48px;
+	display: inline-block;
+	margin: 2px;
+	background-image: url(ui/arrowleft.png);
+	background-size: contain;
+	user-select: none;
+	transition: 200ms ease;
+	-webkit-user-select: none;
+   -webkit-touch-callout: none;
+}
+
+#tutorial .game-button {
+	pointer-events: none;
+}
+
+.game-button:active {
+	filter: brightness(0.6);
+	margin: 4px 2px 0;
+}
+
+#sprint-button.active {
+	filter: brightness(0.6);
+	margin: 10px 5px 0 15px;
+}
+
+#left-arrow-button {background-image: url(ui/arrowleft.png);}
+
+#right-arrow-button {background-image: url(ui/arrowright.png);}
+
+#up-arrow-button {background-image: url(ui/arrowup.png);}
+
+#down-arrow-button {background-image: url(ui/arrowdown.png);}
+
+#w-button {background-image: url(ui/w.png);}
+
+#a-button {background-image: url(ui/a.png);}
+
+#s-button {background-image: url(ui/s.png);}
+
+#d-button {background-image: url(ui/d.png);}
+
+#q-button {background-image: url(ui/q.png);}
+
+#shift-button {
+	margin: 10px;
+	width: 96px;
+	background-image: url(ui/shift.png);
+}
+
+#space-button {
+	margin: 10px;
+	width: 96px;
+	background-image: url(ui/space.png);
+}
+
+#tutorial #shift-button, #tutorial #space-button {
+	margin-right: 40px;
+}
+
+/*** Mobile Controller ***/
+
+#mobile-controls {
+	position: absolute;
+	right: 0;
+	bottom: -30px;
+	padding: 10px;
+	display: none;
+	align-items: center;
+   justify-content: center;
+   z-index: 999;
+   opacity: 0;
+   transition: 200ms ease;
+}
+
+#sprint-button {
+	margin: 5px 5px 5px 15px;
+	width: 96px;
+	background-image: url(ui/sprint.png);
+}
+
+#interact-button {
+	margin: 5px 5px 5px 15px;
+	width: 96px;
+	background-image: url(ui/interact.png);
+}
+
+/** touch only stuff **/
+
+body.touch-only #mobile-controls.open {
+	opacity: 1;
+	display: flex;
+}
+
+body.touch-only #tutorial-button {
+	display: block;
+}
+
+body.touch-only .desktop-confirm {
+	display: none;
+}
+
+body.touch-only .touch-hide {
+	display: none;
+}
+
+body.touch-only #shift-button {
+	background-image: url(ui/sprint.png);
+}
+
+body.touch-only #space-button {
+	background-image: url(ui/interact.png);
+}
+
+/*** Inventory ***/
+
+#inventory {
+	display: flex;
+	flex-wrap: wrap;
+	align-content: flex-start;
+	justify-content: center;
+	height: var(--game-height);
+	width: var(--inventory-width);
+	background: red;
+	margin: 0;
+	padding: 20px;
+	background: var(--dark-grey);
+	border: 2px solid var(--light-accent);
+	transition: 200ms ease all, 0ms ease z-index;
+	position: absolute;
+   right: 0;
+   overflow: hidden;
+   z-index: 998;
+}
+
+#inventory.open {
+	width: 100%;
+	z-index: 1000;
+}
+
+#inventory li {
+	list-style: none;
+	margin: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	width: 60px;
+	height: 60px;
+	margin: 6px;
+	border: 2px solid var(--accent);
+   padding: 4px;
+   border-radius: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--black);
+	background-color: var(--white);
+	transition: 200ms ease;
+}
+
+#inventory.open li {
+	width: 100px;
+	height: 100px;
+}
+
+#inventory.open li.collected {
+	padding: 40px;
+	width: unset;
+	height: unset;
+	order: -1;
+}
+
+#inventory li span {
+	min-height: 60px;
+	min-width: 100%;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-image: url(https://cdn-icons-png.flaticon.com/512/25/25333.png);
+}
+
+#inventory.open li span {
+	min-height: 120px;
+	display: block;
+	margin: 10px;
+}
+
+#inventory li .title {
+	font-family: 'Jacquard 12';
+   font-size: 1.5em;
+	display: none;
+}
+
+#inventory.open li.collected .title {
+	display: block;
+}
+
+#inventory h3 {
+	font-size: 2.4em;
+	margin: 10px;
+	width: 100%;
+	text-align: center;
+	font-weight: 300;
+	order: -2;
+}
+
+#inventory .description {
+	display: none;
+}
+
+#inventory.open li.collected .description {
+	 display: block;
+	 padding: 10px 20px 20px;
+}
+
+/********************** Dialogue Pop-Up *********************/
+
+.dialogue-popup {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(255, 255, 255, 0.1);
+	backdrop-filter: blur(5px);
+	z-index: 999;
+}
+
+.dialogue-wrap {
+	display: flex;
+	margin: calc(50% - 40px) auto auto;
+	align-items: center;
+}
+
+#dialogue-loader {
+	padding: 10px;
+}
+
+#speech-bubble {
+	width: 550px;
+	height: 140px;
+	background: var(--white);
+	color: var(--black);
+	padding: 20px;
+	border: 2px solid black;
+	position: relative;
+	margin: 10px;
+}
+
+.dialogue-popup {
+	flex-direction: column;
+}
+
+.dialogue-popup #speech-bubble {
+	width: 670px;
+}
+
+#speech-bubble h3 {
+	margin: 0;
+}
+
+#dialogue-arrow {
+	position: absolute;
+	margin: 5px 10px;
+	right: 0;
+	bottom: 0;
+	animation: bounce 1s infinite 500ms;
+	cursor: pointer;
+}
+
+@keyframes bounce { 
+	0% { transform: translateY(0);}
+	25% { transform: translateY(-5px);}
+	50% { transform: translateY(0);}
+}
+
+#interact-display {
+	width: 300px;
+	left: calc(50% - 150px);
+	top: 60px;
+	position: absolute;
+}
+
+.dialogue-popup:not(.item-text) #interact-display {
+	width: 100%;
+	max-width: unset;
+	left: 0;
+	top: 0;
+	position: absolute;
+}
+
+.whisper {
+	font-size: 90%;
+   opacity: 0.6;
+}
+
+/********************** Game Container *********************/
+
+#game-container {
+	background-image: url(background11.png);
+	background-size: cover;
+	background-position: top left;
+	max-height: 100%;
+	max-width: 100%;
+	height: var(--game-height);
+	width: var(--game-width);
+	position: relative;
+	overflow:hidden;
+	border: 2px solid var(--light-accent);
+	aspect-ratio: 896 / 576;
+   flex: 0 0 auto;
+}
+
+#game-container:after {
+	display: none;
+}
+
+#game-container.initial-screen:after,
+#game-container.left-1:after,
+#game-container.up-1:not(.left-1,.left-2,.left-3,.right-3):after, 
+#game-container.right-1:after,
+#game-container.right-2:after,
+#game-container.right-3:after,
+#game-container.down-1:not(.left-2,.left-3):after {
+	display: block;
+	content:"";
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	background-image: url(obstacles/leavesfull.png);
+	background-size: 100%;
+	z-index: 998;
+	pointer-events: none;
+}
+
+#screen-display {
+	display: flex;
+	padding: 10px 20px;
+	text-transform: capitalize;
+	background: var(--white);
+	color: var(--black);
+	width: fit-content;
+	z-index: 1000;
+	position: absolute;
+	top: 0;
+	left: 0;
+	opacity: 0.9;
+	border-bottom-right-radius: 4px;
+}
+
+#game-container > div {
+	display: none;
+}
+
+#game-container > div#test-character {
+	display: flex;
+}
+
+/*** Level 1 ***/
+	
+
+/** screen 1 **/
+#game-container.Oddly-Shaded-Woods.left-3.up-1 {background-image: url(background1.png);}
+#game-container.Oddly-Shaded-Woods.left-3.up-1 > div.Oddly-Shaded-Woods.left-3.up-1 {display: flex;}
+
+/** screen 2 **/
+#game-container.Oddly-Shaded-Woods.left-2.up-1 {background-image: url(background2.png);}
+#game-container.Oddly-Shaded-Woods.left-2.up-1 > div.Oddly-Shaded-Woods.left-2.up-1 {display: flex;}
+
+/** screen 3 **/
+#game-container.Oddly-Shaded-Woods.left-1.up-1 {background-image: url(background3.png);}
+#game-container.Oddly-Shaded-Woods.left-1.up-1 > div.Oddly-Shaded-Woods.left-1.up-1 {display: flex;}
+
+/** screen 4 **/
+#game-container.Oddly-Shaded-Woods.up-1 {background-image: url(background4.png);}
+#game-container.Oddly-Shaded-Woods.up-1:not(.left-1,.left-2,.left-3,.right-1,.right-2,.right-3) > div.Oddly-Shaded-Woods.up-1:not(.left-1,.left-2,.left-3,.right-1,.right-2,.right-3) {display: flex;}
+
+/** screen 5 **/
+#game-container.Oddly-Shaded-Woods.right-1.up-1 {background-image: url(background5.png);}
+#game-container.Oddly-Shaded-Woods.right-1.up-1 > div.Oddly-Shaded-Woods.right-1.up-1 {display: flex;}
+
+/** screen 6 **/
+#game-container.Oddly-Shaded-Woods.right-2.up-1 {background-image: url(background6.png);}
+#game-container.Oddly-Shaded-Woods.right-2.up-1 > div.Oddly-Shaded-Woods.right-2.up-1 {display: flex;}
+
+/** screen 7 **/
+#game-container.Oddly-Shaded-Woods.right-3.up-1 {background-image: url(background7.png);}
+#game-container.Oddly-Shaded-Woods.right-3.up-1 > div.Oddly-Shaded-Woods.right-3.up-1 {display: flex;}
+
+/** screen 8 **/
+#game-container.Oddly-Shaded-Woods.left-3 {background-image: url(background8.png);}
+#game-container.Oddly-Shaded-Woods.left-3:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.Oddly-Shaded-Woods.left-3:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
+
+/** screen 9 **/
+#game-container.Oddly-Shaded-Woods.left-2 {background-image: url(background9.png);}
+#game-container.Oddly-Shaded-Woods.left-2:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.Oddly-Shaded-Woods.left-2:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
+
+/** screen 10 **/
+#game-container.Oddly-Shaded-Woods.left-1 {background-image: url(background10.png);}
+#game-container.Oddly-Shaded-Woods.left-1:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.Oddly-Shaded-Woods.left-1:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
+
+/** screen 11  || INTITIAL SCREEN **/
+#game-container.Oddly-Shaded-Woods {background-image: url(background11.png);}
+#game-container.Oddly-Shaded-Woods.initial-screen > div.Oddly-Shaded-Woods.initial-screen {display: flex;}
+
+/** screen 12 **/
+#game-container.Oddly-Shaded-Woods.right-1 {background-image: url(background12.png);}
+#game-container.Oddly-Shaded-Woods.right-1:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.Oddly-Shaded-Woods.right-1:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
+
+/** screen 13 **/
+#game-container.Oddly-Shaded-Woods.right-2 {background-image: url(background13.png);}
+#game-container.Oddly-Shaded-Woods.right-2:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.Oddly-Shaded-Woods.right-2:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
+
+/** screen 14 **/
+#game-container.Oddly-Shaded-Woods.right-3 {background-image: url(background14.png);}
+#game-container.Oddly-Shaded-Woods.right-3:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.Oddly-Shaded-Woods.right-3:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
+
+/** screen 15 **/
+#game-container.Oddly-Shaded-Woods.left-3.down-1 {background-image: url(background15.png);}
+#game-container.Oddly-Shaded-Woods.left-3.down-1 > div.Oddly-Shaded-Woods.left-3.down-1 {display: flex;}
+
+/** screen 16 **/
+#game-container.Oddly-Shaded-Woods.left-2.down-1 {background-image: url(background16.png);}
+#game-container.Oddly-Shaded-Woods.left-2.down-1 > div.Oddly-Shaded-Woods.left-2.down-1 {display: flex;}
+
+/** screen 17 **/
+#game-container.Oddly-Shaded-Woods.left-1.down-1 {background-image: url(background17.png);}
+#game-container.Oddly-Shaded-Woods.left-1.down-1 > div.Oddly-Shaded-Woods.left-1.down-1 {display: flex;}
+
+/** screen 18 **/
+#game-container.Oddly-Shaded-Woods.down-1 {background-image: url(background18.png);}
+#game-container.Oddly-Shaded-Woods.down-1:not(.left-1,.left-2,.left-3,.right-1,.right-2,.right-3) > div.Oddly-Shaded-Woods.down-1:not(.left-1,.left-2,.left-3,.right-1,.right-2,.right-3) {display: flex;}
+
+/** screen 19 **/
+#game-container.Oddly-Shaded-Woods.right-1.down-1 {background-image: url(background19.png);}
+#game-container.Oddly-Shaded-Woods.right-1.down-1 > div.Oddly-Shaded-Woods.right-1.down-1 {display: flex;}
+
+/** screen 20 **/
+#game-container.Oddly-Shaded-Woods.right-2.down-1 {background-image: url(background20.png);}
+#game-container.Oddly-Shaded-Woods.right-2.down-1 > div.Oddly-Shaded-Woods.right-2.down-1 {display: flex;}
+
+/** screen 21 **/
+#game-container.Oddly-Shaded-Woods.right-3.down-1 {background-image: url(background21.png);}
+#game-container.Oddly-Shaded-Woods.right-3.down-1 > div.Oddly-Shaded-Woods.right-3.down-1 {display: flex;}
+
+/********************** /Game Container *********************/
+
+/************************* Character ************************/
+
+#test-character {
+	height: 88px;
+	width: 88px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	transition:  100ms ease, transform 400ms ease ;
+	margin: 0 6px;
+}
+
+#test-character:after {
+	height: 98px;
+	width: 128px;
+	content:"";
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	background-position: left center;
+	background-image: url(charactersprites/standleft.png);
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+/** this allows for finer control for some interactions **/
+#nose {
+	display: block;
+	position: relative;
+   top: 4px;
+   right: 2px;
+   height: 50%;
+   width: 30px;
+}
+
+#test-character.moving:after {
+	background-image: url(charactersprites/walkleft.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+#test-character.moving.sprint:after {
+	background-image: url(charactersprites/lopeleft.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+#test-character.face-right {
+	transform: scaleX(-1);
+}
+
+/************* Obstacles, Decorations, & Objectives *************/
+
+/** General **/
+
+.test-decoration, .obstacle, .objective {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-position: center bottom;
+	background-size: contain;
+	background-repeat: no-repeat;
+	position: absolute;
+}
+
+@keyframes wiggle {
+   0% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  50% { transform: rotate(0eg); }
+  75% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+#forest-entry {
+	height: 130px;
+   width: 1px;
+   position: absolute;
+   left: 480px;
+   top: 248px;
+}
+
+#church-entrance {
+	height: 100px;
+   width: 298px;
+   position: absolute;
+   left: 592px;
+   top: 188px;
+}
+
+/**** Obstacles ****/
+
+.obstacle {
+	height: 108px;
+	width: 108px;
+	margin: -16px 0 0;
+	z-index: 1;
+}
+
+/** water **/
+.water {
+	 margin: 0;
+	 position: absolute;
+	 background-image: url(water.gif);
+    left: 0;
+    top: 0;
+    background-size: 64px;
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(0% 57%, 8% 49%, 16% 44%, 25% 38.5%, 37% 37%, 45% 37%, 50% 36%, 55% 35%, 61% 35%, 68% 32.5%, 71% 33%, 74% 33%, 83% 36%, 90% 40%, 98% 45%, 100% 45.5%, 100% 100%, 0% 100%);
+}
+
+/** fence style; obstacles with a solid base but open top/bottom have the fence class **/
+.obstacle.fence {
+	background-color: transparent;
+	height: 48px;
+	margin-top: 64px;
+}
+
+/** flip each odd number tree, for variation **/
+.tree:nth-child(odd), .churchpew:nth-child(odd)  {
+	transform: scaleX(-1);
+}
+
+.churchpew.bible:nth-child(odd) div:after  {
+	transform: scaleX(-1);
+}
+
+/** default fence **/
+.obstacle.fence div {
+	background-size: contain;
+	background-image: url(obstacles/fence.png);
+	height: 108px;
+	width: 100%;
+	position: absolute;
+	bottom: 24px;
+}
+
+/** vertical fence **/
+.obstacle.fencevertical {
+	background-color: transparent;
+	height: 108px;
+	width: 32px;
+	position: absolute;
+}
+
+.obstacle.fencevertical div {
+	height: calc(100% + 92px);
+	width: 32px;
+	background-image: url(obstacles/fencevertical.png);
+	background-position: 16px 0;
+	background-repeat: repeat-y;
+	background-size: 10px auto;
+	position: absolute;
+	top: -36px;
+}
+
+/** tombstone **/
+.obstacle.fence.tombstone {
+	height: 24px;
+	width: 16px;
+	margin-top: 74px;
+}
+
+.obstacle.fence.tombstone div {
+	background-size: contain;
+	background-image: url(obstacles/tombstone1.png);
+	height: 60px;
+	width: 16px;
+	position: absolute;
+	bottom: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	bottom: 8px;
+	margin-top: 80px;
+}
+
+.obstacle.fence.tombstone.dirt:before {
+	content: "";
+	flex: 0 0 74px;
+	height: 24px;
+	background-image: url(obstacles/dirtpatch.png);
+	background-size: contain;
+	position: relative;
+	top: 5%;
+}
+
+.obstacle.fence.t1 div {width: 46px;}
+.obstacle.fence.t1 div {height: 58px;background-image: url(obstacles/tombstone1.png);}
+
+.obstacle.fence.t2 div {width: 50px;}
+.obstacle.fence.t2 div {height: 66px;background-image: url(obstacles/tombstone2.png);}
+
+.obstacle.fence.t3 div {width: 50px;}
+.obstacle.fence.t3 div {height: 56px;background-image: url(obstacles/tombstone3.png);}
+
+.obstacle.fence.t4 div {width: 50px;}
+.obstacle.fence.t4 div {height: 72px;background-image: url(obstacles/tombstone4.png);}
+
+.obstacle.fence.t5 div {width: 46px;}
+.obstacle.fence.t5 div {height: 64px;background-image: url(obstacles/tombstone5.png);}
+
+.obstacle.fence.t6 div {width: 46px;}
+.obstacle.fence.t6 div {height: 70px;background-image: url(obstacles/tombstone6.png);}
+
+.obstacle.fence.t7 div {width: 56px;}
+.obstacle.fence.t7 div {height: 82px;background-image: url(obstacles/tombstone7.png);}
+
+.obstacle.fence.t8 div {width: 46px;}
+.obstacle.fence.t8 div {height: 64px;background-image: url(obstacles/tombstone8.png);}
+
+.obstacle.fence.t9 div {width: 50px;}
+.obstacle.fence.t9 div {height: 56px;background-image: url(obstacles/tombstone9.png);}
+
+.obstacle.fence.t10 div {width: 46px;}
+.obstacle.fence.t10 div {height: 58px;background-image: url(obstacles/tombstone10.png);}
+
+.tombstone-text {
+	line-height: 0.8;
+   opacity: 0;
+   position: relative;
+   display: block;
+   top: calc(-100% - 4px);
+   background: black;
+   padding: 8px 16px;
+   border-radius: 8px;
+   transition: 200ms ease opacity;
+   text-align: center;
+   width: fit-content;
+}
+
+.tombstone.active .tombstone-text {
+	opacity: 1;
+}
+
+.tombstone-text:after {
+  content: " ";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+.tombstone .flower1, .tombstone .flower2, .tombstone .flower3 {
+	margin-top: 10px;
+}
+
+/** altar **/
+.obstacle.fence.altar {
+	width: 104px;
+}
+
+.obstacle.fence.altar div {
+	background-size: contain;
+	background-image: url(obstacles/altar.png);
+	height: 94px;
+	width: 114px;
+	position: absolute;
+	bottom: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	bottom: 8px;
+	right: 0;
+	margin-top: 80px;
+}
+
+/** pots **/
+.obstacle.fence.pot1, .obstacle.fence.pot2  {
+	width: 80px;
+}
+
+.obstacle.fence.pot1 div {
+	background-size: contain;
+	background-image: url(obstacles/pot1.png);
+	height: 92px;
+	width: 80px;
+	position: absolute;
+	bottom: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	bottom: 8px;
+	margin-top: 80px;
+}
+
+.obstacle.fence.pot2 div {
+	background-size: contain;
+	background-image: url(obstacles/pot2.png);
+	height: 82px;
+	width: 80px;
+	position: absolute;
+	bottom: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	bottom: 8px;
+	margin-top: 80px;
+}
+
+/** church deck **/
+.churchdeck {
+	width: 328px;
+	background-size: contain;
+	background-image: url(obstacles/churchdeck.png);
+	height: 104px;
+	position: absolute;
+	margin-top: 60px;
+}
+
+/** cliff **/
+
+.obstacle.cliff {
+	width: 68px;
+	background-repeat: repeat-y;
+	background-image: url(obstacles/cliff.png);
+}
+
+/** tall trunk **/
+.obstacle.fence.talltrunk {
+	width: 154px;
+}
+
+.obstacle.fence.talltrunk div {
+	background-size: contain;
+	background-image: url(obstacles/talltrunk.png);
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	height: 600px;
+	width: 100%;
+	position: absolute;
+}
+
+/** haunted tree 1 **/
+.obstacle.fence.hauntedtree1 {
+	margin-top: 26px;
+	width: 128px;
+}
+
+.obstacle.fence.hauntedtree1 div {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	background-size: contain;
+	background-image: url(obstacles/hauntedtree1.png);
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	height: 372px;
+	width: 268px;
+	position: absolute;
+	left: -30px;
+   bottom: -32px;
+}
+
+/** haunted tree 2 **/
+.obstacle.fence.hauntedtree2 {
+	margin-top: 48px;
+   width: 126px;
+}
+
+.obstacle.fence.hauntedtree2 div {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	background-size: contain;
+	background-image: url(obstacles/hauntedtree2.png);
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	height: 316px;
+	width: 304px;
+	position: absolute;
+	left: -88px;
+   bottom: -4px;
+}
+
+/** brambles **/
+
+/** normal version **/
+.obstacle.brambles {
+	width: 64px;
+	height: 64px;
+	margin-top: -8px;
+}
+
+/** fence version **/
+.obstacle.brambles.fence {
+	width: 192px;
+	margin-top: 64px;
+}
+
+.obstacle.brambles div {
+	width: 211px;
+	height: 131px;
+	background-size: contain;
+	background-image: url(obstacles/brambles.png);
+	display: block;
+	flex: 0 0 211px;
+	margin-left: 25%;
+	margin-left: 64px;
+}
+
+.obstacle.brambles:nth-child(odd) div {
+	background-image: url(obstacles/brambles2.png);
+}
+
+/** dead tree **/
+.obstacle.fence.deadtree {
+	width: 32px;
+}
+
+.obstacle.fence.deadtree div {
+	background-size: contain;
+	background-image: url(obstacles/deadtree.png);
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	height: 154px;
+	width: 156px;
+	position: absolute;
+	bottom: 20px;
+}
+
+/** hollow tree **/
+.obstacle.fence.hollowtree {
+	width: 96px;
+}
+
+.obstacle.fence.hollowtree div {
+	background-size: contain;
+	background-image: url(obstacles/hollowtree.png);
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	height: 160px;
+	width: 192px;
+	position: absolute;
+	bottom: 8px;
+   left: -60px;
+}
+
+/** big tree **/
+.obstacle.bigtreeorange, .obstacle.bigtreegreen, .obstacle.bigtreeyellow {
+	width: 192px;
+}
+
+.obstacle.fence.bigtreeorange, .obstacle.fence.bigtreegreen, .obstacle.fence.bigtreeyellow {
+	width: 32px;
+}
+
+.obstacle.bigtreeorange div, .obstacle.bigtreegreen div, .obstacle.bigtreeyellow div {
+	background-size: contain;
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	height: 240px;
+	width: 298px;
+	position: absolute;
+	bottom: -80px;
+	margin-left: 10px;
+}
+
+.obstacle.fence.bigtreeorange div, .obstacle.fence.bigtreegreen div, .obstacle.fence.bigtreeyellow div {
+	bottom: 16px;
+}
+
+.obstacle.bigtreeorange div {
+	background-image: url(obstacles/bigtreeorange.png);
+}
+
+.obstacle.bigtreegreen div {
+	background-image: url(obstacles/bigtreegreen.png);
+}
+
+.obstacle.bigtreeyellow div {
+	background-image: url(obstacles/bigtreeyellow.png);
+}
+
+/** tree block **/
+
+.obstacle.treeblock {
+	height: 64px;
+}
+
+.obstacle.treeblock div {
+	background-image: url(obstacles/treeblock.png);
+	background-size: contain;
+	height: 64px;
+	width: 100%;
+	position: absolute;
+	bottom: -40px;
+	margin-left: 10px;
+}
+
+/** fog left 2 down 1 **/
+
+.fog {
+	background: url(obstacles/smoke.gif);
+	background-size: 64px;
+   height: 100%;
+   width: 100%;
+   position: absolute;
+   left: 0;
+   top: 0;
+   z-index: 500;
+   opacity: 0.95;
+   display: block;
+   mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110096362_chRv2u9qijtxGM8.png?1762821628);
+   mask-repeat: no-repeat;
+   mask-size: 100% 100%;
+   pointer-events: none;
+   transition: 400ms ease-in;
+}
+
+.fog .obstacle.fence.hauntedtree2 div {
+	background-image: url(obstacles/fogtree.png);
+}
+
+.fog.left-2:not(.down-1){
+   mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110102532_EBqkT7mPbCKC5us.png);
+   mask-repeat: no-repeat;
+   mask-size: 100% 100%;
+}
+
+.fog.left-2.up-1 {
+   mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110103005_qwXzOAOOpaKv0a6.png?1762829937);
+   mask-repeat: no-repeat;
+   mask-size: 100% 100%;
+}
+
+.fog.left-1.up-1 {
+   mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110127189_1GL3amMRpN5x0GG.png);
+   mask-repeat: no-repeat;
+   mask-size: 100% 100%;
+}
+
+/** church pew **/
+.obstacle.churchpew {
+	height: 56px;
+	width: 146px;
+}
+
+.obstacle.churchpew div {
+	background-image: url(obstacles/churchpew.png);
+	background-size: contain;
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	height: 66px;
+	width: 146px;
+	position: absolute;
+	bottom: 8px;
+}
+
+.obstacle.churchpew.bible div:after {
+	display: block;
+	content:"";
+	background-image: url(obstacles/churchpewbible.png);
+	background-size: contain;
+	width: 100%;
+	height: 100%;
+}
+
+
+.obstacle.small {
+	height: 32px;
+	width: 32px;
+}
+
+/**** Decorations ****/
+
+.test-decoration {
+	height: 108px;
+	width: 108px;
+	background: red;
+	margin: -16px 0 0;
+}
+
+.leaves {
+	background-image: url(obstacles/leavesflat1.png);
+   background-size: 56px 44px;
+   background-position: center center;
+   position: absolute;
+   width: 56px;
+   height: 44px;
+   border: 26px solid transparent;
+   background-clip: padding-box,border-box;
+   border-image: url(obstacles/leavesflatborder.png);
+   border-image-slice: 55 55 55 55;
+   border-image-width: 26px 26px 26px 26px;
+   border-image-repeat: repeat repeat;
+   z-index: 1;
+}
+
+/** leafsprawl is in its own fucking place man too long, new CSS file **/
+
+.leavesround {
+	background-image: url(obstacles/leavesflatround.png);
+   background-size: contain;
+   background-position: top left;
+   position: absolute;
+   width: 116px;
+   height: 115px;
+   border: none;
+}
+
+/** Flowers in ground **/
+
+.flowers1, .flowers2, .flowers3 {
+	margin-top: 68px;
+	position: absolute;
+	background-position: left bottom;
+	background-size: auto 22px;
+	width: 38px;
+	height: 22px;
+}
+
+.flowers1 {
+	background-image: url(obstacles/flowers1.png);
+}
+
+.flowers2 {
+	background-image: url(obstacles/flowers2.png);
+}
+
+.flowers3 {
+	background-image: url(obstacles/flowers3.png);
+}
+
+/** Flowers picked **/
+
+.flower1, .flower2, .flower3, #Daisy {
+	margin-top: 68px;
+	position: absolute;
+	background-position: left bottom;
+	background-size: contain;
+	width: 24px;
+	height: 10px;
+}
+
+.flower1 {
+	background-image: url(obstacles/flower1.png);
+}
+
+.flower2 {
+	background-image: url(obstacles/flower2.png);
+}
+
+.flower3 {
+	background-image: url(obstacles/flower3.png);
+}
+
+/**Church Top (this has a smaller base, to change when it fades**/
+
+.churchtop {
+	width: 544px;
+	height: 750px;
+	position: absolute;
+	left: 548px;
+   top: -558px;
+   z-index: 237;
+   position: absolute;
+   transition: 400ms ease;
+}
+
+.churchtop div {
+	width: 544px;
+	height: 882px;
+	background-size: contain;
+	background-image: url(obstacles/churchtop.png);
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	position: absolute;
+   left: -14px;
+   bottom: -129px;
+}
+
+/** inner wall vertical **/
+.innerwall {
+	background-color: transparent;
+	height: 108px;
+	width: 40px;
+	position: absolute;
+}
+
+.obstacle.innerwall div {
+	height: calc(100% + 116px);
+	width: 34px;
+	background-image: url(obstacles/innerwall.png);
+	background-position: center bottom;
+	background-repeat: repeat-y;
+	background-size: 100% auto;
+	position: absolute;
+	top: -36px;
+	right: 0;
+}
+
+/** inner wall horizontal **/
+
+.obstacle.innerwallhorizontal {
+	margin-top: 72px;
+	height: 40px;
+	width: 400px;
+}
+
+.obstacle.innerwallhorizontal div {
+	background-size: auto 34px;
+	background-image: url(obstacles/innerwallhorizontal.png);
+	height: 34px;
+	width: 100%;
+	position: absolute;
+	bottom: 17px;
+	border: 1.5px solid #221022;
+   border-top: none;
+   border-bottom: none;
+}
+
+/** Objectives **/
+
+.objective {
+	height: 32px;
+	width: 32px;
+	border: 10px solid transparent;
+	box-sizing: content-box;
+	animation: wiggle 500ms infinite;
+}
+
+.objective.collected {
+	position: unset;
+	display: none;
+}
+
+#CandyApple, #CandyAppleInventory.collected span {
+	background-image: url(objectives/candyapple.png);
+}
+
+#Drawing.objective {
+	height: 46px;
+	width: 46px;
+}
+
+#Drawing, #DrawingInventory.collected span {
+	background-image: url(objectives/drawing.png);
+}
+
+#DaisyInventory.collected span {
+	background-image: url(obstacles/flower2.png);
+}
+
+/** NPCs **/
+
+.npc {
+	height: 100px;
+	width: 100px;
+	position: absolute;
+	background-size: contain;
+}
+
+#Terracotta.npc {
+	width: 140px;
+	height: 66px;
+	background-image: url(charactersprites/terracottapix.png);
+}
+
+#Terracotta:before {
+	content: "";
+   background: #221022;
+   height: 12px;
+   width: 70%;
+   position: relative;
+   bottom: -89%;
+   left: 15%;
+   border-radius: 100%;
+   mix-blend-mode: darken;
+   opacity: 40%;
+}
+
+#Quincy.npc {
+	margin-top: -10px;
+	width: 110px;
+	height: 100px;
+	background-image: url(charactersprites/quincypix.png);
+}
+
+#Crow.npc {
+	/** he has some extra code bc he's so small, so he gets padding for easier interaction **/
+	background-image: url(charactersprites/crowpix.png);
+   height: 66px;
+   width: 68px;
+   padding: 0 0 20px 20px;
+   background-clip: content-box;
+   background-size: 48px 46px;
+   background-position: right top;
+   z-index: 275 !important;
+}
+
+#Crow-talking #dialogue-loader {
+	font-family: 'SD Auto Pilot';
+	font-size: 1.8em;
+	display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 20px;
+   flex-wrap: wrap;
+}
+
+.crow-scream {
+	font-size: 2.5em;
+	margin-top: -25px;
+}
+
+#Crow.npc.call {
+	background-image: url(charactersprites/crowCaw.png);
+}
+
+
+/****************************************** Media Queries ******************************************/
+
+@media (max-width: 1100px) {
+
+	body {
+		height: 90vh;
+	}
+
+	#game-wrapper {
+		width: calc(var(--game-width));
+		flex-direction: column;
+		height: calc(var(--game-height) + var(--inventory-width) / 2);
+	}
+
+	#inventory:not(.open) h3 {
+		width: auto;
+	}
+
+	#inventory {
+		position: unset;
+		width: auto;
+		height: var(--inventory-width);
+		flex-direction: row;
+      justify-content: flex-start;
+	}
+
+	#inventory.open {
+		justify-content: center;
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 676px;
+	}
+}
+
+
