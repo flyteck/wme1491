@@ -84,7 +84,6 @@ if (smallMobile == true || appleDevice == true) {
   //this makes the buttons work on mobile
   window.addEventListener("contextmenu", function(e) { e.preventDefault(); })
   document.querySelector("body").classList.add("touch-only");
-  console.log("no mouse")
 }
 
 //set sfx audio volume 
@@ -487,8 +486,6 @@ function buttonPress() {
     return
   }
 
-  console.log("keydown")
-
   if (eventVar.key === 'ArrowLeft' || eventVar.key === 'a' || character.classList.contains("left") || eventVar.target.id == "left-arrow-button" || direction == "left") {
     //set move distance, and modify if holding shift to sprint
     var moveDistance = +slowMoveSpeed
@@ -643,8 +640,6 @@ function buttonRelease() {
 
 //check for obstacles
 function obstacleCheck(direction,moveDistance) {
-
-  console.log("obstacleCheck")
   //get classes on game container
   var gameContainerClasses = gameContainer.classList.value.split(' ');
   //shift off the location name
@@ -681,7 +676,6 @@ function obstacleCheck(direction,moveDistance) {
 
   //check if we're on the forest screen
   if (gameContainer.classList.contains("left-2") && gameContainer.classList.contains("down-1")) {
-    console.log("checking for forest");
     //get the interact zone
     var forestEntrance = document.getElementById("forest-entry");
 
@@ -810,22 +804,30 @@ function obstacleCheck(direction,moveDistance) {
           var overlapBottomTop = characterBounds.bottom >= obstacleBounds.top;
 
           if (overlapLeftRight == true && character.classList.contains("left")) {
-            character.classList.add("blocked");
+            if (smallMobile == false && appleDevice == false) {
+              character.classList.add("blocked");
+            }
             return true;
           }
 
           if (overlapRightLeft == true && character.classList.contains("right")) {
-            character.classList.add("blocked");
+            if (smallMobile == false && appleDevice == false) {
+              character.classList.add("blocked");
+            }
             return true;
           }
 
           if (overlapTopBottom == true && character.classList.contains("up")) {
-            character.classList.add("blocked");
+            if (smallMobile == false && appleDevice == false) {
+              character.classList.add("blocked");
+            }
             return true;
           }
 
           if (overlapBottomTop == true && character.classList.contains("down")) {
-            character.classList.add("blocked");
+            if (smallMobile == false && appleDevice == false) {
+              character.classList.add("blocked");
+            }
             return true;
           }
         }
@@ -849,7 +851,9 @@ function obstacleCheck(direction,moveDistance) {
           var inFront = (parseInt(obstacle[i].style.zIndex) - parseInt(moveDistance)) < parseInt(character.style.zIndex);
 
           if (overlapBottomTop == true && character.classList.contains("down") && behind == true) {
-            character.classList.add("blocked");
+            if (smallMobile == false && appleDevice == false) {
+              character.classList.add("blocked");
+            }
             return true;
           }
 
@@ -859,7 +863,9 @@ function obstacleCheck(direction,moveDistance) {
             //see if the bottom is also higher, and if we're in front
             if (overlapBottomBottom == true && inFront === true) {
               //if it is, increase top to push it down
-              character.classList.add("blocked");
+              if (smallMobile == false && appleDevice == false) {
+                character.classList.add("blocked");
+              }
               return true;
             }
           }
@@ -1118,7 +1124,6 @@ function stopCharacter() {
 
 //Secondary Obstacle Check 
 function obstacleCorrect() {
-  console.log("obstacleCorrect")
   //after we stop moving, we do a final obstacle check where we correct any issues
     //check which way we're facing
     if (character.classList.contains("face-left")) { var facing = "left"; }
@@ -1212,7 +1217,6 @@ function moveScreen(direction) {
   setTimeout(() => {
     if(direction == "right" || direction == "left") {
       character.style.left = newPosition;
-      console.log(character.style.left);
     }
     if(direction == "up" || direction == "down") {
       character.style.top = newPosition;
@@ -1368,7 +1372,6 @@ function moveScreen(direction) {
     //jump character to the right spot on the new screen (passed our variables from the initial function)
     character.style.transition = "0ms ease all";
     setTimeout(() => {
-      console.log(character.style.left)
       if(direction == "right" || direction == "left") {
         character.style.left = newPosition;
       }
