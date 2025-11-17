@@ -1315,6 +1315,10 @@ function interactCheck() {
 
     gameContainer.classList.add("just-moved");
 
+    setTimeout(() => {
+      moveScreen2(direction);
+    }, 32);
+
     //this generates the screen title (delay to be sure that the classes are all updated before generating)
     setTimeout(() => {
       screenTitle();
@@ -1450,6 +1454,61 @@ function interactCheck() {
       if (direction == "up" || direction == "down") {
         character.style.zIndex = newZIndex;
       }
+  }
+
+//move screen but MORE you FUCKING CUNT
+
+  function moveScreen2(direction) {
+    //define the variables based on move direction
+    if(direction == "left") {
+      console.log(direction + " - inside the function");
+      //jump character to the right spot on the new screen
+      character.style.transition = "0ms ease all";
+      setTimeout(() => {
+        character.style.left = gameWidth + "px";
+        setTimeout(() => {
+          character.style.transition = "";
+        }, 16);
+      }, 32);
+    }
+
+    if(direction == "up") {
+      console.log(direction);
+      //jump character to the right spot on the new screen
+      character.style.transition = "0ms ease all";
+      setTimeout(() => {
+        character.style.top = gameHeight + "px";
+        setTimeout(() => {
+          character.style.transition = "";
+        }, 16);
+      }, 32);
+    }
+
+    if(direction == "down") {
+      console.log(direction + " - inside the function");
+      //jump character to the right spot on the new screen
+      character.style.transition = "0ms ease all";
+      setTimeout(() => {
+      character.style.top = "0";
+        setTimeout(() => {
+          character.style.transition = "";
+          character.style.zIndex = "2";
+        }, 16);
+      }, 32);
+
+    }
+
+    if(direction == "right") {
+      console.log(direction + " - inside the function");
+      //jump character to the right spot on the new screen
+      character.style.transition = "0ms ease all";
+      setTimeout(() => {
+        character.style.left = "0";
+        setTimeout(() => {
+          character.style.transition = "";
+        }, 16);
+      }, 32);
+    }
   }
 
 ///////////////////////NPCs
