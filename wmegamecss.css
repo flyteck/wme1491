@@ -17,8 +17,17 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-family: 'Micro 5';
+	font-family: 'Coders Crux', 'Micro 5';
 	font-size: 1.5em;
+	line-height: 0.8;
+}
+
+#workingOn {
+	display: block!important;
+}
+
+#workingOn div {
+	display: flex!important;
 }
 
 h1, h2, h3, h4, h5 {
@@ -100,6 +109,10 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 	transition: 200ms ease;
 	-webkit-user-select: none;
    -webkit-touch-callout: none;
+}
+
+#tutorial .game-button {
+	pointer-events: none;
 }
 
 .game-button:active {
@@ -217,6 +230,7 @@ body.touch-only #space-button {
 	transition: 200ms ease all, 0ms ease z-index;
 	position: absolute;
    right: 0;
+   overflow: hidden;
    z-index: 998;
 }
 
@@ -236,7 +250,7 @@ body.touch-only #space-button {
 	height: 60px;
 	margin: 6px;
 	border: 2px solid var(--accent);
-   padding: 10px;
+   padding: 4px;
    border-radius: 4px;
 	display: flex;
 	align-items: center;
@@ -252,8 +266,10 @@ body.touch-only #space-button {
 }
 
 #inventory.open li.collected {
+	padding: 40px;
 	width: unset;
 	height: unset;
+	order: -1;
 }
 
 #inventory li span {
@@ -287,6 +303,7 @@ body.touch-only #space-button {
 	width: 100%;
 	text-align: center;
 	font-weight: 300;
+	order: -2;
 }
 
 #inventory .description {
@@ -313,13 +330,17 @@ body.touch-only #space-button {
 
 .dialogue-wrap {
 	display: flex;
-	margin: calc(50% - 70px) auto auto;
+	margin: calc(50% - 40px) auto auto;
 	align-items: center;
+}
+
+#dialogue-loader {
+	padding: 10px;
 }
 
 #speech-bubble {
 	width: 550px;
-	height: 170px;
+	height: 140px;
 	background: var(--white);
 	color: var(--black);
 	padding: 20px;
@@ -370,8 +391,9 @@ body.touch-only #space-button {
 	position: absolute;
 }
 
-#Alsike-talking.dialogue-popup #talk-sprite {
-	background-image: url(charactersprites/alsiketalk.gif);
+.whisper {
+	font-size: 90%;
+   opacity: 0.6;
 }
 
 /********************** Game Container *********************/
@@ -391,19 +413,18 @@ body.touch-only #space-button {
    flex: 0 0 auto;
 }
 
+#game-container:after {
+	display: none;
+}
+
 #game-container.initial-screen:after,
 #game-container.left-1:after,
-#game-container.up-1:after,
-#game-container.up-1.right-1:after,
-#game-container.up-1.right-2:after,
-#game-container.up-1.right-3:after,
+#game-container.up-1:not(.left-1,.left-2,.left-3,.right-3):after, 
 #game-container.right-1:after,
 #game-container.right-2:after,
 #game-container.right-3:after,
-#game-container.down-1.left-1:after,
-#game-container.down-1:after,
-#game-container.down-1.right-1:after,
-#game-container.down-1.right-2:after {
+#game-container.down-1:not(.left-2,.left-3):after {
+	display: block;
 	content:"";
 	width: 100%;
 	height: 100%;
@@ -436,8 +457,6 @@ body.touch-only #space-button {
 #game-container > div#test-character {
 	display: flex;
 }
-
-/
 
 /*** Level 1 ***/
 	
@@ -541,7 +560,7 @@ body.touch-only #space-button {
 }
 
 #test-character:after {
-	height: 88px;
+	height: 98px;
 	width: 128px;
 	content:"";
 	position: absolute;
@@ -551,6 +570,16 @@ body.touch-only #space-button {
 	background-image: url(charactersprites/standleft.png);
 	background-repeat: no-repeat;
 	background-size: contain;
+}
+
+/** this allows for finer control for some interactions **/
+#nose {
+	display: block;
+	position: relative;
+   top: 4px;
+   right: 2px;
+   height: 50%;
+   width: 30px;
 }
 
 #test-character.moving:after {
@@ -567,16 +596,6 @@ body.touch-only #space-button {
 
 #test-character.face-right {
 	transform: scaleX(-1);
-}
-
-.npc {
-	height: 100px;
-	width: 100px;
-	position: absolute;
-}
-
-#Alsike {
-	background-image: url(charactersprites/alsikepix.png);
 }
 
 /************* Obstacles, Decorations, & Objectives *************/
@@ -599,6 +618,22 @@ body.touch-only #space-button {
   50% { transform: rotate(0eg); }
   75% { transform: rotate(-5deg); }
   100% { transform: rotate(0deg); }
+}
+
+#forest-entry {
+	height: 130px;
+   width: 1px;
+   position: absolute;
+   left: 480px;
+   top: 248px;
+}
+
+#church-entrance {
+	height: 100px;
+   width: 298px;
+   position: absolute;
+   left: 592px;
+   top: 188px;
 }
 
 /**** Obstacles ****/
@@ -668,6 +703,171 @@ body.touch-only #space-button {
 	top: -36px;
 }
 
+/** tombstone **/
+.obstacle.fence.tombstone {
+	height: 24px;
+	width: 16px;
+	margin-top: 74px;
+}
+
+.obstacle.fence.tombstone div {
+	background-size: contain;
+	background-image: url(obstacles/tombstone1.png);
+	height: 60px;
+	width: 16px;
+	position: absolute;
+	bottom: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	bottom: 8px;
+	margin-top: 80px;
+}
+
+.obstacle.fence.tombstone.dirt:before {
+	content: "";
+	flex: 0 0 74px;
+	height: 24px;
+	background-image: url(obstacles/dirtpatch.png);
+	background-size: contain;
+	position: relative;
+	top: 5%;
+}
+
+.obstacle.fence.t1 div {width: 46px;}
+.obstacle.fence.t1 div {height: 58px;background-image: url(obstacles/tombstone1.png);}
+
+.obstacle.fence.t2 div {width: 50px;}
+.obstacle.fence.t2 div {height: 66px;background-image: url(obstacles/tombstone2.png);}
+
+.obstacle.fence.t3 div {width: 50px;}
+.obstacle.fence.t3 div {height: 56px;background-image: url(obstacles/tombstone3.png);}
+
+.obstacle.fence.t4 div {width: 50px;}
+.obstacle.fence.t4 div {height: 72px;background-image: url(obstacles/tombstone4.png);}
+
+.obstacle.fence.t5 div {width: 46px;}
+.obstacle.fence.t5 div {height: 64px;background-image: url(obstacles/tombstone5.png);}
+
+.obstacle.fence.t6 div {width: 46px;}
+.obstacle.fence.t6 div {height: 70px;background-image: url(obstacles/tombstone6.png);}
+
+.obstacle.fence.t7 div {width: 56px;}
+.obstacle.fence.t7 div {height: 82px;background-image: url(obstacles/tombstone7.png);}
+
+.obstacle.fence.t8 div {width: 46px;}
+.obstacle.fence.t8 div {height: 64px;background-image: url(obstacles/tombstone8.png);}
+
+.obstacle.fence.t9 div {width: 50px;}
+.obstacle.fence.t9 div {height: 56px;background-image: url(obstacles/tombstone9.png);}
+
+.obstacle.fence.t10 div {width: 46px;}
+.obstacle.fence.t10 div {height: 58px;background-image: url(obstacles/tombstone10.png);}
+
+.tombstone-text {
+	line-height: 0.8;
+   opacity: 0;
+   position: relative;
+   display: block;
+   top: calc(-100% - 4px);
+   background: black;
+   padding: 8px 16px;
+   border-radius: 8px;
+   transition: 200ms ease opacity;
+   text-align: center;
+   width: fit-content;
+}
+
+.tombstone.active .tombstone-text {
+	opacity: 1;
+}
+
+.tombstone-text:after {
+  content: " ";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+.tombstone .flower1, .tombstone .flower2, .tombstone .flower3 {
+	margin-top: 10px;
+}
+
+/** altar **/
+.obstacle.fence.altar {
+	width: 104px;
+}
+
+.obstacle.fence.altar div {
+	background-size: contain;
+	background-image: url(obstacles/altar.png);
+	height: 94px;
+	width: 114px;
+	position: absolute;
+	bottom: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	bottom: 8px;
+	right: 0;
+	margin-top: 80px;
+}
+
+/** pots **/
+.obstacle.fence.pot1, .obstacle.fence.pot2  {
+	width: 80px;
+}
+
+.obstacle.fence.pot1 div {
+	background-size: contain;
+	background-image: url(obstacles/pot1.png);
+	height: 92px;
+	width: 80px;
+	position: absolute;
+	bottom: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	bottom: 8px;
+	margin-top: 80px;
+}
+
+.obstacle.fence.pot2 div {
+	background-size: contain;
+	background-image: url(obstacles/pot2.png);
+	height: 82px;
+	width: 80px;
+	position: absolute;
+	bottom: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	bottom: 8px;
+	margin-top: 80px;
+}
+
+/** church deck **/
+.churchdeck {
+	width: 328px;
+	background-size: contain;
+	background-image: url(obstacles/churchdeck.png);
+	height: 104px;
+	position: absolute;
+	margin-top: 60px;
+}
+
+/** cliff **/
+
+.obstacle.cliff {
+	width: 68px;
+	background-repeat: repeat-y;
+	background-image: url(obstacles/cliff.png);
+}
+
 /** tall trunk **/
 .obstacle.fence.talltrunk {
 	width: 154px;
@@ -727,14 +927,14 @@ body.touch-only #space-button {
 
 /** brambles **/
 
+/** normal version **/
 .obstacle.brambles {
 	width: 64px;
-	height: 96px;
-	margin-top: -36px;
-	justify-content: flex-start;
-	align-items: flex-start;
+	height: 64px;
+	margin-top: -8px;
 }
 
+/** fence version **/
 .obstacle.brambles.fence {
 	width: 192px;
 	margin-top: 64px;
@@ -747,6 +947,12 @@ body.touch-only #space-button {
 	background-image: url(obstacles/brambles.png);
 	display: block;
 	flex: 0 0 211px;
+	margin-left: 25%;
+	margin-left: 64px;
+}
+
+.obstacle.brambles:nth-child(odd) div {
+	background-image: url(obstacles/brambles2.png);
 }
 
 /** dead tree **/
@@ -775,45 +981,111 @@ body.touch-only #space-button {
 	background-image: url(obstacles/hollowtree.png);
 	background-position: bottom center;
 	background-repeat: no-repeat;
-	height: 152px;
-	width: 138px;
+	height: 160px;
+	width: 192px;
 	position: absolute;
 	bottom: 8px;
-   left: -25px;
+   left: -60px;
 }
 
 /** big tree **/
+.obstacle.bigtreeorange, .obstacle.bigtreegreen, .obstacle.bigtreeyellow {
+	width: 192px;
+}
+
 .obstacle.fence.bigtreeorange, .obstacle.fence.bigtreegreen, .obstacle.fence.bigtreeyellow {
 	width: 32px;
 }
 
-.obstacle.fence.bigtreeorange div, .obstacle.fence.bigtreegreen div, .obstacle.fence.bigtreeyellow div {
+.obstacle.bigtreeorange div, .obstacle.bigtreegreen div, .obstacle.bigtreeyellow div {
 	background-size: contain;
 	background-position: bottom center;
 	background-repeat: no-repeat;
 	height: 240px;
 	width: 298px;
 	position: absolute;
-	bottom: 16px;
+	bottom: -80px;
 	margin-left: 10px;
 }
 
-.obstacle.fence.bigtreeorange div {
+.obstacle.fence.bigtreeorange div, .obstacle.fence.bigtreegreen div, .obstacle.fence.bigtreeyellow div {
+	bottom: 16px;
+}
+
+.obstacle.bigtreeorange div {
 	background-image: url(obstacles/bigtreeorange.png);
 }
 
-.obstacle.fence.bigtreegreen div {
+.obstacle.bigtreegreen div {
 	background-image: url(obstacles/bigtreegreen.png);
 }
 
-.obstacle.fence.bigtreeyellow div {
+.obstacle.bigtreeyellow div {
 	background-image: url(obstacles/bigtreeyellow.png);
+}
+
+/** tree block **/
+
+.obstacle.treeblock {
+	height: 64px;
+}
+
+.obstacle.treeblock div {
+	background-image: url(obstacles/treeblock.png);
+	background-size: contain;
+	height: 64px;
+	width: 100%;
+	position: absolute;
+	bottom: -40px;
+	margin-left: 10px;
+}
+
+/** fog left 2 down 1 **/
+
+.fog {
+	background: url(obstacles/smoke.gif);
+	background-size: 64px;
+   height: 100%;
+   width: 100%;
+   position: absolute;
+   left: 0;
+   top: 0;
+   z-index: 500;
+   opacity: 0.95;
+   display: block;
+   mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110096362_chRv2u9qijtxGM8.png?1762821628);
+   mask-repeat: no-repeat;
+   mask-size: 100% 100%;
+   pointer-events: none;
+   transition: 400ms ease-in;
+}
+
+.fog .obstacle.fence.hauntedtree2 div {
+	background-image: url(obstacles/fogtree.png);
+}
+
+.fog.left-2:not(.down-1){
+   mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110102532_EBqkT7mPbCKC5us.png);
+   mask-repeat: no-repeat;
+   mask-size: 100% 100%;
+}
+
+.fog.left-2.up-1 {
+   mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110103005_qwXzOAOOpaKv0a6.png?1762829937);
+   mask-repeat: no-repeat;
+   mask-size: 100% 100%;
+}
+
+.fog.left-1.up-1 {
+   mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110127189_1GL3amMRpN5x0GG.png);
+   mask-repeat: no-repeat;
+   mask-size: 100% 100%;
 }
 
 /** church pew **/
 .obstacle.churchpew {
 	height: 56px;
-	width: 123.5px;
+	width: 146px;
 }
 
 .obstacle.churchpew div {
@@ -822,7 +1094,7 @@ body.touch-only #space-button {
 	background-position: bottom center;
 	background-repeat: no-repeat;
 	height: 66px;
-	width: 123.5px;
+	width: 146px;
 	position: absolute;
 	bottom: 8px;
 }
@@ -879,22 +1151,68 @@ body.touch-only #space-button {
    border: none;
 }
 
+/** Flowers in ground **/
+
+.flowers1, .flowers2, .flowers3 {
+	margin-top: 68px;
+	position: absolute;
+	background-position: left bottom;
+	background-size: auto 22px;
+	width: 38px;
+	height: 22px;
+}
+
+.flowers1 {
+	background-image: url(obstacles/flowers1.png);
+}
+
+.flowers2 {
+	background-image: url(obstacles/flowers2.png);
+}
+
+.flowers3 {
+	background-image: url(obstacles/flowers3.png);
+}
+
+/** Flowers picked **/
+
+.flower1, .flower2, .flower3, #Daisy {
+	margin-top: 68px;
+	position: absolute;
+	background-position: left bottom;
+	background-size: contain;
+	width: 24px;
+	height: 10px;
+}
+
+.flower1 {
+	background-image: url(obstacles/flower1.png);
+}
+
+.flower2 {
+	background-image: url(obstacles/flower2.png);
+}
+
+.flower3 {
+	background-image: url(obstacles/flower3.png);
+}
+
 /**Church Top (this has a smaller base, to change when it fades**/
 
 .churchtop {
-	width: 456px;
+	width: 544px;
 	height: 750px;
 	position: absolute;
-	left: 572px;
-   top: -560px;
+	left: 548px;
+   top: -558px;
    z-index: 237;
    position: absolute;
    transition: 400ms ease;
 }
 
 .churchtop div {
-	width: 476px;
-	height: 880px;
+	width: 544px;
+	height: 882px;
 	background-size: contain;
 	background-image: url(obstacles/churchtop.png);
 	background-position: bottom center;
@@ -921,7 +1239,7 @@ body.touch-only #space-button {
 	background-size: 100% auto;
 	position: absolute;
 	top: -36px;
-	left: 8px;
+	right: 0;
 }
 
 /** inner wall horizontal **/
@@ -933,7 +1251,7 @@ body.touch-only #space-button {
 }
 
 .obstacle.innerwallhorizontal div {
-	background-size: 100% 34px;
+	background-size: auto 34px;
 	background-image: url(obstacles/innerwallhorizontal.png);
 	height: 34px;
 	width: 100%;
@@ -962,6 +1280,86 @@ body.touch-only #space-button {
 #CandyApple, #CandyAppleInventory.collected span {
 	background-image: url(objectives/candyapple.png);
 }
+
+#Drawing.objective {
+	height: 46px;
+	width: 46px;
+}
+
+#Drawing, #DrawingInventory.collected span {
+	background-image: url(objectives/drawing.png);
+}
+
+#DaisyInventory.collected span {
+	background-image: url(obstacles/flower2.png);
+}
+
+/** NPCs **/
+
+.npc {
+	height: 100px;
+	width: 100px;
+	position: absolute;
+	background-size: contain;
+}
+
+#Terracotta.npc {
+	width: 140px;
+	height: 66px;
+	background-image: url(charactersprites/terracottapix.png);
+}
+
+#Terracotta:before {
+	content: "";
+   background: #221022;
+   height: 12px;
+   width: 70%;
+   position: relative;
+   bottom: -89%;
+   left: 15%;
+   border-radius: 100%;
+   mix-blend-mode: darken;
+   opacity: 40%;
+}
+
+#Quincy.npc {
+	margin-top: -10px;
+	width: 110px;
+	height: 100px;
+	background-image: url(charactersprites/quincypix.png);
+}
+
+#Crow.npc {
+	/** he has some extra code bc he's so small, so he gets padding for easier interaction **/
+	background-image: url(charactersprites/crowpix.png);
+   height: 66px;
+   width: 68px;
+   padding: 0 0 20px 20px;
+   background-clip: content-box;
+   background-size: 48px 46px;
+   background-position: right top;
+   z-index: 275 !important;
+}
+
+#Crow-talking #dialogue-loader {
+	font-family: 'SD Auto Pilot';
+	font-size: 1.8em;
+	display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 20px;
+   flex-wrap: wrap;
+}
+
+.crow-scream {
+	font-size: 2.5em;
+	margin-top: -25px;
+}
+
+#Crow.npc.call {
+	background-image: url(charactersprites/crowCaw.png);
+}
+
 
 /****************************************** Media Queries ******************************************/
 

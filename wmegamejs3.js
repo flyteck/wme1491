@@ -5,13 +5,20 @@
 //Leaf stutter on mobile -- this is an optimization thing. I should have a clause to cancel calling a pause when you go quickly between two
 // object that make the same sfx, possibly by adding a class
 //Need to optimize obstacle check - old method was buggy
+//Crow stutters between animations sometimes
+
+//Menu open/close doesn't interact w forest music (maybe I'll just replace the SRC etc)
 
 ////PLANS
 //Fullscreen: needs to use zoom or else pixel alignments break. Would need to dynamically find the right zoom number and use that with JS
 
+//Guh I kinda think I need to redo dialogue.... I would want it to check for lines going up by 1 each time, and once it hits the end, add repeat
 
 ///for bullfrog: on change screen, check gamecontainer classlist, if it's got one of the bottom middle three, play; otherwise, pause
 
+//this is evil and it needs to be defined globally I fucking guess
+var crowInterval
+var expressions = ""
 
 ///quick OS detector for stupid stupid ipads
 window.addEventListener("load", getMobileOperatingSystem);
@@ -46,6 +53,7 @@ var OS = getMobileOperatingSystem();
 
 //character + container
 const character = document.getElementById("test-character");
+const nose = document.getElementById("nose");
 const gameContainer = document.getElementById("game-container");
 
 buttonPressed = "initial";
@@ -78,6 +86,9 @@ function audioVolume() {
   document.getElementById("background-player").volume = 0.7;
   document.getElementById("advance").volume = 0.2;
   document.getElementById("leaves").volume = 0.2;
+
+  document.getElementById("forest-player").volume = 0.2;
+  document.getElementById("forest-ambience-player").volume = 0.2;
 }
 
 window.addEventListener("load", groundZIndex);
@@ -112,6 +123,11 @@ function screenTitle() {
 
   //display it nicely on the game screen
   document.getElementById("screen-display").innerHTML = gameContainer.classList.toString().replace(/\s/g, ' SPACEHOLDER ').replace(/-/g, ' ').replace(' SPACEHOLDER ', ' - ').replace(' SPACEHOLDER ', ', ');
+
+  //we're gonna call this in here, to be sure it's all updated when it goes
+  if (document.getElementById("tutorial").style.display == "none") {
+    soundEffectManage();
+  }
 }
 
 //quick listener to hide the tutorial with a key press as well
@@ -157,7 +173,7 @@ for (i = 0; i < items.length; i++) {
     if (npcName == npcList[j].name) {
       var description = items[i].querySelector(".description")
       //if they match, set the description text
-      description.innerHTML = npcList[j].dialogue
+      description.innerHTML = npcList[j].dialogue.replace(/♡/g, "");
     }
   }
 
@@ -269,7 +285,8 @@ function buttonPress() {
         //remove the talking ID
         dialoguePopUp.id = "";
         //remove last line,
-        dialoguePopUp.classList.remove("last-line")
+        dialoguePopUp.classList.remove("last-line", "talking-now");
+        expressions = "";
 
         if (interactFound != null) {        
           //add repeat for characters so we know they're done their main dialogue (items dissapear after interact, so this excludes them)
@@ -354,10 +371,6 @@ function buttonPress() {
         interactFound.style.opacity = "0"
       }
 
-      //set the viewable image with the right SRC
-      var interactDisplay = document.getElementById("interact-display");
-      interactDisplay.src = "objectives/" + interactFound.id.toLowerCase() + ".png";
-
       //make the textbox visible
       dialoguePopUp.style.display = "flex";
 
@@ -375,7 +388,6 @@ function buttonPress() {
       var dialogue = getCharacterDialogue().toString();
 
       function getCharacterDialogue() {
-
         //iterate through the list to find a name match,
         for (i = 0; i < npcList.length; i++) {
           if (npcName == npcList[i].name) {
@@ -385,25 +397,47 @@ function buttonPress() {
         }
       }
 
-      //split dialogue by spaces,
-      var words = dialogue.split(' ');
+      //split dialogue at the hearts (♡) [this allows us to break up our lines nicely],
+      var words = dialogue.split('♡');
 
-      //get a 20 word chunk, add it to the textbox
+      //if there's expressions, shift one off
+      if (expressions != "") {
+        expressions.shift();
+      }
+
+      if (!dialoguePopUp.classList.contains("talking-now") && !interactFound.classList.contains("objective")) {
+        //on our first one, we want to grab our facial expressions, so we separate those out (odd numbers, even is text),
+        var words = dialogue.split('♡').filter((e, i) =>  i % 2 != 0);
+        //and add "talking now" so we don't do it again
+        expressions = dialogue.split('♡').filter((e, i) =>  i % 2 == 0);
+        dialoguePopUp.classList.add("talking-now");
+      }
+
+      //set the viewable image with the proper SRC (this must be after things are split to make sure it includes the first expression)
+      var interactDisplay = document.getElementById("interact-display");
+      //slight delay to make sure that expressions exist
+        //if it's not an item, and it isn't "null"
+      if (!interactFound.classList.contains("objective") && expressions[0] != "null") {
+        //get the correct sprite + expression
+        interactDisplay.src = "objectives/" + interactFound.id.toLowerCase() + expressions[0].toLowerCase() + ".png";
+      } else {
+        //otherwise, just do it without the expression
+        interactDisplay.src = "objectives/" + interactFound.id.toLowerCase() + ".png";
+      }
+
+      //get the first dialogue chunk, put it in the textbox
 
       dialogueSplit()
       function dialogueSplit() {
-        var dialogueChunk = words.slice(0,39);
+        var dialogueChunk = words.slice(0,1);
         //and clean it up (remove excess commas and put desired ones back in)
         dialogueLoader.innerHTML = dialogueChunk.toString().replaceAll(",", " ").replaceAll("  ", ", ");
 
-        if (words.length <= 39) {
+        if (words.length == 1) {
           dialoguePopUp.classList.add("last-line");
         }
-
-        //shift the first 39 elements off of the array,
-        for (i = 0; i < 39; i++) {
-          words.shift(); 
-        }
+        
+        words.shift(); 
 
         //if there's words left after the splice
         if (words.length != 0) {
@@ -411,7 +445,7 @@ function buttonPress() {
           for (i = 0; i < npcList.length; i++) {
             if (npcName == npcList[i].name) {
               //then grab their dialogue
-             npcList[i].dialogue = words;
+             npcList[i].dialogue = words.join("♡");
             }
           }
         } else {
@@ -449,9 +483,6 @@ function buttonPress() {
       }
     }
 
-    //check for buildings
-    churchOverlap();
-
   }
 
   if (eventVar.key === 'ArrowRight' || eventVar.key === 'd' || character.classList.contains("right") || eventVar.target.id == "right-arrow-button" ||  direction == "right") {
@@ -476,9 +507,6 @@ function buttonPress() {
         character.style.left = parseInt(character.style.left) - parseInt(moveDistance) + "px";
       }
     }
-
-    //check for buildings
-    churchOverlap();
   }
 
   if (eventVar.key === 'ArrowUp' || eventVar.key === 'w' ||character.classList.contains("up") || eventVar.target.id == "up-arrow-button" || direction == "up") {
@@ -503,9 +531,6 @@ function buttonPress() {
         character.style.top = parseInt(character.style.top) + parseInt(moveDistance) + "px";
       }
     }
-
-    //check for buildings
-    churchOverlap();
   }
 
   if (eventVar.key === 'ArrowDown' || eventVar.key === 's' || character.classList.contains("down") || eventVar.target.id == "down-arrow-button" ||  direction == "down") {
@@ -530,9 +555,6 @@ function buttonPress() {
         character.style.top = parseInt(character.style.top) - parseInt(moveDistance) + "px";
       }
     }
-
-    //check for buildings
-    churchOverlap();
   }
 
   //set the buttonpressed var to the current event trigger, to recall on mobile
@@ -580,8 +602,6 @@ function buttonRelease() {
     stopLeft();
     //re-check for obstacles
     obstacleCheck("left",moveDistance)
-    //check for buildings
-    churchOverlap();
     //fix zindex
     zIndexSort()
   }
@@ -594,8 +614,6 @@ function buttonRelease() {
     stopRight()
     //re-check for obstacles
     obstacleCheck("right",moveDistance)
-    //check for buildings
-    churchOverlap();
     //fix zindex
     zIndexSort()
   }
@@ -608,8 +626,6 @@ function buttonRelease() {
     stopUp()
     //re-check for obstacles
     obstacleCheck("up",moveDistance)
-    //check for buildings
-    churchOverlap();
     //fix zindex
     zIndexSort()
   }
@@ -622,8 +638,6 @@ function buttonRelease() {
     stopDown()
     //re-check for obstacles
     obstacleCheck("down",moveDistance)
-    //check for buildings
-    churchOverlap();
     //fix zindex
     zIndexSort()
   }
@@ -646,26 +660,6 @@ function buttonRelease() {
     buttonPressed = "initial";
 }
 
-//check for the church overlap
-
-function churchOverlap() {
-  var church = document.querySelector(".churchtop");
-  var characterBounds = character.getBoundingClientRect();
-
-  var churchBounds = church.getBoundingClientRect();
-
-      var overlap = !(churchBounds.right <= characterBounds.left || churchBounds.left >= characterBounds.right ||
-                    churchBounds.bottom <= characterBounds.top || churchBounds.top >= characterBounds.bottom);
-
-      if (overlap === true) {
-        church.style.opacity = "0";
-      }
-
-      if (overlap === false) {
-        church.style.opacity = "1";
-      }
-}
-
 //check for obstacles
 function obstacleCheck(direction,moveDistance) {
   //get classes on game container
@@ -675,6 +669,97 @@ function obstacleCheck(direction,moveDistance) {
 
   var obstacle = document.querySelectorAll(".obstacle");
   var characterBounds = character.getBoundingClientRect();
+
+  //check if we're in the church
+  if (gameContainer.classList.contains("right-2") && !gameContainer.classList.contains("up-1") && !gameContainer.classList.contains("down-1")) {
+    var church = document.getElementsByClassName("churchtop");
+    var churchEntrance = document.getElementById("church-entrance");
+    var characterBounds = character.getBoundingClientRect();
+    var churchBounds = churchEntrance.getBoundingClientRect();
+
+    var overlap = !(churchBounds.right <= characterBounds.left || churchBounds.left >= characterBounds.right ||
+                  churchBounds.bottom <= characterBounds.top || churchBounds.top >= characterBounds.bottom);
+    //if we have overlap,
+    if (overlap === true) {
+      //if the character bottom is below the church bottom, and we're moving down
+      if (characterBounds.bottom >= churchBounds.bottom && character.classList.contains("down")) {
+        for (i = 0; i < church.length; i++) {
+          church[i].style.opacity = "1";
+        }
+      } 
+      //if the character bottom is above the church top, and we're moving up
+      if (characterBounds.top <= churchBounds.top && character.classList.contains("up")) {
+        for (i = 0; i < church.length; i++) {
+          church[i].style.opacity = "0";
+        }
+          
+      }
+    }
+  }
+
+  //check if we're on the forest screen
+  if (gameContainer.classList.contains("left-2") && gameContainer.classList.contains("down-1")) {
+    console.log("checking for forest");
+    //get the interact zone
+    var forestEntrance = document.getElementById("forest-entry");
+
+    //check for overlap
+    var forestBounds = forestEntrance.getBoundingClientRect();
+    var overlap = !(forestBounds.right <= characterBounds.left || forestBounds.left >= characterBounds.right ||
+                  forestBounds.bottom <= characterBounds.top || forestBounds.top >= characterBounds.bottom);
+
+    //if there's overlap
+      if (overlap === true) {
+        var fog = document.querySelectorAll(".fog");
+
+        //if we're going left (entering)
+        if (character.classList.contains("left")) {
+          //pause and reset the time on the music players
+          document.getElementById("background-player").pause();
+          document.getElementById("ambience-player").pause();
+          document.getElementById("background-player").currentTime = 0;
+          document.getElementById("ambience-player").currentTime = 0;
+
+          for (i = 0; i < fog.length; i++) {
+            fog[i].style.opacity = "0.3";
+          }
+
+          document.getElementById("forest-player").play();
+          document.getElementById("forest-ambience-player").play();
+        }
+        //if we're going right (leaving)
+        if (character.classList.contains("right")) {
+          //pause and reset the time on the music players
+          document.getElementById("forest-player").pause();
+          document.getElementById("forest-ambience-player").pause();
+          document.getElementById("forest-player").currentTime = 0;
+          document.getElementById("forest-ambience-player").currentTime = 0;
+
+          for (i = 0; i < fog.length; i++) {
+            fog[i].style.opacity = "";
+          }
+
+          document.getElementById("background-player").play();
+          document.getElementById("ambience-player").play();
+        }
+      }
+  }
+
+  //check if we're overlapping an open tombstone
+  var openTombstone = document.querySelector(".active.tombstone div");
+  //we use nosebounds here for accuracy
+  var noseBounds = nose.getBoundingClientRect();
+  //if one exists,
+  if (openTombstone != null) {
+    var tombBounds = openTombstone.getBoundingClientRect();
+    var tombOverlap = !(tombBounds.right <= noseBounds.left || tombBounds.left >= noseBounds.right ||
+                      tombBounds.bottom <= noseBounds.top || tombBounds.top >= noseBounds.bottom);
+    //and we're not overlapping it,
+    if (tombOverlap === false) {
+      //close it
+      openTombstone.parentElement.classList.remove("active");
+    }
+  }
 
   //check for ground items
   var groundItem = document.querySelectorAll(".ground");
@@ -691,7 +776,15 @@ function obstacleCheck(direction,moveDistance) {
         //if there's overlap, we're not pressing shift to target this, and our bottom is higher than the object bottom
         if (overlap === true && eventVar.key != 'Shift' && characterBounds.bottom <= groundItemBounds.bottom) {
           //for leaves
+
+          //if we're running, normal speed; double speed for walking (since the steps are faster)
           if (groundItem[i].classList.contains("leaves")) {
+            if (character.classList.contains("sprint")) {
+              leafPlayer.playbackRate = 1;
+            } else {
+              leafPlayer.playbackRate = 1.5;
+            }
+
             leafPlayer.play();
             leafPlayer.classList.add("leaves-" + i, "playing");
             setTimeout(() => {
@@ -710,81 +803,93 @@ function obstacleCheck(direction,moveDistance) {
 
   //check for obstacles
   for (i = 0; i < obstacle.length; i++) {
-    //for general obstacles
-    if (!obstacle[i].classList.contains("fence")) {
-      var obstacleBounds = obstacle[i].getBoundingClientRect();
+    var gameClasses = gameContainer.classList.value.split(' ');
+    var obstacleClasses = obstacle[i].classList.value.split(' ');
 
-      var overlap = !(obstacleBounds.right <= characterBounds.left || obstacleBounds.left >= characterBounds.right ||
-                    obstacleBounds.bottom <= characterBounds.top || obstacleBounds.top >= characterBounds.bottom);
+    //only do all this shit if it's not in a fog box (decorative) and if it has the game container's classes (visible)
+    //this could be further refined -- down-1 for example checks ALL obstacles on *any* down 1 screen (only relevant for single directions)
+    //could add a "single" class to those pages? idk
+    if (!obstacle[i].parentElement.classList.contains("fog") && gameClasses.every(r=> obstacleClasses.includes(r))) {
 
-      //if there's overlap
-      if (overlap === true) {
+      var gameClasses = gameContainer.classList.value.split(' ');
+      var obstacleClasses = obstacle[i].classList.value.split(' ');
 
-        //check where the overlap is [overlap || character || object]
+      //for general obstacles
+      if (!obstacle[i].classList.contains("fence")) {
+        var obstacleBounds = obstacle[i].getBoundingClientRect();
 
-        var overlapLeftRight = characterBounds.left <= obstacleBounds.right
-        var overlapRightLeft = characterBounds.right >= obstacleBounds.left
-        var overlapTopBottom = characterBounds.top <= obstacleBounds.bottom
-        var overlapBottomTop = characterBounds.bottom >= obstacleBounds.top
+        var overlap = !(obstacleBounds.right <= characterBounds.left || obstacleBounds.left >= characterBounds.right ||
+                      obstacleBounds.bottom <= characterBounds.top || obstacleBounds.top >= characterBounds.bottom);
 
-        if (overlapLeftRight == true && character.classList.contains("right")) {
-          //if character left overlaps object right, increase left to push it over
-          character.style.left = parseInt(character.style.left) - parseInt(moveDistance) + "px";
-        }
+        //if there's overlap
+        if (overlap === true) {
 
-        if (overlapRightLeft == true && character.classList.contains("left")) {
-          //if character right overlaps object left, decrease left to push it over
-          character.style.left = parseInt(character.style.left) + parseInt(moveDistance) + "px";
-        }
+          //check where the overlap is [overlap || character || object]
 
-        if (overlapTopBottom == true && character.classList.contains("up")) {
-          //if character top overlaps object bottom, increase top to push it down
-          character.style.top = parseInt(character.style.top) + parseInt(moveDistance) + "px";
-        }
+          var overlapLeftRight = characterBounds.left <= obstacleBounds.right
+          var overlapRightLeft = characterBounds.right >= obstacleBounds.left
+          var overlapTopBottom = characterBounds.top <= obstacleBounds.bottom
+          var overlapBottomTop = characterBounds.bottom >= obstacleBounds.top
 
-        if (overlapBottomTop == true && character.classList.contains("down")) {
-          //if character bottom overlaps object top, decrease top to push it up
-          character.style.top = parseInt(character.style.top) - parseInt(moveDistance) + "px";
-        }
+          if (overlapLeftRight == true && character.classList.contains("right")) {
+            //if character left overlaps object right, increase left to push it over
+            character.style.left = parseInt(character.style.left) - parseInt(moveDistance) + "px";
+          }
 
-      }
-    }
+          if (overlapRightLeft == true && character.classList.contains("left")) {
+            //if character right overlaps object left, decrease left to push it over
+            character.style.left = parseInt(character.style.left) + parseInt(moveDistance) + "px";
+          }
 
-    //for "fences" (elements you can pass behind/in front of but not through)
-    if (obstacle[i].classList.contains("fence")) {
-      var obstacleBounds = obstacle[i].getBoundingClientRect();
-
-      var overlap = !(obstacleBounds.right <= characterBounds.left || obstacleBounds.left >= characterBounds.right ||
-                    obstacleBounds.bottom <= characterBounds.top || obstacleBounds.top >= characterBounds.bottom);
-
-      //if there's overlap
-      if (overlap === true) {
-
-        //check where the overlap is [overlap || character || object]
-
-        //allow to move up unless the character bottom is higher than the obstacle bottom
-
-        var overlapTopBottom = characterBounds.top <= obstacleBounds.bottom
-        var overlapBottomTop = characterBounds.bottom >= obstacleBounds.top
-
-        var behind = (parseInt(obstacle[i].style.zIndex) + parseInt(moveDistance)) > parseInt(character.style.zIndex);
-        var inFront = (parseInt(obstacle[i].style.zIndex) - parseInt(moveDistance)) < parseInt(character.style.zIndex);
-
-        if (overlapBottomTop == true && character.classList.contains("down") && behind == true) {
-          //if character bottom overlaps object top, decrease top to push it up
-          character.style.top = parseInt(character.style.top) - parseInt(moveDistance) + "px";
-        }
-
-        if (overlapTopBottom == true && character.classList.contains("up")) {
-          //if character top overlaps object bottom,
-          var overlapBottomBottom = characterBounds.bottom <= obstacleBounds.bottom
-          //see if the bottom is also higher, and if we're in front
-          if (overlapBottomBottom == true && inFront === true) {
-            //if it is, increase top to push it down
+          if (overlapTopBottom == true && character.classList.contains("up")) {
+            //if character top overlaps object bottom, increase top to push it down
             character.style.top = parseInt(character.style.top) + parseInt(moveDistance) + "px";
           }
-        }
 
+          if (overlapBottomTop == true && character.classList.contains("down")) {
+            //if character bottom overlaps object top, decrease top to push it up
+            character.style.top = parseInt(character.style.top) - parseInt(moveDistance) + "px";
+          }
+
+        }
+      }
+
+      //for "fences" (elements you can pass behind/in front of but not through)
+      if (obstacle[i].classList.contains("fence")) {
+        var obstacleBounds = obstacle[i].getBoundingClientRect();
+
+        var overlap = !(obstacleBounds.right <= characterBounds.left || obstacleBounds.left >= characterBounds.right ||
+                      obstacleBounds.bottom <= characterBounds.top || obstacleBounds.top >= characterBounds.bottom);
+
+        //if there's overlap
+        if (overlap === true) {
+
+          //check where the overlap is [overlap || character || object]
+
+          //allow to move up unless the character bottom is higher than the obstacle bottom
+
+          var overlapTopBottom = characterBounds.top <= obstacleBounds.bottom
+          var overlapBottomTop = characterBounds.bottom >= obstacleBounds.top
+
+          var behind = (parseInt(obstacle[i].style.zIndex) + parseInt(moveDistance)) > parseInt(character.style.zIndex);
+          var inFront = (parseInt(obstacle[i].style.zIndex) - parseInt(moveDistance)) < parseInt(character.style.zIndex);
+
+          if (overlapBottomTop == true && character.classList.contains("down") && behind == true) {
+            //if character bottom overlaps object top, decrease top to push it up
+            character.style.top = parseInt(character.style.top) - parseInt(moveDistance) + "px";
+          }
+
+          if (overlapTopBottom == true && character.classList.contains("up")) {
+            //if character top overlaps object bottom,
+            var overlapBottomBottom = characterBounds.bottom <= obstacleBounds.bottom
+            //see if the bottom is also higher, and if we're in front
+            if (overlapBottomBottom == true && inFront === true) {
+              //if it is, increase top to push it down
+              character.style.top = parseInt(character.style.top) + parseInt(moveDistance) + "px";
+            }
+          }
+
+        }
       }
     }
   }
@@ -795,45 +900,70 @@ function obstacleCheck(direction,moveDistance) {
 //check for interactable object (NPC, Item) 
 function interactCheck() {
   var npc = document.querySelectorAll(".npc");
+  var objective = document.querySelectorAll(".objective");
+  var tombstone = document.querySelectorAll(".tombstone div");
   var characterBounds = character.getBoundingClientRect();
 
-  var objective = document.querySelectorAll(".objective");
-  var characterBounds = character.getBoundingClientRect();
+  //we use nosebounds here for accuracy (this is a smaller hitbox on the front end of the character)
+  var noseBounds = nose.getBoundingClientRect();
 
   //for NPCs
   for (i = 0; i < npc.length; i++) {
     var npcBounds = npc[i].getBoundingClientRect();
 
     //check all objectives for intersection
-    var overlap = !(npcBounds.right <= characterBounds.left || npcBounds.left >= characterBounds.right ||
-                  npcBounds.bottom <= characterBounds.top || npcBounds.top >= characterBounds.bottom);
+    var overlap = !(npcBounds.right <= noseBounds.left || npcBounds.left >= noseBounds.right ||
+                  npcBounds.bottom <= noseBounds.top || npcBounds.top >= noseBounds.bottom);
 
     if (overlap === true) {
       //if player is touching one, return which one
       var characterTalking = npc[i];
-
       return characterTalking
     }
   }
 
-    //for items
-    for (i = 0; i < objective.length; i++) {
+  //for items
+  for (i = 0; i < objective.length; i++) {
     var objectiveBounds = objective[i].getBoundingClientRect();
 
     //check all objectives for intersection
-    var overlap = !(objectiveBounds.right <= characterBounds.left || objectiveBounds.left >= characterBounds.right ||
-                  objectiveBounds.bottom <= characterBounds.top || objectiveBounds.top >= characterBounds.bottom);
+    var overlap = !(objectiveBounds.right <= noseBounds.left || objectiveBounds.left >= noseBounds.right ||
+                  objectiveBounds.bottom <= noseBounds.top || objectiveBounds.top >= noseBounds.bottom);
 
     if (overlap === true && !objective[i].classList.contains("collected")) {
       //if player is touching one (and it hasn't been found), return which one
       var foundItem = objective[i];
       return foundItem
     }
-
-    //otherwise, button does nothing
   }
-}
 
+  //to read the tombstones
+  for (i = 0; i < tombstone.length; i++) {
+    var tombstoneBounds = tombstone[i].getBoundingClientRect();
+
+    //check all objectives for intersection
+    var overlap = !(tombstoneBounds.right <= noseBounds.left || tombstoneBounds.left >= noseBounds.right ||
+                  tombstoneBounds.bottom <= noseBounds.top || tombstoneBounds.top >= noseBounds.bottom);
+
+    if (overlap === true) {
+      //if player is touching one (and it hasn't been found), return which one
+      var tombstoneCurrent = tombstone[i];
+      //^we need this for later due to the timeout
+
+      if (tombstone[i].parentElement.classList.contains("active") && !tombstone[i].classList.contains("clicked")) {
+          tombstone[i].parentElement.classList.remove("active");
+      } else {
+          tombstone[i].parentElement.classList.add("active");
+          tombstone[i].parentElement.classList.add("clicked");
+          setTimeout(() => {
+            //we need this clicked class + timeout to prevent weird double taps on mobile
+            tombstoneCurrent.parentElement.classList.remove("clicked");
+        }, 100);
+      }
+    }
+  }
+    //otherwise, button does nothing
+}
 
 //move left
   function moveLeft(moveDistance) {
@@ -851,7 +981,6 @@ function interactCheck() {
             } else {
               moveDistance = parseInt(moveDistance)/parseInt("2")+parseInt("2");
             }
-            console.log("diagonal Left" + " " + moveDistance);
           }
           //subtract a value from it to set it right
           character.style.left = leftPosition - moveDistance + "px";
@@ -895,7 +1024,6 @@ function interactCheck() {
             } else {
               moveDistance = parseInt(moveDistance)/parseInt("2")+parseInt("2");
             }
-            console.log("diagonal Right" + " " + moveDistance);
           }
         //add a value to it, and pixels to set it right
         setTimeout(() => {
@@ -941,7 +1069,6 @@ function interactCheck() {
             } else {
               moveDistance = parseInt(moveDistance)/parseInt("2")+parseInt("2");
             }
-            console.log("diagonal Up" + " " + moveDistance);
           }
           //subtract a value from it, and pixels to push it up
           character.style.top = topPosition - moveDistance + "px";
@@ -986,7 +1113,6 @@ function interactCheck() {
             } else {
               moveDistance = parseInt(moveDistance)/parseInt("2")+parseInt("2");
             }
-            console.log("diagonal Down" + " " + moveDistance);
           }
           //add a value to it, and pixels to push it down
           character.style.top = topPosition + moveDistance + "px";
@@ -1290,6 +1416,65 @@ function interactCheck() {
 
 ///////////////////////NPCs
 
+function soundEffectManage() {
+  //for the crow
+  var crow = document.getElementById("Crow")
+  var crowPlayer = document.getElementById("crow-player");
+
+  //if we're on one of the right screens,
+  if (gameContainer.classList.contains("right-1") || gameContainer.classList.contains("right-2") || gameContainer.classList.contains("right-3") && !crow.classList.contains("repeat")) {
+    //set interval (only if it's undefined, it stacks otherwise for some reason)
+    if (crowInterval == undefined) {
+      crowInterval = setInterval(crowCall, 6000);
+    }
+
+    //first, set the volume based on distance from the crow
+    setTimeout(() => {
+      if (gameContainer.classList.contains("right-3") && !gameContainer.classList.contains("up-1") || !gameContainer.classList.contains("down-1")) {
+        crowPlayer.volume = "1"
+      }
+
+      if (gameContainer.classList.contains("right-3") && gameContainer.classList.contains("up-1") || gameContainer.classList.contains("down-1")) {
+        crowPlayer.volume = "0.5"
+      }
+
+      if (gameContainer.classList.contains("right-2") && !gameContainer.classList.contains("up-1") || !gameContainer.classList.contains("down-1")) {
+        crowPlayer.volume = "0.5"
+      }
+
+      if (gameContainer.classList.contains("right-2") && gameContainer.classList.contains("up-1") || gameContainer.classList.contains("down-1")) {
+        crowPlayer.volume = "0.3"
+      }
+
+      if (gameContainer.classList.contains("right-1")) {
+        crowPlayer.volume = "0.1"
+      }
+    }, 32);
+  } else {
+    clearInterval(crowInterval);
+  }
+
+}
+
+//if the crow isn't calling, call
+function crowCall() {
+  var crow = document.getElementById("Crow")
+  var crowPlayer = document.getElementById("crow-player");
+
+  if (crow.classList.contains("repeat") || crow.classList.contains("last-line")) {
+    clearInterval(crowInterval);
+    return
+  }
+
+  //add call, play the sound
+  crow.classList.add("call");
+  crowPlayer.play();
+  //and then remove after the sound should be done
+  setTimeout(() => {
+      crow.classList.remove("call");
+  }, 2000);
+}
+
 ///////////////////////
 
 //z-index shenanigans for layering 
@@ -1301,7 +1486,7 @@ function zIndexSort() {
   //go down the list, and set their z-index to their top position
   for (i = 0; i < screenElements.length; i++) {
     //we wanna leave out items on the ground from this
-    if (!screenElements[i].classList.contains("ground")) {
+    if (!screenElements[i].classList.contains("ground") && !screenElements[i].classList.contains("churchtop")) {
       var screenElementBounds = parseInt(screenElements[i].style.top);
         
       //don't touch if it's below 0 as well
