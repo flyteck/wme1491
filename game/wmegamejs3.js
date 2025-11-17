@@ -6,6 +6,7 @@
 // object that make the same sfx, possibly by adding a class
 //Need to optimize obstacle check - old method was buggy
 //Crow stutters between animations sometimes
+//Should set the mobile detects as variables, for cleanliness
 
 //Menu open/close doesn't interact w forest music (maybe I'll just replace the SRC etc)
 
@@ -206,7 +207,7 @@ function sprintToggle() {
 
 function buttonPress() {
   //on mobile, check if we're on a recall, and if so, repeat that event
-  if (!matchMedia('(pointer:fine)').matches) {
+  if (matchMedia('(hover:none)').matches && screen.width < "1024") {
     if (buttonPressed != "initial") {
       eventVar = buttonPressed;
     } else {
@@ -569,7 +570,7 @@ function buttonPress() {
 
   //don't ask me why this needs to have a timeout inside and out but it won't run right otherwise
   setTimeout(() => {
-    if (!matchMedia('(pointer:fine)').matches) {
+    if (matchMedia('(hover:none)').matches && screen.width < "1024") {
       //if we're on mobile,
       if (mouseDown == 1) {
         //and button is being pressed, fire again 
@@ -590,7 +591,7 @@ function buttonPress() {
 
 function buttonRelease() {
   //on mobile, check if we're on a recall, and if so, repeat that event
-  if (!matchMedia('(pointer:fine)').matches) {
+  if (matchMedia('(hover:none)').matches && screen.width < "1024") {
     if (buttonPressed != "initial") {
       var eventVar = buttonPressed;
     } else {
