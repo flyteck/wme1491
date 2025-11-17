@@ -8,6 +8,10 @@
 //Crow stutters between animations sometimes
 //Should set the mobile detects as variables, for cleanliness
 
+//For the overlap detection -- to make it work better, instead of going back and forth, I should check FIRST if the current position
+//+ move distance would overlap -- if it would, cancel; if not, continue
+//I think this is kind of what I have but I think there's movement IN the overlap which there shouldn't be
+
 //Menu open/close doesn't interact w forest music (maybe I'll just replace the SRC etc)
 
 ////PLANS
@@ -994,7 +998,7 @@ function interactCheck() {
         //fire move screen event
         moveScreen("left");
         setTimeout(() => {
-          gameContainer.classList.remove("just-moved");
+          document.body.classList.remove("just-moved");
         }, 1000);
       }
 
@@ -1041,7 +1045,7 @@ function interactCheck() {
         //fire move screen event
         moveScreen("right");
         setTimeout(() => {
-          gameContainer.classList.remove("just-moved");
+          document.body.classList.remove("just-moved");
         }, 1000);
       }
 
@@ -1088,7 +1092,7 @@ function interactCheck() {
         //fire move screen event
         moveScreen("up");
         setTimeout(() => {
-          gameContainer.classList.remove("just-moved");
+          document.body.classList.remove("just-moved");
         }, 1000);
       }
 
@@ -1135,7 +1139,7 @@ function interactCheck() {
         //fire move screen event
         moveScreen("down");
         setTimeout(() => {
-          gameContainer.classList.remove("just-moved");
+          document.body.classList.remove("just-moved");
         }, 1000);
       }
 
@@ -1256,7 +1260,7 @@ function interactCheck() {
 
   function moveScreen(direction) {
 
-    if (gameContainer.classList.contains("just-moved")) {
+    if (document.body.classList.contains("just-moved")) {
       console.log("just moved, sorry")
       return;
     }
@@ -1265,7 +1269,6 @@ function interactCheck() {
 
     //define the variables based on move direction
     if(direction == "left") {
-      console.log(direction + " - inside the function");
       //jump character to the right spot on the new screen
       character.style.transition = "0ms ease all";
       setTimeout(() => {
@@ -1277,7 +1280,6 @@ function interactCheck() {
     }
 
     if(direction == "up") {
-      console.log(direction);
       //jump character to the right spot on the new screen
       character.style.transition = "0ms ease all";
       setTimeout(() => {
@@ -1289,7 +1291,6 @@ function interactCheck() {
     }
 
     if(direction == "down") {
-      console.log(direction + " - inside the function");
       //jump character to the right spot on the new screen
       character.style.transition = "0ms ease all";
       setTimeout(() => {
@@ -1303,7 +1304,6 @@ function interactCheck() {
     }
 
     if(direction == "right") {
-      console.log(direction + " - inside the function");
       //jump character to the right spot on the new screen
       character.style.transition = "0ms ease all";
       setTimeout(() => {
@@ -1314,7 +1314,7 @@ function interactCheck() {
       }, moveDelay);
     }
 
-    gameContainer.classList.add("just-moved");
+    document.body.classList.add("just-moved");
 
     setTimeout(() => {
       moveScreen2(direction);
@@ -1462,7 +1462,6 @@ function interactCheck() {
   function moveScreen2(direction) {
     //define the variables based on move direction
     if(direction == "left") {
-      console.log(direction + " - inside the function");
       //jump character to the right spot on the new screen
       character.style.transition = "0ms ease all";
       setTimeout(() => {
@@ -1474,7 +1473,6 @@ function interactCheck() {
     }
 
     if(direction == "up") {
-      console.log(direction);
       //jump character to the right spot on the new screen
       character.style.transition = "0ms ease all";
       setTimeout(() => {
@@ -1486,7 +1484,6 @@ function interactCheck() {
     }
 
     if(direction == "down") {
-      console.log(direction + " - inside the function");
       //jump character to the right spot on the new screen
       character.style.transition = "0ms ease all";
       setTimeout(() => {
@@ -1500,7 +1497,6 @@ function interactCheck() {
     }
 
     if(direction == "right") {
-      console.log(direction + " - inside the function");
       //jump character to the right spot on the new screen
       character.style.transition = "0ms ease all";
       setTimeout(() => {
