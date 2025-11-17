@@ -68,6 +68,28 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 
 /*** Instructional Overlay ***/
 
+#loader {
+	position: absolute;
+	width: calc(var(--game-width) + var(--inventory-width)) ;
+	height: var(--game-height);
+	background: var(--black);
+	z-index: 1001;
+	transition: 200ms ease-out;
+	border: 2px solid var(--white);
+	display: flex;
+   align-items: center;
+   justify-content: center;
+   flex-direction: column;
+}
+
+.hidden-load {
+	display: block;
+	overflow: hidden;
+	height: 0;
+	width: 0;
+	opacity: 0;
+}
+
 #tutorial {
 	position: absolute;
 	top: 0;

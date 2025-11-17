@@ -37,6 +37,108 @@
 	<audio id="leaves" class="sound-effect ground-sound" src="music/leaves.wav" allow="autoplay"></audio>
 
 	<div id="game-wrapper">
+		<div id="loader">
+			<img src="charactersprites/lopeleft.png" style="height: 58px;margin:10px;filter:brightness(0) invert(1);">
+			Loading...
+
+			<div class="hidden-load">
+				<img src="charactersprites/walkleft.png">
+				<img src="charactersprites/standleft.png">
+				<img src="charactersprites/qunicypix.png">
+				<img src="charactersprites/terracottapix.png">
+				<img src="charactersprites/crowpix.png">
+
+				<img src="objectives/drawing.png">
+
+				<img src="objectives/qunicy.png">
+				<img src="objectives/qunicyannoyed.png">
+				<img src="objectives/qunicyconcerned.png">
+				<img src="objectives/qunicyexcited.png">
+
+				<img src="objectives/terracotta.png">
+				<img src="objectives/terracottaconcern.png">
+				<img src="objectives/terracottahappy.png">
+				<img src="objectives/terracottaneutral.png">
+
+				<img src="objectives/crow.png">
+				<img src="objectives/crowcaw.png">
+				<img src="objectives/crowneutral.png">
+
+				<img src="background1.png">
+				<img src="background2.png">
+				<img src="background3.png">
+				<img src="background4.png">
+				<img src="background5.png">
+				<img src="background6.png">
+				<img src="background7.png">
+				<img src="background8.png">
+				<img src="background9.png">
+				<img src="background10.png">
+				<img src="background11.png">
+				<img src="background12.png">
+				<img src="background13.png">
+				<img src="background14.png">
+				<img src="background15.png">
+				<img src="background16.png">
+				<img src="background17.png">
+				<img src="background18.png">
+				<img src="background19.png">
+				<img src="background20.png">
+				<img src="background21.png">
+
+				<img src="obstacles/tombstone1.png">
+				<img src="obstacles/tombstone2.png">
+				<img src="obstacles/tombstone3.png">
+				<img src="obstacles/tombstone4.png">
+				<img src="obstacles/tombstone5.png">
+				<img src="obstacles/tombstone6.png">
+				<img src="obstacles/tombstone7.png">
+				<img src="obstacles/tombstone8.png">
+				<img src="obstacles/tombstone9.png">
+				<img src="obstacles/tombstone10.png">
+				<img src="obstacles/dirtpatch.png">
+
+				<img src="obstacles/bigtreeorange.png">
+				<img src="obstacles/bigtreegreen.png">
+				<img src="obstacles/bigtreeyellow.png">
+				<img src="obstacles/deadtree.png">
+				<img src="obstacles/hollowtree.png">
+				<img src="obstacles/hauntedtree1.png">
+				<img src="obstacles/hauntedtree2.png">
+				<img src="obstacles/brambles.png">
+				<img src="obstacles/talltrunk.png">
+
+				<img src="obstacles/flowers1.png">
+				<img src="obstacles/flowers2.png">
+				<img src="obstacles/flowers3.png">
+				<img src="obstacles/flower1.png">
+				<img src="obstacles/flower2.png">
+				<img src="obstacles/flower3.png">
+
+				<img src="obstacles/leafmap.png">
+				<img src="obstacles/leafmap2.png">
+				<img src="obstacles/leafmap3.png">
+				<img src="obstacles/leafmap4.png">
+				<img src="obstacles/leavesround.png">
+				<img src="obstacles/leavesfull.png">
+
+				<img src="obstacles/churchpew.png">
+				<img src="obstacles/churchpewbible.png">
+				<img src="obstacles/churchtop.png">
+				<img src="obstacles/churchdeck.png">
+				<img src="obstacles/pot1.png">
+				<img src="obstacles/pot2.png">
+
+				<img src="obstacles/fence.png">
+				<img src="obstacles/fencevertical.png">
+				<img src="obstacles/cliff.png">
+				<img src="obstacles/treeblock.png">
+
+				<img src="water.gif">
+				<img src="obstacles/smoke.png">
+
+			</div>
+		</div>
 		<div id="game-container" class="Oddly-Shaded-Woods right-2">
 			<div id="test-character" style="left:448px;top:320px;"><span id="nose"></span></div>
 
@@ -188,7 +290,7 @@
 			<div class="obstacle treeblock Oddly-Shaded-Woods up-1 right-2" style="left: 0;top: -24px; width: 100%;"><div><!--fence image--></div></div>
 
 			<div class="obstacle innerwall Oddly-Shaded-Woods up-1 right-2" style="left: 542px;top: 355px;height: 254px;"><div style="background-position: center 150px;"><!--fence image--></div></div>
-			<div class="obstacle innerwallhorizontal fence Oddly-Shaded-Woods up-1 right-2" style="left: 548px;top: 247px;width: 350px;"><div style="top: 34px;"><!--fence image--></div></div>
+			<div class="obstacle innerwallhorizontal fence Oddly-Shaded-Woods up-1 right-2" style="left: 548px;top: 247px;width: 350px;"><div style="top: -34px;"><!--fence image--></div></div>
 			<div class="obstacle churchpew bible fence Oddly-Shaded-Woods up-1 right-2" style="left: 587px;top: 495px;"><div><!--fence image--></div></div>
 			<div class="obstacle churchpew fence Oddly-Shaded-Woods up-1 right-2" style="left: 587px;top: 404px;"><div><!--fence image--></div></div>
 			<div class="obstacle churchpew fence Oddly-Shaded-Woods up-1 right-2" style="left: 881px;top: 494px;"><div><!--fence image--></div></div>
@@ -215,7 +317,7 @@
 			<div id="Drawing" class="objective Oddly-Shaded-Woods up-1 right-3" style="top: 311px; left: 86px;"></div>
 
 			<div class="obstacle innerwall Oddly-Shaded-Woods up-1 right-3" style="left:139px;top: 355px;height: 254px;transform: scaleX(-1);"><div style="background-position: center 150px;"><!--fence image--></div></div>
-			<div class="obstacle innerwallhorizontal fence Oddly-Shaded-Woods up-1 right-3" style="left: -8px;top: 247px;width: 181px;"><div style="top: 34px;"><!--fence image--></div></div>
+			<div class="obstacle innerwallhorizontal fence Oddly-Shaded-Woods up-1 right-3" style="left: -8px;top: 247px;width: 181px;"><div style="top: -34px;"><!--fence image--></div></div>
 			<div class="obstacle churchpew bible fence Oddly-Shaded-Woods up-1 right-3" style="left: -14px;top: 495px;z-index: 495;"><div><!--fence image--></div></div>
 			<div class="obstacle churchpew fence Oddly-Shaded-Woods up-1 right-3" style="left: -14px;top: 404px;z-index: 404;"><div><!--fence image--></div></div>
 

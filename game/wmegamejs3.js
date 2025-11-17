@@ -126,6 +126,15 @@ document.body.ontouchend = function() {
 
 ///////////////////////Tutorial, titles, & other things over top
 
+window.addEventListener("load", hideLoader);
+
+function hideLoader() {
+  document.getElementById("loader").style.opacity = "0";
+  setTimeout(() => {
+     document.getElementById("loader").style.display = "none";
+  }, 200);
+}
+
 //load the game title in when the page loads
 window.addEventListener("load", screenTitle);
 
@@ -1102,7 +1111,7 @@ function stopCharacter() {
 
     //allow movement again
     character.classList.remove("blocked");
-    
+    //and indicate stopped
     character.classList.add("stopped");
   }, 100);
 }
