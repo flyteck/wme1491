@@ -64,6 +64,7 @@ buttonPressed = "initial";
 //move distance (may have modifiers so I made it a variable)
 var slowMoveSpeed = "8"
 var fastMoveSpeed = "16"
+var moveDelay = "64";
 
 var sprintButton = document.getElementById("sprint-button");
 
@@ -988,7 +989,7 @@ function interactCheck() {
           }
           //subtract a value from it to set it right
           character.style.left = leftPosition - moveDistance + "px";
-        }, 32);
+        }, moveDelay);
       } else {
         //fire move screen event
         moveScreen("left");
@@ -1035,7 +1036,7 @@ function interactCheck() {
         //add a value to it, and pixels to set it right
         setTimeout(() => {
           character.style.left = leftPosition + moveDistance + "px";
-        }, 32);
+        }, moveDelay);
       } else {
         //fire move screen event
         moveScreen("right");
@@ -1082,7 +1083,7 @@ function interactCheck() {
           }
           //subtract a value from it, and pixels to push it up
           character.style.top = topPosition - moveDistance + "px";
-        }, 32);
+        }, moveDelay);
       } else {
         //fire move screen event
         moveScreen("up");
@@ -1129,7 +1130,7 @@ function interactCheck() {
           }
           //add a value to it, and pixels to push it down
           character.style.top = topPosition + moveDistance + "px";
-        }, 32);
+        }, moveDelay);
       } else {
         //fire move screen event
         moveScreen("down");
@@ -1178,7 +1179,7 @@ function interactCheck() {
       }, 150);
       
       character.classList.add("stopped");
-    }, 32);
+    }, moveDelay);
   }
 
   function stopRight() {
@@ -1201,7 +1202,7 @@ function interactCheck() {
       }, 150);
 
       character.classList.add("stopped");
-    }, 32);
+    }, moveDelay);
   }
 
   function stopUp() {
@@ -1224,7 +1225,7 @@ function interactCheck() {
       }, 150);
 
       character.classList.add("stopped");
-    }, 32);
+    }, moveDelay);
   }
 
   function stopDown() {
@@ -1247,7 +1248,7 @@ function interactCheck() {
       }, 150);
 
       character.classList.add("stopped");
-    }, 32);
+    }, moveDelay);
   }
 
 
@@ -1272,7 +1273,7 @@ function interactCheck() {
         setTimeout(() => {
           character.style.transition = "";
         }, 16);
-      }, 32);
+      }, moveDelay);
     }
 
     if(direction == "up") {
@@ -1284,7 +1285,7 @@ function interactCheck() {
         setTimeout(() => {
           character.style.transition = "";
         }, 16);
-      }, 32);
+      }, moveDelay);
     }
 
     if(direction == "down") {
@@ -1297,7 +1298,7 @@ function interactCheck() {
           character.style.transition = "";
           character.style.zIndex = "2";
         }, 16);
-      }, 32);
+      }, moveDelay);
 
     }
 
@@ -1310,14 +1311,14 @@ function interactCheck() {
         setTimeout(() => {
           character.style.transition = "";
         }, 16);
-      }, 32);
+      }, moveDelay);
     }
 
     gameContainer.classList.add("just-moved");
 
     setTimeout(() => {
       moveScreen2(direction);
-    }, 32);
+    }, moveDelay);
 
     //this generates the screen title (delay to be sure that the classes are all updated before generating)
     setTimeout(() => {
