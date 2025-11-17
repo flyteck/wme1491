@@ -975,7 +975,7 @@ function interactCheck() {
       var leftPosition = parseInt(character.style.left);
 
       //only move if there's room to move
-      if (leftPosition > 0) {
+      if (leftPosition > 0 && !gameContainer.classList.contains("just-moved")) {
         setTimeout(() => {
           //if we're on a diagonal, half the move distance since it'll be applied twice
           if (character.classList.contains("up") || character.classList.contains("down")) {
@@ -1022,7 +1022,7 @@ function interactCheck() {
       var leftPosition = parseInt(character.style.left);
 
       //only move if there's room to move
-      if (leftPosition < gameWidth) {
+      if (leftPosition < gameWidth && !gameContainer.classList.contains("just-moved")) {
         //if we're on a diagonal, half the move distance since it'll be applied twice
           if (character.classList.contains("up") || character.classList.contains("down")) {
             //idk why this is the math we need but it is
@@ -1069,7 +1069,7 @@ function interactCheck() {
       var topPosition = parseInt(character.style.top);
 
       //only move if there's room to move
-      if (topPosition > 0) {
+      if (topPosition > 0 && !gameContainer.classList.contains("just-moved")) {
         setTimeout(() => {
           //if we're on a diagonal, half the move distance since it'll be applied twice
           if (character.classList.contains("left") || character.classList.contains("right")) {
@@ -1116,7 +1116,7 @@ function interactCheck() {
       var topPosition = parseInt(character.style.top);
 
       //only move if there's room to move
-      if (topPosition < gameHeight) {
+      if (topPosition < gameHeight && !gameContainer.classList.contains("just-moved")) {
         setTimeout(() => {
           //if we're on a diagonal, half the move distance since it'll be applied twice
           if (character.classList.contains("left") || character.classList.contains("right")) {
