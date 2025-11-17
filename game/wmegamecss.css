@@ -556,7 +556,6 @@ body.touch-only #space-button {
 	left: 0;
 	top: 0;
 	transition:  100ms ease, transform 400ms ease ;
-	margin: 0 6px;
 }
 
 #test-character:after {
