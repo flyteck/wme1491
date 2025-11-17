@@ -478,6 +478,8 @@ function buttonPress() {
     return
   }
 
+  console.log("keydown")
+
   if (eventVar.key === 'ArrowLeft' || eventVar.key === 'a' || character.classList.contains("left") || eventVar.target.id == "left-arrow-button" || direction == "left") {
     //set move distance, and modify if holding shift to sprint
     var moveDistance = +slowMoveSpeed
@@ -632,6 +634,8 @@ function buttonRelease() {
 
 //check for obstacles
 function obstacleCheck(direction,moveDistance) {
+
+  console.log("obstacleCheck")
   //get classes on game container
   var gameContainerClasses = gameContainer.classList.value.split(' ');
   //shift off the location name
@@ -1105,6 +1109,7 @@ function stopCharacter() {
 
 //Secondary Obstacle Check 
 function obstacleCorrect() {
+  console.log("obstacleCorrect")
   //after we stop moving, we do a final obstacle check where we correct any issues
     //check which way we're facing
     if (character.classList.contains("face-left")) { var facing = "left"; }
@@ -1120,10 +1125,10 @@ function obstacleCorrect() {
 
       if (overlap == true) {
         //check where the overlap is [overlap || character || object]
-        var overlapLeftRight = characterBounds.left <= obstacleBounds.right
-        var overlapRightLeft = characterBounds.right >= obstacleBounds.left
-        var overlapTopBottom = characterBounds.top <= obstacleBounds.bottom
-        var overlapBottomTop = characterBounds.bottom >= obstacleBounds.top
+        var overlapLeftRight = characterBounds.left <= obstacleBounds.right;
+        var overlapRightLeft = characterBounds.right >= obstacleBounds.left;
+        var overlapTopBottom = characterBounds.top <= obstacleBounds.bottom;
+        var overlapBottomTop = characterBounds.bottom >= obstacleBounds.top;
 
         //for general obstacles
         if (!obstacle[i].classList.contains("fence")) {
@@ -1160,7 +1165,7 @@ function obstacleCorrect() {
             //see if the bottom is also higher, and if we're in front
             if (overlapBottomBottom == true && inFront === true) {
               //if it is, increase top to push it down
-              character.style.top = parseInt(obstacle[i].style.top) + parseInt(obstacleBounds.height) + parseInt(moveDistance) + "px";
+              character.style.top = parseInt(obstacle[i].style.top) + parseInt(obstacleBounds.height) - parseInt(moveDistance) + "px";
             }
           }
         }
