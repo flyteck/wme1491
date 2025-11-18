@@ -82,6 +82,31 @@ button:not(.game-button):hover, button:not(.game-button):focus {
    flex-direction: column;
 }
 
+#wait:before {
+	transition: 200ms ease;
+   animation: dots 1.8s linear infinite;
+   content: '';
+ }
+
+@keyframes dots {
+    0%, 20% {
+      content: '.';
+    }
+    40% {
+      content: '..';
+    }
+    60% {
+      content: '...';
+    }
+    90%, 100% {
+      content: '';
+    }
+}
+
+#wait.stop:before {
+	animation: none;
+}
+
 .hidden-load {
 	display: block;
 	overflow: hidden;
@@ -686,6 +711,21 @@ body.touch-only #space-button {
 	margin-top: 64px;
 }
 
+.obstacle.fence.grass:after {
+	content: "";
+   background: url(obstacles/grass.png);
+   background-size: 54px auto;
+   height: 26px;
+   width: 100%;
+   bottom: 11px;
+   position: relative;
+}
+
+.obstacle.fence.tree:after {
+	left: 25%;
+	bottom: 0;
+}
+
 /** flip each odd number tree, for variation **/
 .tree:nth-child(odd), .churchpew:nth-child(odd)  {
 	transform: scaleX(-1);
@@ -699,7 +739,7 @@ body.touch-only #space-button {
 .obstacle.fence div {
 	background-size: contain;
 	background-image: url(obstacles/fence.png);
-	height: 108px;
+	height: 96px;
 	width: 100%;
 	position: absolute;
 	bottom: 24px;
@@ -726,9 +766,9 @@ body.touch-only #space-button {
 
 /** tombstone **/
 .obstacle.fence.tombstone {
-	height: 24px;
+	height: 32px;
 	width: 16px;
-	margin-top: 74px;
+	margin-top: 64px;
 }
 
 .obstacle.fence.tombstone div {
@@ -752,7 +792,7 @@ body.touch-only #space-button {
 	background-image: url(obstacles/dirtpatch.png);
 	background-size: contain;
 	position: relative;
-	top: 5%;
+	top: 25%;
 }
 
 .obstacle.fence.t1 div {width: 46px;}
@@ -957,8 +997,24 @@ body.touch-only #space-button {
 
 /** fence version **/
 .obstacle.brambles.fence {
-	width: 192px;
+	width: 142px;
 	margin-top: 64px;
+}
+
+/** boarder wall **/
+.obstacle.brambleswall {
+	margin-top: 0;
+	width: 81.5px;
+	background-repeat: repeat-y;
+	background-image: url(obstacles/brambleswall.png);
+}
+
+/** boarder wall horizontal **/
+.obstacle.brambleswallhorizontal {
+	margin-top: 0;
+	height: 81.5px;
+	background-repeat: repeat-x;
+	background-image: url(obstacles/brambleswallhorizontal.png);
 }
 
 .obstacle.brambles div {
@@ -1137,11 +1193,16 @@ body.touch-only #space-button {
 
 /**** Decorations ****/
 
-.test-decoration {
-	height: 108px;
-	width: 108px;
-	background: red;
+.decoration {
+	position: absolute;
+}
+
+.cattail {
+	height: 54px;
+	width: 46px;
+	background-image: url(obstacles/cattail.png);
 	margin: -16px 0 0;
+	background-size: contain;
 }
 
 .leaves {
@@ -1302,7 +1363,7 @@ body.touch-only #space-button {
 	background-image: url(objectives/candyapple.png);
 }
 
-#Drawing.objective {
+#Drawing.objective, #Hair.objective {
 	height: 46px;
 	width: 46px;
 }
@@ -1313,6 +1374,15 @@ body.touch-only #space-button {
 
 #DaisyInventory.collected span {
 	background-image: url(obstacles/flower2.png);
+}
+
+#Drawing.objective {
+	height: 46px;
+	width: 46px;
+}
+
+#Hair, #HairInventory.collected span {
+	background-image: url(objectives/hair.png);
 }
 
 /** NPCs **/

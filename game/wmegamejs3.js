@@ -3,23 +3,25 @@
 ////KNOWN BUGS
 //Can walk over church pews due to them being fences. Need to have some separate object type maybe idk how to fix this one yet
 //Leaf stutter on mobile -- this is an optimization thing. I should have a clause to cancel calling a pause when you go quickly between two
-// object that make the same sfx, possibly by adding a class
+//Object that make the same sfx, possibly by adding a class
+//SO I found a way to randomly clip through fences VERY accidentally, and there's still some sticking near them. IDK man.
+
+//the church launches you -- I think I should have a check for height/width, and if it's over a certain threshold, just do the normal double move distance
+//and only on diagonals
+
+//Menu open/close doesn't interact w forest music (maybe I'll just replace the SRC etc)
+
 //Need to optimize obstacle check - old method was buggy
-//Crow stutters between animations sometimes
-//Should set the mobile detects as variables, for cleanliness
 
 //For the overlap detection -- to make it work better, instead of going back and forth, I should check FIRST if the current position
 //+ move distance would overlap -- if it would, cancel; if not, continue
 //I think this is kind of what I have but I think there's movement IN the overlap which there shouldn't be
 
-//Menu open/close doesn't interact w forest music (maybe I'll just replace the SRC etc)
 
 ////PLANS
 //Fullscreen: needs to use zoom or else pixel alignments break. Would need to dynamically find the right zoom number and use that with JS
-
-//Guh I kinda think I need to redo dialogue.... I would want it to check for lines going up by 1 each time, and once it hits the end, add repeat
-
 ///for bullfrog: on change screen, check gamecontainer classlist, if it's got one of the bottom middle three, play; otherwise, pause
+
 
 //this is evil and it needs to be defined globally I fucking guess
 var crowInterval
@@ -131,6 +133,7 @@ function hideLoader() {
   document.getElementById("loader").style.opacity = "0";
   setTimeout(() => {
      document.getElementById("loader").style.display = "none";
+     document.getElementById("wait").classList.add("stop");
   }, 200);
 }
 
@@ -697,7 +700,7 @@ function obstacleCheck(direction,moveDistance) {
           document.getElementById("ambience-player").currentTime = 0;
 
           for (i = 0; i < fog.length; i++) {
-            fog[i].style.opacity = "0.3";
+            fog[i].style.opacity = "0";
           }
 
           document.getElementById("forest-player").play();
@@ -1113,7 +1116,7 @@ function stopCharacter() {
     }, 150);
 
     //unlike obstacleCheck, this actually remedies any overlap
-    obstacleCorrect()
+    obstacleCorrect();
 
     //allow movement again
     character.classList.remove("blocked");
@@ -1130,6 +1133,11 @@ function obstacleCorrect() {
     if (character.classList.contains("face-right")) { var facing = "right"; }
     if (character.classList.contains("face-up")) { var facing = "up"; }
     if (character.classList.contains("face-down")) { var facing = "down"; }
+
+    var moveDistance = +slowMoveSpeed
+    if (character.classList.contains("sprint") || sprintButton.classList.contains("active")) {
+      var moveDistance = +fastMoveSpeed;
+    }
 
     for (i = 0; i < obstacle.length; i++) {
       var obstacleBounds = obstacle[i].getBoundingClientRect();
@@ -1155,7 +1163,7 @@ function obstacleCorrect() {
           }
 
           if (facing == "up" && overlapTopBottom == true) {
-            character.style.top = parseInt(obstacle[i].style.top) + parseInt(moveDistance) + "px";
+            character.style.top = parseInt(obstacle[i].style.top) + parseInt(obstacleBounds.height) + parseInt(moveDistance) + "px";
           }
 
           if (facing == "down" && overlapBottomTop == true) {
@@ -1221,6 +1229,15 @@ function moveScreen(direction) {
     if(direction == "up" || direction == "down") {
       character.style.top = newPosition;
     }
+
+    if (direction == "down") {
+      character.style.zIndex = "1";
+    }
+
+    if (direction == "up") {
+      character.style.zIndex = "gameHeight";
+    }
+
     setTimeout(() => {
       character.style.opacity = "";
       character.style.transition = "";
