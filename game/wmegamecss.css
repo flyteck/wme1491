@@ -206,6 +206,20 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 	margin-right: 40px;
 }
 
+#health {
+	opacity: 0;
+	transition: 400ms ease 200ms;
+	position: absolute;
+   right: var(--inventory-width);
+   top: 0;
+   margin: 10px;
+   height: 20px;
+   width: 62px;
+   background-image: url(ui/healthbar.png);
+   background-size: contain;
+   z-index: 1000;
+}
+
 /*** Mobile Controller ***/
 
 #mobile-controls {
@@ -385,6 +399,60 @@ body.touch-only #space-button {
 	padding: 10px;
 }
 
+#dialogue-loader button {
+	font-family: 'Coders Crux';
+   margin: 18px;
+   position: relative;
+   background: #801c1c;
+   padding: 8px 12px 6px;
+   border: 1px solid var(--accent);
+   border-radius: 4px;
+   transition: 400ms ease;
+   text-transform: none;
+}
+
+#dialogue-loader button img {
+	width: 50px;
+}
+
+.daisy-button, .hair-button, .feather-button, .bone-button, .drawing-button  {
+	display: none;
+}
+
+.option-daisy .daisy-button, .option-hair .hair-button, .option-feather .feather-button, .option-bone .bone-button, .option-drawing .drawing-button  {
+	display: block;
+}
+
+#dialogue-loader button.active {
+	background-color: #490808;
+}
+
+#dialogue-loader button.active:before {
+	background-image: url(ui/arrow.png);
+   content: "";
+   width: 12px;
+   height: 20px;
+   position: absolute;
+   left: -20px;
+   top: calc(50% - 10px);
+   animation: bounceHorizontal 1s infinite 500ms;
+   background-size: contain;
+}
+
+#dialogue-loader .flex-row {
+	justify-content: center;
+}
+
+@keyframes bounceHorizontal { 
+	0% { transform: translateX(0);}
+	25% { transform: translateX(-5px);}
+	50% { transform: translateX(0);}
+}
+
+#dialogue-loader:has(button) + #dialogue-arrow {
+	display: none;
+}
+
 #speech-bubble {
 	width: 550px;
 	height: 140px;
@@ -394,6 +462,12 @@ body.touch-only #space-button {
 	border: 2px solid black;
 	position: relative;
 	margin: 10px;
+}
+
+#Gnash-talking #speech-bubble {
+	background: var(--black);
+	color: var(--white);
+	font-family: 'DoubleHomicide';
 }
 
 .dialogue-popup {
@@ -602,7 +676,7 @@ body.touch-only #space-button {
 	position: absolute;
 	left: 0;
 	top: 0;
-	transition:  100ms ease, transform 400ms ease ;
+	transition: 100ms ease, transform 400ms ease, filter 1s ease ;
 }
 
 #test-character:after {
@@ -701,7 +775,38 @@ body.touch-only #space-button {
     background-size: 64px;
     width: 100%;
     height: 100%;
-    clip-path: polygon(0% 57%, 8% 49%, 16% 44%, 25% 38.5%, 37% 37%, 45% 37%, 50% 36%, 55% 35%, 61% 35%, 68% 32.5%, 71% 33%, 74% 33%, 83% 36%, 90% 40%, 98% 45%, 100% 45.5%, 100% 100%, 0% 100%);
+}
+
+.water.left-1.down-1 {
+	top: 1px;
+	mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110501983_sF4kpBJeBQ1YMPM.png);
+   mask-repeat: no-repeat;
+   mask-size: 100% 100%;
+}
+
+.water.down-1:not(.right-1):not(.left-1):not(.right-2) {
+	top: 1px;
+	mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110501920_OEFIfCEq1AdYLNO.png);
+	mask-repeat: no-repeat;
+   mask-size: 100% 100%;
+}
+
+.water.right-1.down-1 {
+	top: 1px;
+	mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110501705_Nu4nDe1QQYTh2gk.png);
+   mask-repeat: no-repeat;
+   mask-size: 100% 100%;
+}
+
+.water.right-2.down-1 {
+	top: 1px;
+	mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110502070_msKiAQRCXZEYfJi.png);
+   mask-repeat: no-repeat;
+   mask-size: 100% 100%;
+}
+
+.waterBlock {
+	z-index: 1!important;
 }
 
 /** fence style; obstacles with a solid base but open top/bottom have the fence class **/
@@ -762,6 +867,22 @@ body.touch-only #space-button {
 	background-size: 10px auto;
 	position: absolute;
 	top: -36px;
+}
+
+/** wooden fence **/
+.obstacle.woodenfence {
+	width: 234px;
+	height: 40px;
+}
+
+.obstacle.woodenfence div {
+	background-size: contain;
+	background-image: url(obstacles/fencewood.png);
+	background-position: 72px;
+	height: 56px;
+	width: 100%;
+	position: absolute;
+	bottom: 24px;
 }
 
 /** tombstone **/
@@ -1001,7 +1122,7 @@ body.touch-only #space-button {
 	margin-top: 64px;
 }
 
-/** boarder wall **/
+/** border wall **/
 .obstacle.brambleswall {
 	margin-top: 0;
 	width: 81.5px;
@@ -1009,7 +1130,7 @@ body.touch-only #space-button {
 	background-image: url(obstacles/brambleswall.png);
 }
 
-/** boarder wall horizontal **/
+/** border wall horizontal **/
 .obstacle.brambleswallhorizontal {
 	margin-top: 0;
 	height: 81.5px;
@@ -1017,6 +1138,7 @@ body.touch-only #space-button {
 	background-image: url(obstacles/brambleswallhorizontal.png);
 }
 
+/** solid version **/
 .obstacle.brambles div {
 	width: 211px;
 	height: 131px;
@@ -1026,6 +1148,11 @@ body.touch-only #space-button {
 	flex: 0 0 211px;
 	margin-left: 25%;
 	margin-left: 64px;
+}
+
+.left-2 .obstacle.brambleswallhorizontal, .left-3 .obstacle.brambleswallhorizontal, .left-1.up-1 .obstacle.brambleswallhorizontal,
+.left-2 .obstacle.brambleswall, .left-3 .obstacle.brambleswall, .left-1.up-1 .obstacle.brambleswall {
+	filter: brightness(0.6);
 }
 
 .obstacle.brambles:nth-child(odd) div {
@@ -1147,6 +1274,12 @@ body.touch-only #space-button {
    mask-size: 100% 100%;
 }
 
+.fog.up-1:not(.left-1):not(.left-2) {
+   mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110506101_Rug5FfHv9kJ30SN.png);
+   mask-repeat: no-repeat;
+   mask-size: 100% 100%;
+}
+
 .fog.left-2.up-1 {
    mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110103005_qwXzOAOOpaKv0a6.png?1762829937);
    mask-repeat: no-repeat;
@@ -1203,6 +1336,18 @@ body.touch-only #space-button {
 	background-image: url(obstacles/cattail.png);
 	margin: -16px 0 0;
 	background-size: contain;
+	margin-top: 35px;
+}
+
+/**** Ripples go under cattails, but in the water div ***/
+.ripples {
+	 background-image: url(obstacles/ripples.png);
+    width: 22px;
+    height: 10px;
+    margin-top: 83px;
+    margin-left: 12px;
+    background-size: contain;
+    opacity: 60%;
 }
 
 .leaves {
@@ -1449,6 +1594,28 @@ body.touch-only #space-button {
 
 #Crow.npc.call {
 	background-image: url(charactersprites/crowCaw.png);
+}
+
+/* Gnash is a bit different, since we want him to approach the player. SO we treat his trigger like the NPC instead */
+
+#GnashPix {
+	margin-top: -10px;
+	width: 160px;
+	height: 93px;
+	background-image: url(charactersprites/gnashwalk.png);
+	transition: 200ms ease, 6s linear left;
+	background-position: bottom right;
+	background-repeat: no-repeat;
+	filter: contrast(0.95) brightness(1.5);
+}
+
+#Gnash.npc {
+    height: var(--game-height);
+    margin-top: 0;
+    width: 32px;
+    top: 0;
+    left: 500px;
+    position: absolute;
 }
 
 

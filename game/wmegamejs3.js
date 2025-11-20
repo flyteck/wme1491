@@ -13,20 +13,25 @@
 
 //Need to optimize obstacle check - old method was buggy
 
-//For the overlap detection -- to make it work better, instead of going back and forth, I should check FIRST if the current position
-//+ move distance would overlap -- if it would, cancel; if not, continue
-//I think this is kind of what I have but I think there's movement IN the overlap which there shouldn't be
-
-
 ////PLANS
 //Fullscreen: needs to use zoom or else pixel alignments break. Would need to dynamically find the right zoom number and use that with JS
 ///for bullfrog: on change screen, check gamecontainer classlist, if it's got one of the bottom middle three, play; otherwise, pause
+
+//For animating dialogue -- it would be spliced by letters, and then inserted one at a time with a small delay via innerHTML+
+//Would need to either disable space, or have space clear the interval tho to prevent skipping
 
 
 //this is evil and it needs to be defined globally I fucking guess
 var crowInterval
 var expressions = ""
 var direction = "initial"
+
+//need these silly things for Gnash dialogue
+var gnash = false;
+var inDialogue = false;
+var talked = false;
+var gnashOptions = false;
+var currentOption = "initial"
 
 const obstacle = document.getElementsByClassName("obstacle");
 
@@ -110,7 +115,7 @@ function groundZIndex() {
   var ground = document.querySelectorAll(".ground") 
   zIndexSort()
   for (i = 0; i < ground.length; i++) {
-    ground[i].style.zIndex = 1;
+    ground[i].style.zIndex = "1";
   }
 }
 
@@ -244,7 +249,7 @@ function buttonPress() {
     return;
   }
 
-  if (eventVar.key === 'q' || eventVar.key === 'Tab') {
+  if (eventVar.key === 'q') {
     //open/close menu
     //if there's dialogue open, don't do shit
     if (document.querySelector(".dialogue-popup").id != "") {
@@ -282,9 +287,15 @@ function buttonPress() {
   }
   
   //on spacebar click, call item check. if it returns true, modify the clicked item
-  if (eventVar.key === ' ' || eventVar.target.id == "dialogue-arrow" || eventVar.target.id == "interact-button") {
+  if (eventVar.key === ' ' || eventVar.target.id == "dialogue-arrow" || eventVar.target.id == "interact-button" || (gnash == true && inDialogue == false)) {
 
     var interactFound = interactCheck();
+
+    //this makes it so all space bar clicks after the Gnash dialogue opens work normally
+    if (gnash == true && inDialogue == false) {
+      inDialogue = true
+      var noSound = true;
+    }
 
     if (interactFound != undefined || document.querySelector(".last-line") != null) {
 
@@ -304,8 +315,19 @@ function buttonPress() {
       document.getElementById("advance").currentTime = 0;
       document.getElementById("advance2").currentTime = 0;
 
-      document.getElementById("advance").play();
-      document.getElementById("advance2").play();
+      //we don't want these to play when we open Gnash
+      if (!noSound == true) {
+        document.getElementById("advance").play();
+        document.getElementById("advance2").play();
+      }
+
+      noSound = false;
+
+      //this is for if we're in the depths of Gnash dialogue; skips out of here
+      if (gnashOptions == true) {
+        gnashInteraction();
+        return;
+      }
 
       //check if we're on the last line of dialogue, and if so, do something different
       if (dialoguePopUp.classList.contains("last-line")) {
@@ -320,6 +342,9 @@ function buttonPress() {
         if (interactFound != null) {        
           //add repeat for characters so we know they're done their main dialogue (items dissapear after interact, so this excludes them)
           interactFound.classList.add("repeat");
+          if (gnash == true) {
+            document.getElementById("Gnash").style.display = "none";
+          }
         }
 
         if (interactFound.classList.contains("objective")) {
@@ -341,7 +366,6 @@ function buttonPress() {
         var npcName = document.getElementById(interactFound.id).id;
 
         //if we've talked to this NPC already, they say their extra line.
-
         dialoguePopUp.style.display = "flex";
 
         //get the name of the NPC
@@ -401,7 +425,46 @@ function buttonPress() {
       }
 
       //make the textbox visible
-      dialoguePopUp.style.display = "flex";
+      if (interactFound.id != "Gnash") {
+        dialoguePopUp.style.display = "flex";
+      }
+
+      //this is for gnash specifically -- set the timeout to give time for Gnash Animation
+      if (interactFound.id == "Gnash" && talked == false) {
+        gnashAnimation();
+        setTimeout(() => {
+          //open the box
+          dialoguePopUp.style.display = "flex";
+          //switch to Gnash's static animation
+          document.getElementById("GnashPix").style.backgroundImage = "url(charactersprites/gnashpix.png)"
+          //set talked to true so this doesn't fire again
+          talked = true;
+
+          //set the buttonpressed var to the current event trigger, to recall on mobile
+          buttonPressed = eventVar;
+
+          //don't ask me why this needs to have a timeout inside and out but it won't run right otherwise
+          setTimeout(() => {
+            if (smallMobile == true || appleDevice == true) {
+              //if we're on mobile,
+              if (mouseDown == 1) {
+                //and button is being pressed, fire again 
+                setTimeout(() => {
+                  buttonPress.call();
+                }, 32);
+              }
+
+              if (mouseDown == 0) {
+                //if button isn't being pressed, end 
+                setTimeout(() => {
+                  buttonRelease();
+                }, 32);
+              }
+            }
+          }, 32);
+
+        }, 6000);
+      }
 
       //get the name of the NPC
       var npcName = document.getElementById(interactFound.id).id;
@@ -455,7 +518,6 @@ function buttonPress() {
       }
 
       //get the first dialogue chunk, put it in the textbox
-
       dialogueSplit()
       function dialogueSplit() {
         var dialogueChunk = words.slice(0,1);
@@ -479,6 +541,71 @@ function buttonPress() {
           }
         } else {
           dialoguePopUp.classList.add("last-line");
+        }
+      }
+    }
+  }
+
+  //for Gnash, if there's buttons, allow toggling and selecting
+  if (document.querySelector(".dialogue-popup").id == "Gnash-talking") {
+    var GnashBox = document.getElementById("Gnash-talking");
+
+    if (GnashBox.querySelector("button") != null) {
+      gnashOptions = true;
+
+      //get all buttons in the current dialogue box, make an array
+      var buttons = GnashBox.querySelectorAll("button");
+      var buttonArray = Array.from(buttons)
+
+      if (eventVar.key === 'ArrowLeft' || eventVar.key === 'a' || character.classList.contains("left") || eventVar.target.id == "left-arrow-button" || direction == "left") {
+        //sounds 
+        document.getElementById("advance2").pause();
+        document.getElementById("advance2").currentTime = 0;
+        document.getElementById("advance2").play();
+
+        //get the active button
+        var activeButton = buttonArray.find((element) => element.classList.contains("active"));
+        //it's index
+        var buttonIndex = buttonArray.indexOf(activeButton);
+        //and the last button
+        var lastButton = buttonArray.length - 1;
+
+        //remove active from the current button
+        activeButton.classList.remove("active");
+
+        //if we're not on the first button,
+        if (buttonIndex != 0) {
+          //subtract one from the index
+          buttonArray[buttonIndex - 1].classList.add("active");
+        } else {
+          //otherwise, add to the last button
+          buttonArray[lastButton].classList.add("active")
+        }
+      }
+
+      if (eventVar.key === 'ArrowRight' || eventVar.key === 'd' || character.classList.contains("right") || eventVar.target.id == "right-arrow-button" ||  direction == "right") {
+        //sounds 
+        document.getElementById("advance2").pause();
+        document.getElementById("advance2").currentTime = 0;
+        document.getElementById("advance2").play();
+
+        //get the active button
+        var activeButton = buttonArray.find((element) => element.classList.contains("active"));
+        //it's index
+        var buttonIndex = buttonArray.indexOf(activeButton);
+        //and the last button
+        var lastButton = buttonArray.length - 1;
+
+        //remove active from the current button
+        activeButton.classList.remove("active");
+
+        //if we're not on the last button,
+        if (buttonIndex != lastButton) {
+          //add one to the index
+          buttonArray[buttonIndex + 1].classList.add("active");
+        } else {
+          //otherwise, add to the first button
+          buttonArray[0].classList.add("active")
         }
       }
     }
@@ -703,6 +830,9 @@ function obstacleCheck(direction,moveDistance) {
             fog[i].style.opacity = "0";
           }
 
+          document.getElementById("health").style.opacity = "1";
+          character.style.filter = "brightness(0.8) hue-rotate(-45deg) saturate(1.2)";
+
           document.getElementById("forest-player").play();
           document.getElementById("forest-ambience-player").play();
         }
@@ -717,6 +847,9 @@ function obstacleCheck(direction,moveDistance) {
           for (i = 0; i < fog.length; i++) {
             fog[i].style.opacity = "";
           }
+
+          document.getElementById("health").style.opacity = "";
+          character.style.filter = "";
 
           document.getElementById("background-player").play();
           document.getElementById("ambience-player").play();
@@ -805,6 +938,12 @@ function obstacleCheck(direction,moveDistance) {
           var overlapRightLeft = characterBounds.right >= obstacleBounds.left;
           var overlapTopBottom = characterBounds.top <= obstacleBounds.bottom;
           var overlapBottomTop = characterBounds.bottom >= obstacleBounds.top;
+          
+          //check if we're AT GNASH
+          if (obstacle[i].id == "Gnash") {
+            gnash = true;
+            return true;
+          }
 
           if (overlapLeftRight == true && character.classList.contains("left")) {
             if (smallMobile == false && appleDevice == false) {
@@ -917,6 +1056,8 @@ function interactCheck() {
     if (overlap === true && !objective[i].classList.contains("collected")) {
       //if player is touching one (and it hasn't been found), return which one
       var foundItem = objective[i];
+      //add the option to the dialogue loader, for later
+      document.getElementById("dialogue-loader").classList.add("option-" + objective[i].id.toLowerCase());
       return foundItem
     }
   }
@@ -1231,7 +1372,7 @@ function moveScreen(direction) {
     }
 
     if (direction == "down") {
-      character.style.zIndex = "1";
+      character.style.zIndex = "2";
     }
 
     if (direction == "up") {
@@ -1460,6 +1601,121 @@ function crowCall() {
   setTimeout(() => {
       crow.classList.remove("call");
   }, 2000);
+}
+
+function gnashAnimation() {
+  var gnash = document.getElementById("GnashPix");
+  //move gnash to the left
+  gnash.style.left = "304px";
+}
+
+function gnashInteraction() {
+  var dialoguePopUp = document.querySelector(".dialogue-popup");
+  var dialogueLoader = document.getElementById("dialogue-loader");
+  var GnashBox = document.getElementById("Gnash-talking");
+
+  //get the pressed button [if there are buttons]
+  if (currentOption == "initial") {
+    currentOption = document.querySelector("button.active").id;
+  }
+
+  //go through the dialogue list, and find the content
+  var gnashDialogue = getGnashDialogue().toString();
+
+  function getGnashDialogue() {
+    //iterate through the list to find a name match,
+    for (i = 0; i < gnashDialogueOptions.length; i++) {
+        if (currentOption == gnashDialogueOptions[i].option) {
+          //then grab their dialogue
+           return gnashDialogueOptions[i].dialogue;
+        }
+      }
+    }
+
+    //split dialogue at the hearts (♡) [this allows us to break up our lines nicely,
+    var words = gnashDialogue.split('♡');
+
+    //if there's expressions, shift one off
+    if (expressions != "") {
+      expressions.shift();
+    }
+
+    //if we don't have an option selected, do that + grab expressions
+    if (!dialoguePopUp.classList.contains("option-selected")) {
+      //we separate those out (odd numbers expressions, even is text),
+      var words = gnashDialogue.split('♡').filter((e, i) =>  i % 2 != 0);
+      //and add "talking now" so we don't do it again
+      expressions = gnashDialogue.split('♡').filter((e, i) =>  i % 2 == 0);
+      //and we add option selected to prevent this happening again
+      dialoguePopUp.classList.add("option-selected");
+
+      //we will need to check if the dialogue-loader is empty of buttons on the item toggle, and if so, do some other shit
+
+      //this is used to delete items you've already given away
+      if (currentOption == "option-drawing" || currentOption == "option-daisy" || currentOption == "option-hair" || currentOption == "option-feather" || currentOption == "option-clover" || currentOption == "option-bone") {
+        //hide this button for future loops
+        document.getElementById("dialogue-loader").classList.remove(currentOption);
+
+        //and we need to get rid of it in the inventory too
+      }
+    }
+
+    //set the viewable image with the proper SRC (this must be after things are split to make sure it includes the first expression)
+      var interactDisplay = document.getElementById("interact-display");
+      if (expressions[0] != "null") {
+        //get the correct sprite + expression
+        interactDisplay.src = "objectives/" + "gnash" + expressions[0].toLowerCase() + ".png";
+      } else {
+        //otherwise, just do it without the expression
+        interactDisplay.src = "objectives/" + "gnash" + ".png";
+      }
+
+      //get the first dialogue chunk, put it in the textbox
+      dialogueSplit();
+      function dialogueSplit() {
+        var dialogueChunk = words.slice(0,1);
+        //and clean it up (remove excess commas and put desired ones back in)
+        dialogueLoader.innerHTML = dialogueChunk.toString().replaceAll(",", " ").replaceAll("  ", ", ");
+        
+        words.shift(); 
+
+        //if there's words left after the splice
+        if (words.length != 0) {
+          //set the global dialogue var to the new remaining text
+          for (i = 0; i < gnashDialogueOptions.length; i++) {
+            if (currentOption == gnashDialogueOptions[i].option) {
+              //and mash the dialogue back together
+              gnashDialogueOptions[i].dialogue = words.join("♡");
+            }
+          }
+        } else {
+          //otherwise, clear the option-selected class, and set currentOption to initial to re-run the option select code
+          dialoguePopUp.classList.remove("option-selected");
+          currentOption = "initial"
+        }
+      }
+
+      //this adds active to the first button
+      var GnashBox = document.getElementById("Gnash-talking");
+      if (GnashBox.querySelector("button") != null) {
+        var buttons = GnashBox.querySelectorAll("button");
+        for (i = 0; i < gnashDialogueOptions.length; i++) {
+          //if a button is visible,
+          if (buttons[i].checkVisibility() == true) {
+            //pause transitions
+            buttons[i].style.transition = "0ms all";
+            //make it active
+            buttons[i].classList.add("active");
+            //and cut the loop so we just have one
+            break;
+          }
+        }
+
+        for (i = 0; i < gnashDialogueOptions.length; i++) {
+          //and then make sure to reset transitions
+          buttons[i].style.transition = "";
+        }
+      }
 }
 
 ///////////////////////

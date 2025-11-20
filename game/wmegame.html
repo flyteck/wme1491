@@ -12,6 +12,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Jacquard+12&family=Micro+5&display=swap" rel="stylesheet">
 
 	<script src="dialogue.js"></script>
+	<script src="dialoguegnash.js"></script>
 
 	<title>WME 1273</title>
 </head>
@@ -37,6 +38,7 @@
 	<audio id="leaves" class="sound-effect ground-sound" src="music/leaves.wav" allow="autoplay"></audio>
 
 	<div id="game-wrapper">
+		<div id="health"></div>
 		<div id="loader">
 			<img src="charactersprites/lopeleft.png" style="height: 58px;margin:10px;filter:brightness(0) invert(1);">
 			<span>Loading<span id="wait"></span></span>
@@ -139,8 +141,8 @@
 
 			</div>
 		</div>
-		<div id="game-container" class="Oddly-Shaded-Woods down-1">
-			<div id="test-character" style="left:448px;top:320px;"><span id="nose"></span></div>
+		<div id="game-container" class="Oddly-Shaded-Woods left-3 up-1">
+			<div id="test-character" style="left:648px;top:320px;"><span id="nose"></span></div>
 
 			<!------------------------ Level 1 ------------------------>
 			<!--------- Screen 11 / Initial Screen --------->
@@ -165,6 +167,13 @@
 			<!--Objectives -->
 			<div id="CandyApple" class="objective CandyApple Oddly-Shaded-Woods initial-screen" style="left:240px;top:304px;"></div>
 			<!-- Characters -->
+
+			<!--------- Screen 1 / Up 1 Left 3 --------->
+
+			<div class="obstacle brambleswall Oddly-Shaded-Woods up-1 left-3" style="left: 0; top:0; height: 100%;"></div>
+			<div id="GnashPix" class="Oddly-Shaded-Woods up-1 left-3 npc" style="left: -195px;top: 253px;"></div>
+
+			<div id="Gnash" class="npc obstacle Oddly-Shaded-Woods up-1 left-3"></div>
 
 			<!--------- Screen 2 / Up 1 Left 2 --------->
 
@@ -223,9 +232,18 @@
 			<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods up-1 left-1" style="left: -117px;top: 460px;"><div><!--fence image--></div></div>
 
 			<!--------- Screen 4 / Up 1 --------->
+			<div class="fog Oddly-Shaded-Woods decoration up-1">
+				<div class="obstacle brambles Oddly-Shaded-Woods up-1" style="left: 360px;top: -17px;"><div><!--fence image--></div></div>
+				<div class="obstacle hauntedtree2 fence Oddly-Shaded-Woods up-1" style="left: 294px; top: 16px;"><div><!--fence image--></div></div>
+				<div class="obstacle brambles Oddly-Shaded-Woods up-1" style="left: 220px; top: 43px;"><div><!--fence image--></div></div>
+				<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods up-1" style="left: 133px;top: 80px;"><div><!--fence image--></div></div>
+				<div class="obstacle brambles Oddly-Shaded-Woods up-1" style="left: 70px; top: 113px;"><div><!--fence image--></div></div>
+				<div class="obstacle fence brambles Oddly-Shaded-Woods up-1" style="left: -76px; top: 136px;"><div><!--fence image--></div></div>
+			</div>
+
 			<div class="obstacle treeblock Oddly-Shaded-Woods up-1" style="left: 464px;top: -24px; width: 50%;"><div><!--fence image--></div></div>
 
-			<div class="obstacle brambles Oddly-Shaded-Woods up-1" style="left: 360px;top: -27px;"><div><!--fence image--></div></div>
+			<div class="obstacle brambles Oddly-Shaded-Woods up-1" style="left: 360px;top: -17px;"><div><!--fence image--></div></div>
 			<div class="obstacle hauntedtree2 fence Oddly-Shaded-Woods up-1" style="left: 294px; top: 16px;"><div><!--fence image--></div></div>
 			<div class="obstacle brambles Oddly-Shaded-Woods up-1" style="left: 220px; top: 43px;"><div><!--fence image--></div></div>
 			<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods up-1" style="left: 133px;top: 80px;"><div><!--fence image--></div></div>
@@ -621,6 +639,11 @@
 				<span class="flower2"></span>
 			</div>
 
+			<!--------- Screen 15 / Left 3 Down 1 --------->
+
+			<div class="obstacle brambleswall Oddly-Shaded-Woods down-1 left-3" style="left: 0; top:0; height: 100%;"></div>
+			<div class="obstacle brambleswallhorizontal Oddly-Shaded-Woods down-1 left-3" style="left: 0; top:490px; width: 100%;"></div>
+
 			<!--------- Screen 16 / Left 2 Down 1 --------->
 			<div class="obstacle hauntedtree2 fence Oddly-Shaded-Woods left-2 down-1" style="left: 520px;top: -58px;"><div><!--fence image--></div></div>
 			<div class="obstacle brambles Oddly-Shaded-Woods left-2 down-1" style="left: 560px;top: 10px;"><div><!--fence image--></div></div>
@@ -632,7 +655,7 @@
 			<div class="obstacle brambles Oddly-Shaded-Woods left-2 down-1" style="left: 570px;top: 390px;"><div><!--fence image--></div></div>
 			<div class="obstacle brambles Oddly-Shaded-Woods left-2 down-1" style="left: 620px;top: 450px;"><div><!--fence image--></div></div>
 			<div class="obstacle brambles Oddly-Shaded-Woods left-2 down-1" style="left: 680px;top: 460px;"><div><!--fence image--></div></div>
-			<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods left-2 down-1" style="left: 650px; top: 480px;"><div><!--fence image--></div></div>
+			<div class="obstacle hauntedtree1 fence Oddly-Shaded-Woods left-2 down-1" style="left: 650px; top: 500px;"><div><!--fence image--></div></div>
 
 			<div class="obstacle fence deadtree tree Oddly-Shaded-Woods left-2 down-1" style="left: 662px; top: 86px;"><div><!--fence image--></div></div>
 			<div class="obstacle brambleswallhorizontal Oddly-Shaded-Woods down-1 left-2" style="left: 0; top:490px; width: 80%;"></div>
@@ -643,12 +666,48 @@
 
 			<div id="forest-entry" class="Oddly-Shaded-Woods left-2 down-1"></div>
 
-			<!--------- Screen 15 / Left 3 Down 1 --------->
-
-			<div class="obstacle brambleswall Oddly-Shaded-Woods down-1 left-3" style="left: 0; top:0; height: 100%;"></div>
-			<div class="obstacle brambleswallhorizontal Oddly-Shaded-Woods down-1 left-3" style="left: 0; top:490px; width: 100%;"></div>
+			<div class="obstacle woodenfence Oddly-Shaded-Woods down-1 left-2" style="top: 574px;width: 534px;left: 800px;"><div><!--fence image--></div></div>
 
 			<!--------- Screen 17 / Left 1 Down 1 --------->
+
+			<div class="water Oddly-Shaded-Woods left-1 down-1">
+				<div class="decoration ripples Oddly-Shaded-Woods left-1 down-1" style="left: 602px;top: 433px"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods left-1 down-1" style="left: 862px;top: 313px"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods left-1 down-1" style="left: 772px;top: 383px"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods left-1 down-1" style="left: 651px;top: 443px"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods left-1 down-1" style="left: 601px; top: 503px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods left-1 down-1" style="left: 521px; top: 493px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods left-1 down-1" style="left: 541px; top: 473px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods left-1 down-1" style="left: 631px; top: 403px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods left-1 down-1" style="left: 661px; top: 383px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods left-1 down-1" style="left: 701px; top: 353px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods left-1 down-1" style="left: 801px; top: 283px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods left-1 down-1" style="left: 831px; top: 269px;"></div>
+			</div>
+
+			<div class="obstacle waterBlock Oddly-Shaded-Woods left-1 down-1" style="left: 574px;top: 571px;height: 17px;width: 32px"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods left-1 down-1" style="left: 606px;top: 541px;height: 55px;width: 32px"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods left-1 down-1" style="left: 638px;top: 513px;height: 75px;width: 32px"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods left-1 down-1" style="left: 670px;top: 493px;height: 115px;width: 32px"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods left-1 down-1" style="left: 702px;top: 473px;height: 115px;width: 32px"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods left-1 down-1" style="left: 734px;top: 451px;height: 157px;width: 32px"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods left-1 down-1" style="left: 766px;top: 431px;height: 157px;width: 32px"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods left-1 down-1" style="left: 798px;top: 411px;height: 178px;width: 32px"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods left-1 down-1" style="left: 830px;top: 386px;height: 202px;width: 32px"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods left-1 down-1" style="left: 860px;top: 363px;height: 225px;width: 32px"></div>
+			
+			<div class="decoration cattail Oddly-Shaded-Woods left-1 down-1" style="left: 602px;top: 433px"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods left-1 down-1" style="left: 862px;top: 313px"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods left-1 down-1" style="left: 772px;top: 383px"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods left-1 down-1" style="left: 651px;top: 443px"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods left-1 down-1" style="left: 601px; top: 503px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods left-1 down-1" style="left: 521px; top: 493px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods left-1 down-1" style="left: 541px; top: 473px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods left-1 down-1" style="left: 631px; top: 403px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods left-1 down-1" style="left: 661px; top: 383px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods left-1 down-1" style="left: 701px; top: 353px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods left-1 down-1" style="left: 801px; top: 283px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods left-1 down-1" style="left: 831px; top: 269px;"></div>
 
 			<div class="leafmap4 ground Oddly-Shaded-Woods down-1 left-1"></div>
 			<div class="leaves leafsprawl leafsprawl4left1 ground Oddly-Shaded-Woods down-1 left-1"></div>
@@ -657,14 +716,186 @@
 			<div class="obstacle fence bigtreegreen tree Oddly-Shaded-Woods down-1 left-1" style="left: 288px; top:-18px;"><div><!--fence image--></div></div>
 			<div class="obstacle fence bigtreeyellow tree Oddly-Shaded-Woods down-1 left-1" style="left: 118px; top: -42px;"><div><!--fence image--></div></div>
 
+			<div class="obstacle woodenfence Oddly-Shaded-Woods down-1 left-1" style="left: -61px;top: 574px;width: 606px;"><div><!--fence image--></div></div>
+
 			<!--------- Screen 18 / Down 1 --------->
-			<div class="water Oddly-Shaded-Woods down-1"></div>
-			<div class="decoration cattail tree Oddly-Shaded-Woods down-1" style="left: 681px;top: 164px;z-index: 231;"><div><!--fence image--></div></div>
+			<div class="water Oddly-Shaded-Woods down-1">
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: -29px; top: 260px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 1px; top: 240px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 61px; top: 193px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 101px; top: 173px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 211px; top: 136px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 281px; top: 166px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 251px; top: 146px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 231px; top: 188px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 51px;top: 258px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 111px; top: 208px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 151px; top: 178px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 181px; top: 223px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 661px; top: 193px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 701px; top: 168px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 751px; top: 138px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 841px; top: 215px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 801px; top: 195px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 791px; top: 165px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 561px; top: 110px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 641px; top: 149px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 681px; top: 109px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods down-1" style="left: 861px; top: 190px; "></div>
+			</div>
+
+			<div class="obstacle waterBlock Oddly-Shaded-Woods down-1" style="left: 0px;top: 342px;height: 255px;width: 892px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods down-1" style="left: 240px;top: 228px;height: 114px;width: 180px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods down-1" style="left: 170px;top: 256px;height: 86px;width: 70px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods down-1" style="left: 116px;top: 266px;height: 76px;width: 54px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods down-1" style="left: 72px;top: 290px;height: 52px;width: 44px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods down-1" style="left: 36px;top: 320px;height: 22px;width: 36px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods down-1" style="left: 420px;top: 228px;height: 114px;width: 254px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods down-1" style="left: 674px;top: 228px;height: 114px;width: 100px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods down-1" style="left: 774px;top: 278px;height: 64px;width: 120px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods down-1" style="left: 764px;top: 252px;height: 26px;width: 52px;"></div>
+
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: -29px; top: 260px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 1px; top: 240px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 61px; top: 193px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 101px; top: 173px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 211px; top: 136px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 281px; top: 166px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 251px; top: 146px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 231px; top: 188px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 51px;top: 258px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 111px; top: 208px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 151px; top: 178px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 181px; top: 223px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 661px; top: 193px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 701px; top: 168px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 751px; top: 138px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 841px; top: 215px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 801px; top: 195px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 791px; top: 165px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 561px; top: 110px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 641px; top: 149px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 681px; top: 109px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods down-1" style="left: 861px; top: 190px; "></div>
+
+			<!--------- Screen 20 / Right 1 Down 1 --------->
+
+			<div class="water Oddly-Shaded-Woods right-1 down-1">
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: 794px; top: 341px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: 824px; top: 331px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: 574px; top: 321px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: 704px; top: 341px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: 744px; top: 321px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: 694px; top: 301px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: 614px; top: 291px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: 564px; top: 263px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: 524px; top: 243px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: 364px; top: 250px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: 414px; top: 240px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: 114px; top: 230px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: 304px; top: 220px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: 254px; top: 230px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: 184px; top: 210px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: 144px; top: 210px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: 94px; top: 200px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: 14px; top: 190px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: -16px; top: 180px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-1 down-1" style="left: 874px;top: 331px;"></div>
+			</div>
+
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-1 down-1" style="left: 860px;top: 439px;height: 148px;width: 32px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-1 down-1" style="left: 829px;top: 429px;height: 158px;width: 32px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-1 down-1" style="left: 799px;top: 419px;height: 168px;width: 32px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-1 down-1" style="left: 767px;top: 410px;height: 177px;width: 32px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-1 down-1" style="left: 644px;top: 404px;height: 183px;width: 123px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-1 down-1" style="left: 612px;top: 382px;height: 205px;width: 32px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-1 down-1" style="left: 580px;top: 372px;height: 215px;width: 32px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-1 down-1" style="left: 550px;top: 352px;height: 235px;width: 32px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-1 down-1" style="left: 418px;top: 338px;height: 249px;width: 132px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-1 down-1" style="left: 366px;top: 325px;height: 262px;width: 52px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-1 down-1" style="left: 224px;top: 319px;height: 268px;width: 142px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-1 down-1" style="left: 122px;top: 314px;height: 273px;width: 102px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-1 down-1" style="left: 60px;top: 300px;height: 287px;width: 62px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-1 down-1" style="left: 0;top: 290px;height: 297px;width: 62px;"></div>
+
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: 794px; top: 341px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: 824px; top: 331px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: 574px; top: 321px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: 704px; top: 341px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: 744px; top: 321px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: 694px; top: 301px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: 614px; top: 291px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: 564px; top: 263px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: 524px; top: 243px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: 364px; top: 250px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: 414px; top: 240px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: 114px; top: 230px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: 304px; top: 220px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: 254px; top: 230px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: 184px; top: 210px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: 144px; top: 210px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: 94px; top: 200px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: 14px; top: 190px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: -16px; top: 180px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-1 down-1" style="left: 874px;top: 331px;"></div>
 
 			<!--------- Screen 20 / Right 2 Down 1 --------->
 
+			<div class="water Oddly-Shaded-Woods right-2 down-1">
+				<div class="decoration ripples Oddly-Shaded-Woods right-2 down-1" style="left: -16px;top: 340px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-2 down-1" style="left: 44px;top: 360px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-2 down-1" style="left: 114px;top: 380px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-2 down-1" style="left: 134px;top: 390px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-2 down-1" style="left: 204px;top: 390px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-2 down-1" style="left: 204px;top: 430px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-2 down-1" style="left: 264px;top: 410px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-2 down-1" style="left: 364px;top: 430px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-2 down-1" style="left: 331px;top: 420px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-2 down-1" style="left: 391px;top: 450px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-2 down-1" style="left: 361px; top: 490px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-2 down-1" style="left: 431px; top: 460px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-2 down-1" style="left: 421px; top: 430px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-2 down-1" style="left: 461px; top: 450px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-2 down-1" style="left: 491px; top: 470px; "></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-2 down-1" style="left: 561px;top: 510px;"></div>
+				<div class="decoration ripples Oddly-Shaded-Woods right-2 down-1" style="left: 521px; top: 490px; "></div>
+			</div>
+
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-2 down-1" style="left: 509px;top: 570px;height: 17px;width: 22px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-2 down-1" style="left: 488px;top: 558px;height: 29px;width: 22px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-2 down-1" style="left: 436px;top: 540px;height: 47px;width: 52px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-2 down-1" style="left: 384px;top: 524px;height: 63px;width: 52px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-2 down-1" style="left: 294px;top: 518px;height: 69px;width: 90px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-2 down-1" style="left: 242px;top: 504px;height: 83px;width: 52px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-2 down-1" style="left: 200px;top: 494px;height: 93px;width: 42px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-2 down-1" style="left: 158px;top: 484px;height: 103px;width: 42px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-2 down-1" style="left: 116px;top: 472px;height: 115px;width: 42px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-2 down-1" style="left: 74px;top: 462px;height: 126px;width: 42px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-2 down-1" style="left: 32px;top: 452px;height: 136px;width: 42px;"></div>
+			<div class="obstacle waterBlock Oddly-Shaded-Woods right-2 down-1" style="left: 0px; top: 442px; height: 146px; width: 32px; "></div>
+			
+			<div class="decoration cattail Oddly-Shaded-Woods right-2 down-1" style="left: -16px;top: 340px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-2 down-1" style="left: 44px;top: 360px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-2 down-1" style="left: 114px;top: 380px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-2 down-1" style="left: 134px;top: 390px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-2 down-1" style="left: 204px;top: 390px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-2 down-1" style="left: 204px;top: 430px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-2 down-1" style="left: 264px;top: 410px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-2 down-1" style="left: 364px;top: 430px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-2 down-1" style="left: 331px;top: 420px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-2 down-1" style="left: 391px;top: 450px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-2 down-1" style="left: 361px; top: 490px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-2 down-1" style="left: 431px; top: 460px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-2 down-1" style="left: 421px; top: 430px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-2 down-1" style="left: 461px; top: 450px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-2 down-1" style="left: 491px; top: 470px; "></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-2 down-1" style="left: 561px;top: 510px;"></div>
+			<div class="decoration cattail Oddly-Shaded-Woods right-2 down-1" style="left: 521px; top: 490px; "></div>
+
 			<div class="obstacle fencevertical Oddly-Shaded-Woods right-2 down-1" style="left: 618px; top: 0; height: 124px;"><div><!--fence image--></div></div>
 			<div class="obstacle fence grass Oddly-Shaded-Woods right-2 down-1" style="left: 635px;top: 111px;width: 260px;"><div><!--fence image--></div></div>
+
+			<div class="obstacle woodenfence Oddly-Shaded-Woods down-1 right-2" style="left: 559px;top: 574px;width: 334px;"><div><!--fence image--></div></div>
 
 			<!--------- Screen 21 / Right 3 Down 1 --------->
 
@@ -685,6 +916,8 @@
 			<div id="Quincy" class="Oddly-Shaded-Woods right-3 down-1 npc" style="left: 484px;top: 260px;"></div>
 
 			<div class="obstacle fence grass Oddly-Shaded-Woods right-3 down-1" style="left: 112px;top: 480px;width: 713px;"><div><!--fence image--></div></div>
+
+			<div class="obstacle woodenfence Oddly-Shaded-Woods down-1 right-3" style="left: -81px;top: 574px;width: 250px;"><div><!--fence image--></div></div>
 		<!------------------------ Top Elements ------------------------>
 			<!--------- Title --------->
 			<span id="screen-display">Oddly Shaded Woods</span>
