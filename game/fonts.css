@@ -25,3 +25,14 @@
     font-display: block;
 }
 
+@font-face {
+    font-family: 'DoubleHomicide';
+    src: url('fonts/DoubleHomicide.woff2') format('woff2'),
+        url('fonts/DoubleHomicide.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: block;
+}
+
+
+
