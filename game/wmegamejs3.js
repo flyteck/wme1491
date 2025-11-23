@@ -6,9 +6,6 @@
 //Object that make the same sfx, possibly by adding a class
 //SO I found a way to randomly clip through fences VERY accidentally, and there's still some sticking near them. IDK man.
 
-//the church launches you -- I think I should have a check for height/width, and if it's over a certain threshold, just do the normal double move distance
-//and only on diagonals
-
 //Menu open/close doesn't interact w forest music (maybe I'll just replace the SRC etc)
 
 //Need to optimize obstacle check - old method was buggy
@@ -22,9 +19,10 @@
 
 
 //this is evil and it needs to be defined globally I fucking guess
-var crowInterval
-var expressions = ""
-var direction = "initial"
+var crowInterval;
+var expressions = "";
+var direction = "initial";
+var duckInterval = "initial";
 
 //need these silly things for Gnash dialogue
 var gnash = false;
@@ -107,16 +105,6 @@ function audioVolume() {
 
   document.getElementById("forest-player").volume = 0.2;
   document.getElementById("forest-ambience-player").volume = 0.2;
-}
-
-window.addEventListener("load", groundZIndex);
-
-function groundZIndex() {
-  var ground = document.querySelectorAll(".ground") 
-  zIndexSort()
-  for (i = 0; i < ground.length; i++) {
-    ground[i].style.zIndex = "1";
-  }
 }
 
 //this checks if the mouse is held down, to repeat click directions
@@ -207,6 +195,61 @@ for (i = 0; i < items.length; i++) {
 
 }
 
+///////////////////////Misc character pre-functions
+
+window.addEventListener("load", zIndexSort);
+
+//z-index sort for all obstacles
+function zIndexSort() {
+
+  //get all divs in the game screen
+  var screenElements = gameContainer.querySelectorAll("div");
+
+  //go down the list, and set their z-index to their top position
+  for (i = 0; i < screenElements.length; i++) {
+    //grab all items other than the churchtop & ground items
+    if (!screenElements[i].classList.contains("ground") && !screenElements[i].classList.contains("churchtop")) {
+      var screenElementBounds = parseInt(screenElements[i].style.top);
+        
+      //don't touch if it's below 0 as well
+      if (screenElementBounds > 0) {
+        screenElements[i].style.zIndex = screenElementBounds;
+      }
+    }
+  }
+
+  //and then for the ground items, set em all to 1
+  var ground = document.querySelectorAll(".ground") 
+  for (i = 0; i < ground.length; i++) {
+    ground[i].style.zIndex = "1";
+  }
+}
+
+//this is called from the screenchange function
+function duckCheck() {
+  //if we're on the bottom screen,
+  if (gameContainer.classList.contains("down-1") && !gameContainer.classList.contains("left-1") && !gameContainer.classList.contains("left-2") && !gameContainer.classList.contains("left-3") && !gameContainer.classList.contains("right-1") && !gameContainer.classList.contains("right-2") && !gameContainer.classList.contains("right-3")) {
+    //move that duck,
+    moveDuck();
+    //and if we don't have an interval, set it
+    if (duckInterval == "initial") {
+      duckInterval = setInterval(moveDuck, 6000);
+    }
+  } else {
+    //otherwise, reset the interval
+    if (duckInterval != "initial") {
+      clearInterval(duckInterval);
+      duckInterval = "initial";
+    }
+  }
+}
+
+//duck move
+function moveDuck() {
+  const duck = document.getElementById("Duck");
+  duck.classList.toggle("left");
+}
+
 ///////////////////////Controlling the Character & Other Inputs
 
 //this is for the mobile sprint button only
@@ -243,6 +286,10 @@ function buttonPress() {
     character.classList.remove("up","down","left","right","stopped");
   }
 
+  if (character.classList.contains("fixed")) {
+    return
+  }
+
   //if we're stuck, fix our position
   if (character.classList.contains("blocked")) {
     obstacleCorrect();
@@ -256,12 +303,21 @@ function buttonPress() {
       return
     }
 
-    //if it's open
+    //if it's open, close it
     if (menu.classList.contains("open")) {
       menu.classList.remove("open");
-      //play ambience & background
-      document.getElementById("ambience-player").play();
-      document.getElementById("background-player").play();
+
+      //if we're in the forest
+      if (document.body.classList.contains("inForest")) {
+        //play ambience & background
+        document.getElementById("forest-ambience-player").play();
+        document.getElementById("forest-player").play();
+      } 
+      if (!document.body.classList.contains("inForest")) {
+        //play ambience & background
+        document.getElementById("ambience-player").play();
+        document.getElementById("background-player").play();
+      }
 
       //and pause menu music (+ set it to beginning)
       document.getElementById("menu-player").pause();
@@ -269,14 +325,23 @@ function buttonPress() {
       return
     }
     
-    //if it's closed
+    //if it's closed, open it
     if (!menu.classList.contains("open")) {
       //pause ambience & background (+ set them to beginning)
-      document.getElementById("ambience-player").pause();
-      document.getElementById("background-player").pause();
-
-      document.getElementById("ambience-player").currentTime = 0;
-      document.getElementById("background-player").currentTime = 0;
+      if (document.body.classList.contains("inForest")) {
+        //in forest
+        document.getElementById("forest-ambience-player").pause();
+        document.getElementById("forest-player").pause();
+        document.getElementById("forest-ambience-player").currentTime = 0;
+        document.getElementById("forest-player").currentTime = 0;
+      } 
+      if (!document.body.classList.contains("inForest")) {
+        //not in forest
+        document.getElementById("ambience-player").pause();
+        document.getElementById("background-player").pause();
+        document.getElementById("ambience-player").currentTime = 0;
+        document.getElementById("background-player").currentTime = 0;
+      }
 
       //and play menu music
       document.getElementById("menu-player").play();
@@ -288,6 +353,52 @@ function buttonPress() {
   
   //on spacebar click, call item check. if it returns true, modify the clicked item
   if (eventVar.key === ' ' || eventVar.target.id == "dialogue-arrow" || eventVar.target.id == "interact-button" || (gnash == true && inDialogue == false)) {
+
+    if (document.body.classList.contains("reset")) {
+       //if you are, set needed general variables
+      var dialoguePopUp = document.querySelector(".dialogue-popup");
+      var dialogueLoader = document.getElementById("dialogue-loader");
+
+      document.getElementById("blackout").style.opacity = "1";
+
+      setTimeout(() => {
+        reset();
+        document.getElementById("blackout").style.opacity = "0";
+      }, 1000);
+
+      //check if we're on the last line of dialogue, and if so, do something different
+      if (dialoguePopUp.classList.contains("last-line")) {
+        //hide the popup
+        dialoguePopUp.style.display = "none";
+        //remove the talking ID
+        dialoguePopUp.id = "";
+        //remove last line,
+        dialoguePopUp.classList.remove("last-line", "talking-now");
+        expressions = "";
+        setTimeout(() => {
+          dialogueLoader.innerHTML = "";
+        }, 32);
+
+        if (interactFound != null) {        
+          //add repeat for characters so we know they're done their main dialogue (items dissapear after interact, so this excludes them)
+          interactFound.classList.add("repeat");
+        }
+
+        if (interactFound != null && interactFound.classList.contains("objective")) {
+        //properly remove items from the map
+        interactFound.style.left = "";
+        interactFound.style.top = "";
+        interactFound.classList.add("collected");
+        interactFound.style.display = "none"
+
+        //and make sure to remove the item-text class for items, for proper display of the next interact
+        dialoguePopUp.classList.remove("item-text");
+        }
+
+        //and gtfo
+        return
+      }
+    }
 
     var interactFound = interactCheck();
 
@@ -338,16 +449,16 @@ function buttonPress() {
         //remove last line,
         dialoguePopUp.classList.remove("last-line", "talking-now");
         expressions = "";
+        setTimeout(() => {
+          dialogueLoader.innerHTML = "";
+        }, 32);
 
         if (interactFound != null) {        
           //add repeat for characters so we know they're done their main dialogue (items dissapear after interact, so this excludes them)
           interactFound.classList.add("repeat");
-          if (gnash == true) {
-            document.getElementById("Gnash").style.display = "none";
-          }
         }
 
-        if (interactFound.classList.contains("objective")) {
+        if (interactFound != null && interactFound.classList.contains("objective")) {
         //properly remove items from the map
         interactFound.style.left = "";
         interactFound.style.top = "";
@@ -362,25 +473,32 @@ function buttonPress() {
         return
       }
 
-      if (interactFound.classList.contains("repeat")) {
-        var npcName = document.getElementById(interactFound.id).id;
-
+      if (interactFound != null && interactFound.classList.contains("repeat")) {
         //if we've talked to this NPC already, they say their extra line.
         dialoguePopUp.style.display = "flex";
 
         //get the name of the NPC
         var npcName = document.getElementById(interactFound.id).id;
 
+        //specifics for Cain & Vatra's shared dialogue
+        if (npcName == "Cain" || npcName == "Vatra") {
+          npcName = "CainVatra";
+        }
+
         //add the who's talking to the textbox
         var dialoguePopUp = document.querySelector(".dialogue-popup");
         dialoguePopUp.id = npcName + "-talking"
 
         //set their name to show up in the textbox h3
-        document.getElementById("character-name").innerHTML = npcName;
+        if (npcName == "CainVatra") {
+          document.getElementById("character-name").innerHTML = "Cain & Vatra";
+        } else {
+          document.getElementById("character-name").innerHTML = npcName;
+        }
 
         //set the viewable image with the right SRC
         var interactDisplay = document.getElementById("interact-display");
-        interactDisplay.src = "objectives/" + interactFound.id.toLowerCase() + ".png";
+        interactDisplay.src = "objectives/" + npcName.toLowerCase() + ".png";
 
         var repeatDialogue = getRepeatDialogue()
 
@@ -432,11 +550,14 @@ function buttonPress() {
       //this is for gnash specifically -- set the timeout to give time for Gnash Animation
       if (interactFound.id == "Gnash" && talked == false) {
         gnashAnimation();
+        //stop the music right away (I'd like to fade it tbh)
+        document.getElementById("forest-player").pause();
+
         setTimeout(() => {
           //open the box
           dialoguePopUp.style.display = "flex";
           //switch to Gnash's static animation
-          document.getElementById("GnashPix").style.backgroundImage = "url(charactersprites/gnashpix.png)"
+          document.getElementById("GnashPix").style.backgroundImage = "url(charactersprites/gnashpix.png)";
           //set talked to true so this doesn't fire again
           talked = true;
 
@@ -469,12 +590,21 @@ function buttonPress() {
       //get the name of the NPC
       var npcName = document.getElementById(interactFound.id).id;
 
+      //specifics for Cain & Vatra's shared dialogue
+      if (npcName == "Cain" || npcName == "Vatra") {
+        npcName = "CainVatra";
+      }
+
       //add the who's talking to the textbox
       var dialoguePopUp = document.querySelector(".dialogue-popup");
       dialoguePopUp.id = npcName + "-talking"
 
       //set their name to show up in the textbox h3
-      document.getElementById("character-name").innerHTML = npcName;
+      if (npcName == "CainVatra") {
+        document.getElementById("character-name").innerHTML = "Cain & Vatra";
+      } else {
+        document.getElementById("character-name").innerHTML = npcName;
+      }
 
       //dialogue is set earlier in global, so we need to go find it
       var dialogue = getCharacterDialogue().toString();
@@ -497,6 +627,8 @@ function buttonPress() {
         expressions.shift();
       }
 
+      console.log(words);
+
       if (!dialoguePopUp.classList.contains("talking-now") && !interactFound.classList.contains("objective")) {
         //on our first one, we want to grab our facial expressions, so we separate those out (odd numbers, even is text),
         var words = dialogue.split('♡').filter((e, i) =>  i % 2 != 0);
@@ -511,10 +643,10 @@ function buttonPress() {
         //if it's not an item, and it isn't "null"
       if (!interactFound.classList.contains("objective") && expressions[0] != "null") {
         //get the correct sprite + expression
-        interactDisplay.src = "objectives/" + interactFound.id.toLowerCase() + expressions[0].toLowerCase() + ".png";
+        interactDisplay.src = "objectives/" + npcName.toLowerCase() + expressions[0].toLowerCase() + ".png";
       } else {
         //otherwise, just do it without the expression
-        interactDisplay.src = "objectives/" + interactFound.id.toLowerCase() + ".png";
+        interactDisplay.src = "objectives/" + npcName.toLowerCase() + ".png";
       }
 
       //get the first dialogue chunk, put it in the textbox
@@ -543,18 +675,45 @@ function buttonPress() {
           dialoguePopUp.classList.add("last-line");
         }
       }
+
+      //this adds active to the first button
+      var speechBubble = document.getElementById("speech-bubble");
+      if (speechBubble.querySelector("button") != null) {
+        var buttons = speechBubble.querySelectorAll("button");
+        for (i = 0; i < buttons.length; i++) {
+          //if a button is visible,
+          if (buttons[i].checkVisibility() == true) {
+            //pause transitions
+            buttons[i].style.transition = "0ms all";
+            //make it active
+            buttons[i].classList.add("active");
+            //and cut the loop so we just have one
+            break;
+          }
+        }
+
+        setTimeout(() => {
+          for (i = 0; i < buttons.length; i++) {
+            //and then make sure to reset transitions
+            buttons[i].style.transition = "";
+          }
+        }, 32);
+      }
+
     }
   }
 
-  //for Gnash, if there's buttons, allow toggling and selecting
-  if (document.querySelector(".dialogue-popup").id == "Gnash-talking") {
-    var GnashBox = document.getElementById("Gnash-talking");
+  //If there's buttons, allow toggling and selecting
+  var speechBubble = document.getElementById("speech-bubble");
+  if (speechBubble.querySelector("button") != null) {
 
-    if (GnashBox.querySelector("button") != null) {
+    //if we're on Gnash we need too do this bit
+    if (document.querySelector(".dialogue-popup").id == "Gnash-talking") {
       gnashOptions = true;
+    }
 
       //get all buttons in the current dialogue box, make an array
-      var buttons = GnashBox.querySelectorAll("button");
+      var buttons = speechBubble.querySelectorAll("button");
       var buttonArray = Array.from(buttons)
 
       if (eventVar.key === 'ArrowLeft' || eventVar.key === 'a' || character.classList.contains("left") || eventVar.target.id == "left-arrow-button" || direction == "left") {
@@ -565,6 +724,12 @@ function buttonPress() {
 
         //get the active button
         var activeButton = buttonArray.find((element) => element.classList.contains("active"));
+
+        if (activeButton == null) {
+          buttonArray[0].classList.add("active");
+          activeButton = buttonArray[0];
+        }
+
         //it's index
         var buttonIndex = buttonArray.indexOf(activeButton);
         //and the last button
@@ -608,8 +773,8 @@ function buttonPress() {
           buttonArray[0].classList.add("active")
         }
       }
-    }
   }
+  
 
   if (!document.querySelector(".dialogue-popup").id == "") {
     //end this if dialogue is open
@@ -832,6 +997,7 @@ function obstacleCheck(direction,moveDistance) {
 
           document.getElementById("health").style.opacity = "1";
           character.style.filter = "brightness(0.8) hue-rotate(-45deg) saturate(1.2)";
+          document.body.classList.add("inForest");
 
           document.getElementById("forest-player").play();
           document.getElementById("forest-ambience-player").play();
@@ -850,6 +1016,7 @@ function obstacleCheck(direction,moveDistance) {
 
           document.getElementById("health").style.opacity = "";
           character.style.filter = "";
+          document.body.classList.remove("inForest");
 
           document.getElementById("background-player").play();
           document.getElementById("ambience-player").play();
@@ -1234,7 +1401,7 @@ function moveCharacter(direction,moveDistance) {
   }
 
   //and when we move we check zindex
-  zIndexSort();
+  zIndexSortCharacter();
 }
 
 //Stop moving 
@@ -1260,6 +1427,22 @@ function stopCharacter() {
     obstacleCorrect();
 
     //allow movement again
+    if (character.classList.contains("fixed")) {
+      if (character.classList.contains("left")) {
+        character.style.left = parseInt(character.style.left.replace("px","")) - parseInt(slowMoveSpeed) + "px";
+      }
+      if (character.classList.contains("right")) {
+        character.style.left = parseInt(character.style.left.replace("px","")) - parseInt(slowMoveSpeed) + "px";
+      }
+      if (character.classList.contains("up")) {
+        character.style.top = parseInt(character.style.top.replace("px","")) + parseInt(slowMoveSpeed) + "px";
+      }
+      if (character.classList.contains("down")) { 
+        character.style.top = parseInt(character.style.top.replace("px","")) - parseInt(slowMoveSpeed) + "px";
+      }
+
+      character.classList.remove("fixed");
+    }
     character.classList.remove("blocked");
     //and indicate stopped
     character.classList.add("stopped");
@@ -1270,10 +1453,12 @@ function stopCharacter() {
 function obstacleCorrect() {
   //after we stop moving, we do a final obstacle check where we correct any issues
     //check which way we're facing
-    if (character.classList.contains("face-left")) { var facing = "left"; }
-    if (character.classList.contains("face-right")) { var facing = "right"; }
-    if (character.classList.contains("face-up")) { var facing = "up"; }
-    if (character.classList.contains("face-down")) { var facing = "down"; }
+    if (character.classList.contains("left")) { var facing = "left"; }
+    if (character.classList.contains("right")) { var facing = "right"; }
+    if (character.classList.contains("up")) { var facing = "up"; }
+    if (character.classList.contains("down")) { var facing = "down"; }
+
+    var diagonal = (character.classList.contains("down") && character.classList.contains("right") || character.classList.contains("down") && character.classList.contains("left") || character.classList.contains("up") && character.classList.contains("right") || character.classList.contains("up") && character.classList.contains("right"));    
 
     var moveDistance = +slowMoveSpeed
     if (character.classList.contains("sprint") || sprintButton.classList.contains("active")) {
@@ -1296,19 +1481,43 @@ function obstacleCorrect() {
         //for general obstacles
         if (!obstacle[i].classList.contains("fence")) {
           if (facing == "left" && overlapLeftRight == true) {
+            //first, we see how wide the obstacle is -- we move back movedistance if it's more than double the move distance
+            if (obstacleBounds.width > (moveDistance*2) && diagonal == true) {
+              character.style.left = parseInt(character.style.left.replace("px","")) + parseInt(moveDistance*2) + "px";
+              character.classList.add("fixed");
+            } else {
               character.style.left = parseInt(obstacle[i].style.left) + parseInt(obstacleBounds.width) + parseInt(moveDistance) + "px";
+            }
           }
 
           if (facing == "right" && overlapRightLeft == true) {
+            //first, we see how wide the obstacle is -- we move back movedistance if it's more than double the move distance
+            if (obstacleBounds.width > (moveDistance*2) && diagonal == true) {
+              character.style.left = parseInt(character.style.left.replace("px","")) - parseInt(moveDistance*2) + "px";
+              character.classList.add("fixed");
+            } else {
               character.style.left = parseInt(obstacle[i].style.left) - parseInt(characterBounds.width) - parseInt(moveDistance) + "px";
+            }
           }
 
           if (facing == "up" && overlapTopBottom == true) {
-            character.style.top = parseInt(obstacle[i].style.top) + parseInt(obstacleBounds.height) + parseInt(moveDistance) + "px";
+            //first, we see how tall the obstacle is -- we move back movedistance if it's more than double the move distance
+            if (obstacleBounds.height > (moveDistance*2) && diagonal == true) {
+              character.style.top = parseInt(character.style.top.replace("px","")) + parseInt(moveDistance*2) + "px";
+              character.classList.add("fixed");
+            } else {
+              character.style.top = parseInt(obstacle[i].style.top) + parseInt(obstacleBounds.height) + parseInt(moveDistance) + "px";
+            }
           }
 
           if (facing == "down" && overlapBottomTop == true) {
+            //first, we see how tall the obstacle is -- we move back movedistance if it's more than double the move distance
+            if (obstacleBounds.height > (moveDistance*2) && diagonal == true) {
+              character.style.top = parseInt(character.style.top.replace("px","")) - parseInt(moveDistance*2) + "px";
+              character.classList.add("fixed");
+            } else {
               character.style.top = parseInt(obstacle[i].style.top) - parseInt(moveDistance) - parseInt(characterBounds.height) + "px";
+            }
           }
         }
 
@@ -1319,7 +1528,7 @@ function obstacleCorrect() {
 
           if (overlapBottomTop == true && character.classList.contains("down") && behind == true) {
             //if character bottom overlaps object top, decrease top to push it up
-            character.style.top = parseInt(obstacle[i].style.top) - parseInt(moveDistance) + "px";
+            character.style.top = parseInt(obstacle[i].style.top) - parseInt(moveDistance*2) + "px";
           }
 
           if (overlapTopBottom == true && character.classList.contains("up")) {
@@ -1328,14 +1537,14 @@ function obstacleCorrect() {
             //see if the bottom is also higher, and if we're in front
             if (overlapBottomBottom == true && inFront === true) {
               //if it is, increase top to push it down
-              character.style.top = parseInt(obstacle[i].style.top) + parseInt(obstacleBounds.height) - parseInt(moveDistance) + "px";
+              character.style.top = parseInt(obstacle[i].style.top) + parseInt(obstacleBounds.height) - parseInt(moveDistance*2) + "px";
             }
           }
         }
       }
     }
 
-    zIndexSort()
+    zIndexSortCharacter()
 }
 
 //Move screen
@@ -1382,7 +1591,7 @@ function moveScreen(direction) {
     setTimeout(() => {
       character.style.opacity = "";
       character.style.transition = "";
-    }, 16);
+    }, 32);
   }, 32);
 
   setTimeout(() => {
@@ -1393,6 +1602,7 @@ function moveScreen(direction) {
   //this generates the screen title (delay to be sure that the classes are all updated before generating)
   setTimeout(() => {
     screenTitle();
+    duckCheck();
   }, 16);
 
   //get the classlist, split into individuals
@@ -1538,7 +1748,7 @@ function moveScreen(direction) {
       }
       setTimeout(() => {
         character.style.transition = "";
-      }, 16);
+      }, 32);
     }, 32);
   }
 
@@ -1605,7 +1815,12 @@ function crowCall() {
 
 function gnashAnimation() {
   var gnash = document.getElementById("GnashPix");
+  //make sure it's the default (walk) showing
+  document.getElementById("GnashPix").style.backgroundImage = "";
   //move gnash to the left
+  gnash.style.transition = "0ms all"
+  gnash.style.top = character.style.top;
+  gnash.style.transition = ""
   gnash.style.left = "304px";
 }
 
@@ -1649,12 +1864,82 @@ function gnashInteraction() {
       //and we add option selected to prevent this happening again
       dialoguePopUp.classList.add("option-selected");
 
-      //we will need to check if the dialogue-loader is empty of buttons on the item toggle, and if so, do some other shit
+      //on option 7, check for and delete extrenuous buttons (to make arrow toggles smooth)
+        if (currentOption == "option-7") {
+          //delay to be sure they're in already
+          setTimeout(() => {
+            for (i = 0; i < dialogueLoader.classList.length; i++) {
+              if (dialogueLoader.classList[i] == "option-drawing") {document.getElementById("option-drawing").classList.add("item-found");}
+              if (dialogueLoader.classList[i] == "option-daisy") {document.getElementById("option-daisy").classList.add("item-found");}
+              if (dialogueLoader.classList[i] == "option-hair") {document.getElementById("option-hair").classList.add("item-found");}
+              if (dialogueLoader.classList[i] == "option-feather") {document.getElementById("option-feather").classList.add("item-found");}
+              if (dialogueLoader.classList[i] == "option-clover") {document.getElementById("option-clover").classList.add("item-found");}
+              if (dialogueLoader.classList[i] == "option-bone") {document.getElementById("option-bone").classList.add("item-found");}
+            }
+
+            var currentButtons = dialogueLoader.querySelectorAll("button");
+
+            for (i = 0; i < currentButtons.length; i++) {
+              if (!currentButtons[i].classList.contains("item-found")) {
+                currentButtons[i].remove();
+              }
+            }
+
+            var currentButtons = dialogueLoader.querySelectorAll("button");
+
+            //any buttons added after this points must have a manual active added
+            if (currentButtons.length == 0) {
+              dialogueLoader.innerHTML = "You don't have any items... <div class='flex-row'><button id='gnash-close' class='active'>[Run!!]</button></div>";
+              //this resets our dialogue box and allows it to close
+              gnash = false;
+              inDialogue = false;
+              talked = false;
+              gnashOptions = false;
+              expressions = "";
+              currentOption = "initial"
+
+              //reset Gnash's classlist
+              document.getElementById("Gnash").classList = "npc obstacle Oddly-Shaded-Woods up-1 left-3";
+
+              //and his position
+              document.getElementById("GnashPix").style.transition = "0ms ease all";
+              document.getElementById("GnashPix").style.left = "-195px";
+              setTimeout(() => {
+                document.getElementById("GnashPix").style.transition = "";
+              }, 32);
+
+              //replace Gnash's initial dialogue, before branching back to his specific tree
+              for (i = 0; i < npcList.length; i++) {
+                if ("Gnash" == npcList[i].name) {
+                  //new dialogue for conversation 2
+                  npcList[i].dialogue = "null♡Hey yo WB♡null♡.....♡null♡Why... have you come here?<div class='flex-row'><button class='active' id='option-1'>Seeking something strange</button> <button id='option-6'>Seeking you</button></div>"
+                }
+              }
+
+              //NEW DIALOGUE
+              gnashDialogueOptions = [
+                { option: "option-1", dialogue: "concern♡Something... strange?<div class='flex-row'><button id='option-3'>There's been rumours of a monster</button> <button id='option-3'>You, I think</button></div>"},
+                { option: "option-3", dialogue: "null♡Me...?♡null♡Why...?<div class='flex-row'><button id='option-4'>Have you been hurting equids?</button><button id='option-4'>Everyone is scared</button></div>"},
+                { option: "option-4", dialogue: "worry♡I would...♡worry♡I would not hurt anyone.♡concern♡I am here. Alone.♡concern♡I only... watch.♡null♡Are you...♡null♡...like me? <div class='flex-row'><button id='option-5'>Yes</button><button id='option-6'>No</button></div>"},
+                { option: "option-5", dialogue: "empty♡I am... not so sure.<div class='flex-row'><button id='option-7'>[Give him something]</button></div>"},
+                { option: "option-6", dialogue: "null♡...<div class='flex-row'><button id='option-7'>[Give him something]</button></div>"},
+                { option: "option-7", dialogue: "null♡<div class='flex-row' style='margin-top: -20px;'><button class='drawing-button' id='option-drawing'><img src='objectives/drawing.png'></button><button id='option-hair' class='hair-button'><img src='objectives/hair.png'></button><button id='option-daisy' class='daisy-button'><img src='objectives/daisy.png'></button><button id='option-bone' class='bone-button'><img src='objectives/bone.png' class='bone-button'></button><button id='option-daisy' class='daisy-button'><img src='objectives/daisy.png'></button></div>"},
+                { option: "option-drawing", dialogue: "null♡Is this... me?♡null♡Then...♡null♡I am... not like you.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
+                { option: "option-hair", dialogue: "null♡Oh. My hair.♡null♡I do not... need this.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
+                { option: "option-bone", dialogue: "null♡Oh -♡null♡My gnawing bone.♡null♡I... misplaced it.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
+              ];
+
+              document.body.classList.add("reset");
+  
+            }
+
+          }, 200);
+        }
 
       //this is used to delete items you've already given away
       if (currentOption == "option-drawing" || currentOption == "option-daisy" || currentOption == "option-hair" || currentOption == "option-feather" || currentOption == "option-clover" || currentOption == "option-bone") {
         //hide this button for future loops
-        document.getElementById("dialogue-loader").classList.remove(currentOption);
+        dialogueLoader.classList.remove(currentOption);
 
         //and we need to get rid of it in the inventory too
       }
@@ -1696,46 +1981,76 @@ function gnashInteraction() {
       }
 
       //this adds active to the first button
-      var GnashBox = document.getElementById("Gnash-talking");
-      if (GnashBox.querySelector("button") != null) {
-        var buttons = GnashBox.querySelectorAll("button");
-        for (i = 0; i < gnashDialogueOptions.length; i++) {
-          //if a button is visible,
+      var speechBubble = document.getElementById("speech-bubble");
+      //if there are buttons,
+      if (speechBubble.querySelector("button") != null) {
+        var buttons = speechBubble.querySelectorAll("button");
+        for (i = 0; i < buttons.length; i++) {
+          //and if a button is visible,
           if (buttons[i].checkVisibility() == true) {
             //pause transitions
             buttons[i].style.transition = "0ms all";
             //make it active
             buttons[i].classList.add("active");
-            //and cut the loop so we just have one
+            //and cut the loop so we just have one active one
             break;
           }
         }
 
-        for (i = 0; i < gnashDialogueOptions.length; i++) {
-          //and then make sure to reset transitions
-          buttons[i].style.transition = "";
-        }
+        setTimeout(() => {
+          for (i = 0; i < buttons.length; i++) {
+            //and then make sure to reset transitions
+            buttons[i].style.transition = "";
+          }
+        }, 32);
       }
+}
+
+function reset() {
+  //move character back to the forest entrance
+  gameContainer.classList.remove("left-3","up-1");
+  gameContainer.classList.add("left-2","down-1");
+
+  //reposition at the gate
+  character.style.left = "420px";
+  character.style.top = "244px";
+  character.style.zIndex = "244";
+  //turn around
+  character.classList.remove("left","face-left");
+  character.classList.add("face-right");
+
+  //fix the title
+  document.getElementById("screen-display").innerHTML = "Oddly Shaded Woods - down 1, left 2";
+
+  //and rerun the forest exit code
+  //pause and reset the time on the music players
+  document.getElementById("forest-player").pause();
+  document.getElementById("forest-ambience-player").pause();
+  document.getElementById("forest-player").currentTime = 0;
+  document.getElementById("forest-ambience-player").currentTime = 0;
+
+  var fog = document.querySelectorAll(".fog");
+  for (i = 0; i < fog.length; i++) {
+    fog[i].style.opacity = "";
+  }
+
+  document.getElementById("health").style.opacity = "";
+  character.style.filter = "";
+  document.body.classList.remove("inForest");
+
+  document.getElementById("background-player").play();
+  document.getElementById("ambience-player").play();
+
+  //aaaand remove reset from the body
+  document.body.classList.remove("reset");
 }
 
 ///////////////////////
 
-//z-index shenanigans for layering 
-function zIndexSort() {
-
-  //get all givs in the game screen
-  var screenElements = gameContainer.querySelectorAll("div");
-
-  //go down the list, and set their z-index to their top position
-  for (i = 0; i < screenElements.length; i++) {
-    //we wanna leave out items on the ground from this
-    if (!screenElements[i].classList.contains("ground") && !screenElements[i].classList.contains("churchtop")) {
-      var screenElementBounds = parseInt(screenElements[i].style.top);
-        
-      //don't touch if it's below 0 as well
-      if (screenElementBounds > 0) {
-        screenElements[i].style.zIndex = screenElementBounds;
-      }
-    }
+//character specific z-index sort to double check once we finish moving
+function zIndexSortCharacter() {
+  //only do it if it's above 0 jfc
+  if (character.style.top.replace("px","") > "0") {
+    character.style.zIndex = character.style.top.replace("px","");
   }
 }

@@ -222,6 +222,24 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 
 /*** Mobile Controller ***/
 
+#game-container > div#blackout {
+	width: var(--game-width);
+   height: var(--game-height);
+   left: 0;
+   top: 0;
+   background: black;
+   z-index: 1000;
+   position: absolute;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   pointer-events: none;
+   transition: 400ms ease;
+   opacity: 0;
+}
+
+/*** Mobile Controller ***/
+
 #mobile-controls {
 	position: absolute;
 	right: 0;
@@ -339,7 +357,7 @@ body.touch-only #space-button {
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center center;
-	background-image: url(https://cdn-icons-png.flaticon.com/512/25/25333.png);
+	background-image: url(ui/questionmark.png);
 }
 
 #inventory.open li span {
@@ -389,6 +407,10 @@ body.touch-only #space-button {
 	z-index: 999;
 }
 
+#Gnash-talking.dialogue-popup {
+	background-color: rgb(168 130 130 / 10%);
+}
+
 .dialogue-wrap {
 	display: flex;
 	margin: calc(50% - 40px) auto auto;
@@ -397,18 +419,30 @@ body.touch-only #space-button {
 
 #dialogue-loader {
 	padding: 10px;
+	display: flex;
+   flex-direction: column;
+   height: calc(100% - 20px);
 }
 
 #dialogue-loader button {
 	font-family: 'Coders Crux';
-   margin: 18px;
+   margin: 10px;
    position: relative;
-   background: #801c1c;
    padding: 8px 12px 6px;
+   background: #bab6b6;
    border: 1px solid var(--accent);
    border-radius: 4px;
    transition: 400ms ease;
    text-transform: none;
+}
+
+#dialogue-loader button:not(:first-child) {
+	margin-left: 26px;
+}
+
+#Gnash-talking #dialogue-loader button {
+	background: #801c1c;
+   margin: 18px;
 }
 
 #dialogue-loader button img {
@@ -424,6 +458,10 @@ body.touch-only #space-button {
 }
 
 #dialogue-loader button.active {
+	background-color: #ee8484;
+}
+
+#Gnash-talking #dialogue-loader button.active {
 	background-color: #490808;
 }
 
@@ -436,11 +474,17 @@ body.touch-only #space-button {
    left: -20px;
    top: calc(50% - 10px);
    animation: bounceHorizontal 1s infinite 500ms;
+   filter: invert(1);
    background-size: contain;
+}
+
+#Gnash-talking #dialogue-loader button.active:before {
+	filter: none;
 }
 
 #dialogue-loader .flex-row {
 	justify-content: center;
+	flex-grow: 1;
 }
 
 @keyframes bounceHorizontal { 
@@ -1043,7 +1087,6 @@ body.touch-only #space-button {
 }
 
 /** cliff **/
-
 .obstacle.cliff {
 	width: 68px;
 	background-repeat: repeat-y;
@@ -1052,7 +1095,8 @@ body.touch-only #space-button {
 
 /** tall trunk **/
 .obstacle.fence.talltrunk {
-	width: 154px;
+	width: 70px;
+	margin-left: 54px;
 }
 
 .obstacle.fence.talltrunk div {
@@ -1061,8 +1105,34 @@ body.touch-only #space-button {
 	background-position: bottom center;
 	background-repeat: no-repeat;
 	height: 600px;
-	width: 100%;
+	width: 154px;
 	position: absolute;
+	left: -39px;
+	bottom: 9px;
+}
+
+/** dead pine **/
+.obstacle.deadpine, .obstacle.deadpinesm {
+	width: 24px;
+	margin-top: 70px;
+}
+
+.obstacle.deadpine div {
+	height: 200px;
+	width: 90px;
+	background-image: url(obstacles/pinelg.png);
+	background-size: contain;
+   flex: 0 0 auto;
+   left: -26px;
+}
+
+.obstacle.deadpinesm div {
+	height: 160px;
+	width: 58px;
+	background-image: url(obstacles/pinesm.png);
+	background-size: contain;
+   flex: 0 0 auto;
+   left: -18px;
 }
 
 /** haunted tree 1 **/
@@ -1122,6 +1192,10 @@ body.touch-only #space-button {
 	margin-top: 64px;
 }
 
+.obstacle.brambles:nth-child(odd) div {
+	background-image: url(obstacles/brambles2.png);
+}
+
 /** border wall **/
 .obstacle.brambleswall {
 	margin-top: 0;
@@ -1150,14 +1224,31 @@ body.touch-only #space-button {
 	margin-left: 64px;
 }
 
+/** big maps **/
+
+.vinemap1, .vinemap2 {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: var(--game-width);
+	height: var(--game-height);
+	background-size: contain;
+}
+
+.vinemap1 {
+	background-image: url(obstacles/vinemap1.png);
+}
+
+.vinemap2 {
+	background-image: url(obstacles/vinemap2.png);
+}
+
 .left-2 .obstacle.brambleswallhorizontal, .left-3 .obstacle.brambleswallhorizontal, .left-1.up-1 .obstacle.brambleswallhorizontal,
-.left-2 .obstacle.brambleswall, .left-3 .obstacle.brambleswall, .left-1.up-1 .obstacle.brambleswall {
+.left-2 .obstacle.brambleswall, .left-3 .obstacle.brambleswall, .left-1.up-1 .obstacle.brambleswall, 
+.left-3 .obstacle.brambles, .vinemap1, .vinemap2 {
 	filter: brightness(0.6);
 }
 
-.obstacle.brambles:nth-child(odd) div {
-	background-image: url(obstacles/brambles2.png);
-}
 
 /** dead tree **/
 .obstacle.fence.deadtree {
@@ -1177,7 +1268,7 @@ body.touch-only #space-button {
 
 /** hollow tree **/
 .obstacle.fence.hollowtree {
-	width: 96px;
+	width: 56px;
 }
 
 .obstacle.fence.hollowtree div {
@@ -1189,7 +1280,7 @@ body.touch-only #space-button {
 	width: 192px;
 	position: absolute;
 	bottom: 8px;
-   left: -60px;
+   left: -83px;
 }
 
 /** big tree **/
@@ -1350,6 +1441,11 @@ body.touch-only #space-button {
     opacity: 60%;
 }
 
+.tree .ripples {
+	margin-left: 4px;
+   margin-top: -2px;
+}
+
 .leaves {
 	background-image: url(obstacles/leavesflat1.png);
    background-size: 56px 44px;
@@ -1424,8 +1520,16 @@ body.touch-only #space-button {
 	background-image: url(obstacles/flower3.png);
 }
 
-/**Church Top (this has a smaller base, to change when it fades**/
+/** Bones **/
+.decoration.bones {
+	background-image: url(obstacles/bones.png);
+	background-size: contain;
+	margin-top: 62px;
+	height: 30px;
+	width: 62px;
+}
 
+/**Church Top (this has a smaller base, to change when it fades**/
 .churchtop {
 	width: 544px;
 	height: 750px;
@@ -1489,7 +1593,7 @@ body.touch-only #space-button {
    border-bottom: none;
 }
 
-/** Objectives **/
+/******* Objectives *******/
 
 .objective {
 	height: 32px;
@@ -1521,13 +1625,21 @@ body.touch-only #space-button {
 	background-image: url(obstacles/flower2.png);
 }
 
-#Drawing.objective {
-	height: 46px;
-	width: 46px;
-}
-
 #Hair, #HairInventory.collected span {
 	background-image: url(objectives/hair.png);
+}
+
+#Bone.objective {
+	height: 32px;
+	width: 44px;
+}
+
+#Bone, #BoneInventory.collected span {
+	background-image: url(objectives/bone.png);
+}
+
+#Bone-talking #interact-display {
+	margin-top: 40px;
 }
 
 /** NPCs **/
@@ -1582,7 +1694,6 @@ body.touch-only #space-button {
 	font-size: 1.8em;
 	display: flex;
    align-items: center;
-   justify-content: center;
    gap: 20px;
    flex-wrap: wrap;
 }
@@ -1594,6 +1705,43 @@ body.touch-only #space-button {
 
 #Crow.npc.call {
 	background-image: url(charactersprites/crowCaw.png);
+}
+
+#Acacia.npc {
+	margin-top: -10px;
+	width: 88px;
+	height: 86px;
+	background-image: url(charactersprites/acaciapix.png);
+}
+
+#Duck {
+	width: 62px;
+	height: 48px;
+	background-size: contain;
+	background-image: url(charactersprites/duck.png);
+
+	left: 644px;
+	transition: 6000ms linear, transform 400ms ease;
+	transform: scaleX(-1.0);
+}
+
+#Duck.left {
+	left: 274px;
+	transform: scaleX(1);
+}
+
+#Cain.npc {
+	margin-top: 20px;
+	width: 124px;
+	height: 68px;
+	background-image: url(charactersprites/cainpix.png);
+}
+
+#Vatra.npc {
+	margin-top: 20px;
+	width: 80px;
+	height: 84px;
+	background-image: url(charactersprites/vatrapix.png);
 }
 
 /* Gnash is a bit different, since we want him to approach the player. SO we treat his trigger like the NPC instead */
@@ -1609,12 +1757,12 @@ body.touch-only #space-button {
 	filter: contrast(0.95) brightness(1.5);
 }
 
-#Gnash.npc {
-    height: var(--game-height);
+#Gnash.npc, #Gnash2.npc {
+    height: 190px;
     margin-top: 0;
     width: 32px;
-    top: 0;
-    left: 500px;
+    top: 180px;
+    left: 482px;
     position: absolute;
 }
 
