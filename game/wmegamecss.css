@@ -41,16 +41,18 @@ h2 {
 
 button {
 	color: inherit;
-	font-family: inherit;
-	text-transform: uppercase;
-	font-size: inherit;
-	margin: 10px auto;
-	background: var(--mid-accent);
-	border-radius: 1px;
-	padding: 3px 6px;
-	display: block;
-	cursor: pointer;
-	transition: 50ms ease;
+   font-family: inherit;
+   text-transform: uppercase;
+   font-size: inherit;
+   margin: 10px auto;
+   background: var(--mid-accent);
+   border-radius: 1px;
+   padding: 3px 6px;
+   display: block;
+   cursor: pointer;
+   transition: 50ms ease;
+   padding: 8px 10px 6px;
+   border-radius: 6px;
 }
 
 button:not(.game-button):hover, button:not(.game-button):focus {
@@ -190,6 +192,37 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 
 #q-button {background-image: url(ui/q.png);}
 
+#menu-button {
+	background-image: url(ui/menu.png);
+   width: 30px;
+   height: 30px;
+   margin: 10px;
+   flex: 0 0 auto;
+   display: none;
+}
+
+#inventory-arrows, #menu-button {
+	display: none;
+}
+
+.touch-only #menu-button, .touch-only #inventory.open #inventory-arrows {
+	display: flex;
+}
+
+#inventory.open #inventory-arrows, #inventory.open #menu-button {
+	position: absolute;
+}
+
+#inventory.open #menu-button {
+   right: 12.5px;
+   top: 30px;
+}
+
+#inventory.open #inventory-arrows {
+   bottom: 50px;
+   right: 50px;
+}
+
 #shift-button {
 	margin: 10px;
 	width: 96px;
@@ -220,7 +253,69 @@ button:not(.game-button):hover, button:not(.game-button):focus {
    z-index: 1000;
 }
 
-/*** Mobile Controller ***/
+/*** Intro Cutscene **/
+
+#game-container > div.cutscene {
+	width: var(--game-width);
+   height: var(--game-height);
+   left: 0;
+   top: 0;
+	z-index: 1000;
+   position: absolute;
+   background: black;
+   transition: 400ms ease;
+}
+
+#skip {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	opacity: 0;
+	margin: 15px 20px;
+	transition: 200ms ease;
+}
+
+.slide {
+	opacity: 0;
+	transition: 200ms ease, background-position 10400ms linear;
+	display: none;
+	width: var(--game-width);
+	height: var(--game-height);
+	background-size: calc(var(--game-width) + 20px) auto;
+	display: flex;
+	align-items: center;
+   justify-content: center;
+   background-position: -20px center;
+}
+
+.slide.static {
+	background-position: left center;
+}
+
+.slide div {
+	margin-top: 50%;
+   padding: 100px;
+   text-align: center;
+   text-shadow: -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000, 1px 1px 0 #000, 0 1px 0 #000, -1px 1px 0 #000, -1px 0 0 #000;
+}
+
+.slide.s1 {
+	background-image: url(bgs/slide1.png);
+}
+
+.slide.s2 {
+	background-image: url(bgs/slide2.png);
+}
+
+.slide.s3 {
+	background-image: url(bgs/slide3.png);
+}
+
+.slide.s4 {
+	background-image: url(bgs/slide4.png);
+}
+
+/*** Blackout Div ***/
 
 #game-container > div#blackout {
 	width: var(--game-width);
@@ -243,7 +338,7 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 #mobile-controls {
 	position: absolute;
 	right: 0;
-	bottom: -30px;
+	bottom: -5px;
 	padding: 10px;
 	display: none;
 	align-items: center;
@@ -272,7 +367,7 @@ body.touch-only #mobile-controls.open {
 	display: flex;
 }
 
-body.touch-only #tutorial-button {
+body.touch-only #tutorial-button, body.touch-only .menu-button.example {
 	display: block;
 }
 
@@ -313,9 +408,40 @@ body.touch-only #space-button {
    z-index: 998;
 }
 
+#inventory li#item-viewer {
+	background-image: none;
+	display: none;
+	text-align: center;
+}
+
+#item-viewer img {
+	width: 150px;
+	margin: 20px auto;
+}
+
+#inventory .description {
+	padding: 20px;
+}
+
+#item-viewer span {
+	display: none;
+}
+
+#item-viewer span.viewing {
+	display: flex;
+	flex-direction: column;
+}
+
 #inventory.open {
 	width: 100%;
 	z-index: 1000;
+}
+
+#inventory.open li#item-viewer {
+	display: flex;
+	width: 100%;
+	height: 340px;
+	order: -1;
 }
 
 #inventory li {
@@ -337,17 +463,16 @@ body.touch-only #space-button {
 	color: var(--black);
 	background-color: var(--white);
 	transition: 200ms ease;
+	position: relative;
 }
 
 #inventory.open li {
 	width: 100px;
 	height: 100px;
+	margin: 6px 12px;
 }
 
-#inventory.open li.collected {
-	padding: 40px;
-	width: unset;
-	height: unset;
+#inventory li.collected {
 	order: -1;
 }
 
@@ -360,20 +485,48 @@ body.touch-only #space-button {
 	background-image: url(ui/questionmark.png);
 }
 
-#inventory.open li span {
-	min-height: 120px;
+#inventory li#item-viewer span {
+	background-image: none;
+}
+
+#inventory li#item-viewer span#Default {
 	display: block;
-	margin: 10px;
+	min-height: 0;
+}
+
+#inventory.open li.collected span {
+	display: block;
+   margin: 20px -20px;
+   min-width: 50px;
+   min-height: 50px;
+}
+
+#inventory.open li.collected.viewing span {
+	min-width: 100px;
+   min-height: 100px;
+}
+
+#inventory.open li.collected.viewing {
+	width: 100%;
+   height: unset;
+   padding: 30px;
+}
+
+#inventory.open li.focus:before {
+	background-image: url(ui/arrow.png);
+   content: "";
+   width: 12px;
+   height: 20px;
+   position: absolute;
+   left: -20px;
+   top: calc(50% - 10px);
+   animation: bounceHorizontal 1s infinite 500ms;
+   background-size: contain;
 }
 
 #inventory li .title {
 	font-family: 'Jacquard 12';
    font-size: 1.5em;
-	display: none;
-}
-
-#inventory.open li.collected .title {
-	display: block;
 }
 
 #inventory h3 {
@@ -383,15 +536,9 @@ body.touch-only #space-button {
 	text-align: center;
 	font-weight: 300;
 	order: -2;
-}
-
-#inventory .description {
-	display: none;
-}
-
-#inventory.open li.collected .description {
-	 display: block;
-	 padding: 10px 20px 20px;
+	display: flex;
+	align-items: center;
+   justify-content: center;
 }
 
 /********************** Dialogue Pop-Up *********************/
@@ -451,6 +598,8 @@ body.touch-only #space-button {
 
 .daisy-button, .hair-button, .feather-button, .bone-button, .drawing-button  {
 	display: none;
+	height: 70px;
+	width: 70px;
 }
 
 .option-daisy .daisy-button, .option-hair .hair-button, .option-feather .feather-button, .option-bone .bone-button, .option-drawing .drawing-button  {
@@ -627,88 +776,88 @@ body.touch-only #space-button {
 	
 
 /** screen 1 **/
-#game-container.Oddly-Shaded-Woods.left-3.up-1 {background-image: url(background1.png);}
-#game-container.Oddly-Shaded-Woods.left-3.up-1 > div.Oddly-Shaded-Woods.left-3.up-1 {display: flex;}
+#game-container.left-3.up-1 {background-image: url(bgs/background1.png);}
+#game-container.left-3.up-1 > div.left-3.up-1 {display: flex;}
 
 /** screen 2 **/
-#game-container.Oddly-Shaded-Woods.left-2.up-1 {background-image: url(background2.png);}
-#game-container.Oddly-Shaded-Woods.left-2.up-1 > div.Oddly-Shaded-Woods.left-2.up-1 {display: flex;}
+#game-container.left-2.up-1 {background-image: url(bgs/background2.png);}
+#game-container.left-2.up-1 > div.left-2.up-1 {display: flex;}
 
 /** screen 3 **/
-#game-container.Oddly-Shaded-Woods.left-1.up-1 {background-image: url(background3.png);}
-#game-container.Oddly-Shaded-Woods.left-1.up-1 > div.Oddly-Shaded-Woods.left-1.up-1 {display: flex;}
+#game-container.left-1.up-1 {background-image: url(bgs/background3.png);}
+#game-container.left-1.up-1 > div.left-1.up-1 {display: flex;}
 
 /** screen 4 **/
-#game-container.Oddly-Shaded-Woods.up-1 {background-image: url(background4.png);}
-#game-container.Oddly-Shaded-Woods.up-1:not(.left-1,.left-2,.left-3,.right-1,.right-2,.right-3) > div.Oddly-Shaded-Woods.up-1:not(.left-1,.left-2,.left-3,.right-1,.right-2,.right-3) {display: flex;}
+#game-container.up-1 {background-image: url(bgs/background4.png);}
+#game-container.up-1:not(.left-1,.left-2,.left-3,.right-1,.right-2,.right-3) > div.up-1:not(.left-1,.left-2,.left-3,.right-1,.right-2,.right-3) {display: flex;}
 
 /** screen 5 **/
-#game-container.Oddly-Shaded-Woods.right-1.up-1 {background-image: url(background5.png);}
-#game-container.Oddly-Shaded-Woods.right-1.up-1 > div.Oddly-Shaded-Woods.right-1.up-1 {display: flex;}
+#game-container.right-1.up-1 {background-image: url(bgs/background5.png);}
+#game-container.right-1.up-1 > div.right-1.up-1 {display: flex;}
 
 /** screen 6 **/
-#game-container.Oddly-Shaded-Woods.right-2.up-1 {background-image: url(background6.png);}
-#game-container.Oddly-Shaded-Woods.right-2.up-1 > div.Oddly-Shaded-Woods.right-2.up-1 {display: flex;}
+#game-container.right-2.up-1 {background-image: url(bgs/background6.png);}
+#game-container.right-2.up-1 > div.right-2.up-1 {display: flex;}
 
 /** screen 7 **/
-#game-container.Oddly-Shaded-Woods.right-3.up-1 {background-image: url(background7.png);}
-#game-container.Oddly-Shaded-Woods.right-3.up-1 > div.Oddly-Shaded-Woods.right-3.up-1 {display: flex;}
+#game-container.right-3.up-1 {background-image: url(bgs/background7.png);}
+#game-container.right-3.up-1 > div.right-3.up-1 {display: flex;}
 
 /** screen 8 **/
-#game-container.Oddly-Shaded-Woods.left-3 {background-image: url(background8.png);}
-#game-container.Oddly-Shaded-Woods.left-3:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.Oddly-Shaded-Woods.left-3:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
+#game-container.left-3 {background-image: url(bgs/background8.png);}
+#game-container.left-3:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.left-3:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
 
 /** screen 9 **/
-#game-container.Oddly-Shaded-Woods.left-2 {background-image: url(background9.png);}
-#game-container.Oddly-Shaded-Woods.left-2:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.Oddly-Shaded-Woods.left-2:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
+#game-container.left-2 {background-image: url(bgs/background9.png);}
+#game-container.left-2:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.left-2:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
 
 /** screen 10 **/
-#game-container.Oddly-Shaded-Woods.left-1 {background-image: url(background10.png);}
-#game-container.Oddly-Shaded-Woods.left-1:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.Oddly-Shaded-Woods.left-1:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
+#game-container.left-1 {background-image: url(bgs/background10.png);}
+#game-container.left-1:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.left-1:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
 
 /** screen 11  || INTITIAL SCREEN **/
-#game-container.Oddly-Shaded-Woods {background-image: url(background11.png);}
-#game-container.Oddly-Shaded-Woods.initial-screen > div.Oddly-Shaded-Woods.initial-screen {display: flex;}
+#game-container {background-image: url(bgs/background11.png);}
+#game-container.initial-screen > div.initial-screen {display: flex;}
 
 /** screen 12 **/
-#game-container.Oddly-Shaded-Woods.right-1 {background-image: url(background12.png);}
-#game-container.Oddly-Shaded-Woods.right-1:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.Oddly-Shaded-Woods.right-1:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
+#game-container.right-1 {background-image: url(bgs/background12.png);}
+#game-container.right-1:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.right-1:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
 
 /** screen 13 **/
-#game-container.Oddly-Shaded-Woods.right-2 {background-image: url(background13.png);}
-#game-container.Oddly-Shaded-Woods.right-2:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.Oddly-Shaded-Woods.right-2:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
+#game-container.right-2 {background-image: url(bgs/background13.png);}
+#game-container.right-2:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.right-2:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
 
 /** screen 14 **/
-#game-container.Oddly-Shaded-Woods.right-3 {background-image: url(background14.png);}
-#game-container.Oddly-Shaded-Woods.right-3:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.Oddly-Shaded-Woods.right-3:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
+#game-container.right-3 {background-image: url(bgs/background14.png);}
+#game-container.right-3:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) > div.right-3:not(.up-1,.up-2,.up-3,.down-1,.down-2,.down-3) {display: flex;}
 
 /** screen 15 **/
-#game-container.Oddly-Shaded-Woods.left-3.down-1 {background-image: url(background15.png);}
-#game-container.Oddly-Shaded-Woods.left-3.down-1 > div.Oddly-Shaded-Woods.left-3.down-1 {display: flex;}
+#game-container.left-3.down-1 {background-image: url(bgs/background15.png);}
+#game-container.left-3.down-1 > div.left-3.down-1 {display: flex;}
 
 /** screen 16 **/
-#game-container.Oddly-Shaded-Woods.left-2.down-1 {background-image: url(background16.png);}
-#game-container.Oddly-Shaded-Woods.left-2.down-1 > div.Oddly-Shaded-Woods.left-2.down-1 {display: flex;}
+#game-container.left-2.down-1 {background-image: url(bgs/background16.png);}
+#game-container.left-2.down-1 > div.left-2.down-1 {display: flex;}
 
 /** screen 17 **/
-#game-container.Oddly-Shaded-Woods.left-1.down-1 {background-image: url(background17.png);}
-#game-container.Oddly-Shaded-Woods.left-1.down-1 > div.Oddly-Shaded-Woods.left-1.down-1 {display: flex;}
+#game-container.left-1.down-1 {background-image: url(bgs/background17.png);}
+#game-container.left-1.down-1 > div.left-1.down-1 {display: flex;}
 
 /** screen 18 **/
-#game-container.Oddly-Shaded-Woods.down-1 {background-image: url(background18.png);}
-#game-container.Oddly-Shaded-Woods.down-1:not(.left-1,.left-2,.left-3,.right-1,.right-2,.right-3) > div.Oddly-Shaded-Woods.down-1:not(.left-1,.left-2,.left-3,.right-1,.right-2,.right-3) {display: flex;}
+#game-container.down-1 {background-image: url(bgs/background18.png);}
+#game-container.down-1:not(.left-1,.left-2,.left-3,.right-1,.right-2,.right-3) > div.down-1:not(.left-1,.left-2,.left-3,.right-1,.right-2,.right-3) {display: flex;}
 
 /** screen 19 **/
-#game-container.Oddly-Shaded-Woods.right-1.down-1 {background-image: url(background19.png);}
-#game-container.Oddly-Shaded-Woods.right-1.down-1 > div.Oddly-Shaded-Woods.right-1.down-1 {display: flex;}
+#game-container.right-1.down-1 {background-image: url(bgs/background19.png);}
+#game-container.right-1.down-1 > div.right-1.down-1 {display: flex;}
 
 /** screen 20 **/
-#game-container.Oddly-Shaded-Woods.right-2.down-1 {background-image: url(background20.png);}
-#game-container.Oddly-Shaded-Woods.right-2.down-1 > div.Oddly-Shaded-Woods.right-2.down-1 {display: flex;}
+#game-container.right-2.down-1 {background-image: url(bgs/background20.png);}
+#game-container.right-2.down-1 > div.right-2.down-1 {display: flex;}
 
 /** screen 21 **/
-#game-container.Oddly-Shaded-Woods.right-3.down-1 {background-image: url(background21.png);}
-#game-container.Oddly-Shaded-Woods.right-3.down-1 > div.Oddly-Shaded-Woods.right-3.down-1 {display: flex;}
+#game-container.right-3.down-1 {background-image: url(bgs/background21.png);}
+#game-container.right-3.down-1 > div.right-3.down-1 {display: flex;}
 
 /********************** /Game Container *********************/
 
@@ -961,33 +1110,43 @@ body.touch-only #space-button {
 }
 
 .obstacle.fence.t1 div {width: 46px;}
+.obstacle.fence.t1 .tombstone-text {bottom: 110%;}
 .obstacle.fence.t1 div {height: 58px;background-image: url(obstacles/tombstone1.png);}
 
 .obstacle.fence.t2 div {width: 50px;}
+.obstacle.fence.t2 .tombstone-text {bottom: 120%;}
 .obstacle.fence.t2 div {height: 66px;background-image: url(obstacles/tombstone2.png);}
 
 .obstacle.fence.t3 div {width: 50px;}
+.obstacle.fence.t3 .tombstone-text {bottom: 125%;}
 .obstacle.fence.t3 div {height: 56px;background-image: url(obstacles/tombstone3.png);}
 
 .obstacle.fence.t4 div {width: 50px;}
+.obstacle.fence.t4 .tombstone-text {bottom: 110%;}
 .obstacle.fence.t4 div {height: 72px;background-image: url(obstacles/tombstone4.png);}
 
 .obstacle.fence.t5 div {width: 46px;}
+.obstacle.fence.t5 .tombstone-text {bottom: 120%;}
 .obstacle.fence.t5 div {height: 64px;background-image: url(obstacles/tombstone5.png);}
 
 .obstacle.fence.t6 div {width: 46px;}
+.obstacle.fence.t8 .tombstone-text {bottom: 105%;}
 .obstacle.fence.t6 div {height: 70px;background-image: url(obstacles/tombstone6.png);}
 
 .obstacle.fence.t7 div {width: 56px;}
+.obstacle.fence.t7 .tombstone-text {bottom: 95%;}
 .obstacle.fence.t7 div {height: 82px;background-image: url(obstacles/tombstone7.png);}
 
 .obstacle.fence.t8 div {width: 46px;}
+.obstacle.fence.t8 .tombstone-text {bottom: 110%;}
 .obstacle.fence.t8 div {height: 64px;background-image: url(obstacles/tombstone8.png);}
 
 .obstacle.fence.t9 div {width: 50px;}
+.obstacle.fence.t9 .tombstone-text {bottom: 125%;}
 .obstacle.fence.t9 div {height: 56px;background-image: url(obstacles/tombstone9.png);}
 
 .obstacle.fence.t10 div {width: 46px;}
+.obstacle.fence.t10 .tombstone-text {bottom: 110%;}
 .obstacle.fence.t10 div {height: 58px;background-image: url(obstacles/tombstone10.png);}
 
 .tombstone-text {
@@ -995,7 +1154,6 @@ body.touch-only #space-button {
    opacity: 0;
    position: relative;
    display: block;
-   top: calc(-100% - 4px);
    background: black;
    padding: 8px 16px;
    border-radius: 8px;
@@ -1731,14 +1889,12 @@ body.touch-only #space-button {
 }
 
 #Cain.npc {
-	margin-top: 20px;
 	width: 124px;
 	height: 68px;
 	background-image: url(charactersprites/cainpix.png);
 }
 
 #Vatra.npc {
-	margin-top: 20px;
 	width: 80px;
 	height: 84px;
 	background-image: url(charactersprites/vatrapix.png);
@@ -1787,11 +1943,16 @@ body.touch-only #space-button {
 
 	#inventory {
 		position: unset;
-		width: auto;
-		height: var(--inventory-width);
-		flex-direction: row;
+      width: auto;
+      height: 120px;
+      flex: 0 0 auto;
+      flex-direction: row;
       justify-content: flex-start;
 	}
+
+	#mobile-controls {
+	    bottom: -28px;
+	 }
 
 	#inventory.open {
 		justify-content: center;
@@ -1799,6 +1960,41 @@ body.touch-only #space-button {
 		top: 0;
 		left: 0;
 		height: 676px;
+	}
+}
+
+@media (max-height: 915px) {
+
+	body.touch-only {
+		align-items: flex-end;
+		margin: 20px 0 0;
+	}
+
+	body.touch-only #game-wrapper {
+		width: calc(var(--game-width) + var(--inventory-width));
+		flex-direction: row;
+		height: calc(var(--game-height));
+		margin-top: 40px;
+	}
+
+	body.touch-only #inventory {
+		position: absolute;
+      width: var(--inventory-width);
+      height: 100%;
+      flex: 0 0 auto;
+      justify-content: flex-start;
+	}
+
+	body.touch-only #mobile-controls {
+	    bottom: -5px;
+	 }
+
+	body.touch-only #inventory.open {
+		justify-content: center;
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: calc(var(--game-height);
 	}
 }
 

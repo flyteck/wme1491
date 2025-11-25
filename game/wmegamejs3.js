@@ -23,6 +23,9 @@ var crowInterval;
 var expressions = "";
 var direction = "initial";
 var duckInterval = "initial";
+var slideInterval;
+
+var leftLocation = "Jensen Acres";
 
 //need these silly things for Gnash dialogue
 var gnash = false;
@@ -31,7 +34,32 @@ var talked = false;
 var gnashOptions = false;
 var currentOption = "initial"
 
+//player vars 
+var ambiencePlayer = document.getElementById("ambience-player");
+var backgroundPlayer = document.getElementById("background-player");
+var forestAmbience = document.getElementById("forest-ambience-player");
+var forestPlayer = document.getElementById("forest-player");
+
+var menuPlayer = document.getElementById("menu-player");
 const obstacle = document.getElementsByClassName("obstacle");
+
+//character + container
+const character = document.getElementById("test-character");
+const nose = document.getElementById("nose");
+const gameContainer = document.getElementById("game-container");
+
+buttonPressed = "initial";
+
+//move distance (may have modifiers so I made it a variable)
+var slowMoveSpeed = "8"
+var fastMoveSpeed = "16"
+var moveDelay = "64";
+
+var sprintButton = document.getElementById("sprint-button");
+
+//these numbers need to be the width minus the respective height/width of the character
+var gameWidth = parseInt(795);
+var gameHeight = parseInt(510);
 
 ///quick OS detector for stupid stupid ipads
 window.addEventListener("load", getMobileOperatingSystem);
@@ -64,25 +92,21 @@ var OS = getMobileOperatingSystem();
 var smallMobile = matchMedia('(hover:none)').matches && screen.width < "1024";
 var appleDevice = OS == "Mac" && matchMedia('(any-pointer:coarse)').matches || OS == "iOS";
 
+
+//and a zoom set, for phones n shit
+const mediaQuery = window.matchMedia('(max-width: 896px)');
+
+if (mediaQuery.matches || smallMobile == true || appleDevice == true) {
+  var gameWrapper = document.getElementById("game-wrapper");
+  gameWrapper.style.zoom = ((document.documentElement.clientWidth / 1097) - 0.05);
+  gameWrapper.style.zoom = ((document.documentElement.clientHeight / 576) - 0.05);
+  console.log(document.documentElement.clientWidth * 0.05)
+} else {
+  console.log('Viewport is wide!');
+  console.log(document.documentElement.clientWidth);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
-
-//character + container
-const character = document.getElementById("test-character");
-const nose = document.getElementById("nose");
-const gameContainer = document.getElementById("game-container");
-
-buttonPressed = "initial";
-
-//move distance (may have modifiers so I made it a variable)
-var slowMoveSpeed = "8"
-var fastMoveSpeed = "16"
-var moveDelay = "64";
-
-var sprintButton = document.getElementById("sprint-button");
-
-//these numbers need to be the width minus the respective height/width of the character
-var gameWidth = parseInt(795);
-var gameHeight = parseInt(510);
 
 //only mobile stuff (if no mouse support)
 if (smallMobile == true || appleDevice == true) {
@@ -99,12 +123,12 @@ function audioVolume() {
   for (i = 0; i < soundEffect.length; i++) {
     soundEffect[i].volume = 0.5;
   }
-  document.getElementById("background-player").volume = 0.7;
+  backgroundPlayer.volume = 0.7;
   document.getElementById("advance").volume = 0.2;
   document.getElementById("leaves").volume = 0.2;
 
-  document.getElementById("forest-player").volume = 0.2;
-  document.getElementById("forest-ambience-player").volume = 0.2;
+  forestPlayer.volume = 0.2;
+  forestAmbience.volume = 0.2;
 }
 
 //this checks if the mouse is held down, to repeat click directions
@@ -135,10 +159,43 @@ window.addEventListener("load", screenTitle);
 
 //(and it's also called when someone changes screens)
 function screenTitle() {
-  //I strung this all together: basically, get the classlist, make it a string, replace spaces w spaceholder text, replace hyphens with spaces, then spaceholder w a hyphen and a comma (if two) 
+  var screenName = document.getElementById("screen-display");
+  //check which screen we're on, and get the appropriate title
 
-  //display it nicely on the game screen
-  document.getElementById("screen-display").innerHTML = gameContainer.classList.toString().replace(/\s/g, ' SPACEHOLDER ').replace(/-/g, ' ').replace(' SPACEHOLDER ', ' - ').replace(' SPACEHOLDER ', ', ');
+  //default screen name for all cases
+  screenName.innerHTML = "Jensen Acres";
+
+  //for the forest area
+  if (gameContainer.classList.contains("left-3") || gameContainer.classList.contains("left-2") || gameContainer.classList.contains("left-1", "up-1")) {
+    //we have this as a global variable, modified when you leave the forest;
+    screenName.innerHTML = leftLocation;
+  }
+
+  //for Gnash's screen
+  if (gameContainer.classList.contains("left-3", "up-1")) {
+    screenName.innerHTML = "Tangled Nest";
+  }
+
+  //for the pond
+  if (gameContainer.classList.contains("down-1") && !gameContainer.classList.contains("right-3") && !gameContainer.classList.contains("left-2") && !gameContainer.classList.contains("left-3")) {
+    screenName.innerHTML = "Khoi Pond";
+  }
+
+  //for the church
+  if (gameContainer.classList.contains("right-2") || gameContainer.classList.contains("right-3")) {
+    screenName.innerHTML = "Abandoned Church";
+  }
+
+  //for the Quincy's spot
+  if (gameContainer.classList.contains("right-3") && gameContainer.classList.contains("down-1")) {
+    screenName.innerHTML = "Quincy's Spot";
+  }
+
+  //add a hyphen
+  screenName.innerHTML += " - ";
+
+  //and then add the directional classes for navigation
+  screenName.innerHTML += gameContainer.classList.toString().replace(/\s/g, ' SPACEHOLDER ').replace(/-/g, ' ').replace(' SPACEHOLDER ', ', ');
 
   //we're gonna call this in here, to be sure it's all updated when it goes
   if (document.getElementById("tutorial").style.display == "none") {
@@ -156,37 +213,138 @@ function hideTutorial() {
     document.getElementById("tutorial").style.display = "none";
     }, 200);
     document.getElementById("tutorial").style.opacity = "0";
-    document.getElementById("mobile-controls").classList.add("open");
-
-    //run through all the functions of the controller whenever someone presses a button
-    document.addEventListener("keydown", buttonPress);
-
-    //run through all the functions of the controller whenever someone lifts a button
-    document.addEventListener("keyup", buttonRelease);
-
-    //start playing music
-    document.getElementById("background-player").play();
-    document.getElementById("ambience-player").play();
 
     //remove that once the tutorial is gone
     window.removeEventListener("keydown", hideTutorial);
-    return
+
+    //start the cutscene
+    cutScene("intro-cutscene");
+    document.getElementById("intro-player").play();
   }
 }
 
-//fill in inventory descriptions
-var menu = document.getElementById("inventory");
+function cutScene(slideContainer) {
+  //theres.... a lot of timeouts in here and my head hurts but know they work okay
 
-var items = menu.getElementsByTagName("li")
+  var cutScene = document.getElementById(slideContainer);
+  //show the cutscene box
+  cutScene.style.display = "flex";
+
+  //get all cutscene slides
+  var slides = cutScene.getElementsByClassName("slide")
+  
+  //make sure they're all not visible (IDK why this is needed but the CSS is being overwritten so);
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+
+  //allow for skipping
+  window.addEventListener("keydown", addSkip);
+
+  //set the interval for slideshow
+  slideInterval = setInterval(slideChange, 10400);
+  var slideNumber = "0";
+
+  //show the first slide
+  slides[slideNumber].style.display = "flex";
+  setTimeout(() => {
+    slides[slideNumber].style.opacity = "1";
+    slides[slideNumber].style.backgroundPosition = "0 center";
+  }, 200);
+  
+  function slideChange() {
+    //hide the current slide
+    slides[slideNumber].style.opacity = "0";
+
+    setTimeout(() => {
+      slides[slideNumber].style.display = "none";
+
+      //redefine slide number
+      slideNumber = parseInt(slideNumber) + parseInt("1");
+
+      //show the next slide
+      slides[slideNumber].style.display = "flex";
+      setTimeout(() => {
+        slides[slideNumber].style.opacity = "1";
+        if (!slides[slideNumber].classList.contains("static")) {
+          slides[slideNumber].style.backgroundPosition = "0 center";
+        }
+      }, 200);
+
+      //if we're currently on the last slide,
+      if (slideNumber == parseInt(slides.length) - parseInt("1")) {
+        //stop iterating
+        clearInterval(slideInterval)
+
+        //fade out and hide the curent slide
+        setTimeout(() => {
+          slides[slideNumber].style.opacity = "0";
+          setTimeout(() => {
+            slides[slideNumber].style.display = "none";
+
+            //and then close it all down
+            hideCutscene();
+          }, 200);
+        }, 10200);
+      }
+    }, 200);
+  }
+
+}
+
+//skip
+function addSkip() {
+  document.getElementById("skip").style.opacity = "0.6"
+  window.addEventListener("keydown", hideCutscene);
+
+  setTimeout(() => {
+    document.getElementById("skip").style.opacity = "0"
+    window.removeEventListener("keydown", hideCutscene);
+  }, 2000);
+
+
+}
+
+function hideCutscene() {
+  //hide cutscence (lower opacity and then after it fades, hide it fully);
+  var introPlayer = document.getElementById("intro-player")
+  fadeOut(introPlayer);
+
+  setTimeout(() => {
+    document.getElementById("intro-cutscene").style.display = "none";
+    }, 200);
+  document.getElementById("intro-cutscene").style.opacity = "0";
+
+  //and remove the listener once it's gone, and clear interval
+  window.removeEventListener("keydown", addSkip);
+  window.removeEventListener("keydown", hideCutscene);
+  clearInterval(slideInterval);
+
+  //start playing music
+  backgroundPlayer.play();
+  ambiencePlayer.play();
+
+  //add open to the mobile controls, showing them where relevant
+  document.getElementById("mobile-controls").classList.add("open");
+  //run through all the functions of the controller whenever someone presses a button
+  document.addEventListener("keydown", buttonPress);
+  //run through all the functions of the controller whenever someone lifts a button
+  document.addEventListener("keyup", buttonRelease);
+}
+
+//fill in inventory descriptions
+var itemViewer = document.getElementById("item-viewer");
+var menu = document.getElementById("inventory");
+var items = itemViewer.getElementsByTagName("span");
 
 //loop through the inventory
 for (i = 0; i < items.length; i++) {
   //get the name of each item
-  npcName = items[i].id.replace("Inventory", "");
+  itemName = items[i].id.replace("-description", "");
 
   //loop through the interact list
   for (j = 0; j < npcList.length; j++) {
-    if (npcName == npcList[j].name) {
+    if (itemName == npcList[j].name) {
       var description = items[i].querySelector(".description")
       //if they match, set the description text
       description.innerHTML = npcList[j].dialogue.replace(/♡/g, "");
@@ -296,8 +454,9 @@ function buttonPress() {
     return;
   }
 
-  if (eventVar.key === 'q') {
+  if (eventVar.key === 'q' || eventVar.target.id == "menu-button") {
     //open/close menu
+
     //if there's dialogue open, don't do shit
     if (document.querySelector(".dialogue-popup").id != "") {
       return
@@ -306,22 +465,28 @@ function buttonPress() {
     //if it's open, close it
     if (menu.classList.contains("open")) {
       menu.classList.remove("open");
+      if (menu.querySelector(".collected") != null) {
+        menu.querySelector(".collected").classList.remove("viewing");
+      }
 
       //if we're in the forest
       if (document.body.classList.contains("inForest")) {
         //play ambience & background
-        document.getElementById("forest-ambience-player").play();
-        document.getElementById("forest-player").play();
+        forestAmbience.play();
+        forestPlayer.play();
       } 
       if (!document.body.classList.contains("inForest")) {
         //play ambience & background
-        document.getElementById("ambience-player").play();
-        document.getElementById("background-player").play();
+        ambiencePlayer.play();
+        backgroundPlayer.play();
       }
 
       //and pause menu music (+ set it to beginning)
-      document.getElementById("menu-player").pause();
-      document.getElementById("menu-player").currentTime = 0;
+      menuPlayer.pause();
+      menuPlayer.currentTime = 0;
+
+      document.querySelector(".focus").classList.remove("focus");
+      document.querySelector("span.viewing").classList.remove("viewing");
       return
     }
     
@@ -330,23 +495,47 @@ function buttonPress() {
       //pause ambience & background (+ set them to beginning)
       if (document.body.classList.contains("inForest")) {
         //in forest
-        document.getElementById("forest-ambience-player").pause();
-        document.getElementById("forest-player").pause();
-        document.getElementById("forest-ambience-player").currentTime = 0;
-        document.getElementById("forest-player").currentTime = 0;
+        forestAmbience.pause();
+        forestPlayer.pause();
+        forestAmbience.currentTime = 0;
+        forestPlayer.currentTime = 0;
       } 
       if (!document.body.classList.contains("inForest")) {
         //not in forest
-        document.getElementById("ambience-player").pause();
-        document.getElementById("background-player").pause();
-        document.getElementById("ambience-player").currentTime = 0;
-        document.getElementById("background-player").currentTime = 0;
+        ambiencePlayer.pause();
+        backgroundPlayer.pause();
+
+        ambiencePlayer.currentTime = 0;
+        backgroundPlayer.currentTime = 0;
       }
 
       //and play menu music
       document.getElementById("menu-player").play();
 
       menu.classList.add("open");
+
+      if (menu.querySelector(".collected") != null) {
+        //if there's collected items,
+
+        //first, hide default
+        var defaultText = document.getElementById("Default");
+        defaultText.style.display = "none";
+
+        var collectedItems = menu.getElementsByClassName("collected");
+        var itemDisplays = itemViewer.getElementsByTagName("span");
+        
+        //grab the first collected item, add focus to it
+        collectedItems[0].classList.add("focus");
+
+        //and then we find the matching name, and add viewing to that
+        for (i = 0; i < itemDisplays.length; i++) {
+          if (itemDisplays[i].id.replace("-description","") == collectedItems[0].id.replace("Inventory","")) {
+            itemDisplays[i].classList.add("viewing");
+            break;
+          }
+        }
+
+      }
       return
     }
   }
@@ -354,17 +543,28 @@ function buttonPress() {
   //on spacebar click, call item check. if it returns true, modify the clicked item
   if (eventVar.key === ' ' || eventVar.target.id == "dialogue-arrow" || eventVar.target.id == "interact-button" || (gnash == true && inDialogue == false)) {
 
-    if (document.body.classList.contains("reset")) {
+    if (document.body.classList.contains("reset") || document.body.classList.contains("success")) {
        //if you are, set needed general variables
       var dialoguePopUp = document.querySelector(".dialogue-popup");
       var dialogueLoader = document.getElementById("dialogue-loader");
 
-      document.getElementById("blackout").style.opacity = "1";
+      //do stuff for the blackout (so only if we have reset & no success)
+      if (!document.body.classList.contains("success")) {
+        document.getElementById("blackout").style.opacity = "1";
 
-      setTimeout(() => {
-        reset();
-        document.getElementById("blackout").style.opacity = "0";
-      }, 1000);
+        setTimeout(() => {
+          reset();
+          document.getElementById("blackout").style.opacity = "0";
+        }, 1000);
+      }
+
+      //play the ending cutscene, if we have success
+      if (document.body.classList.contains("success")) {
+        document.getElementById("outro-cutscene").style.display = "flex";
+        setTimeout(() => {
+          cutScene("outro-cutscene");
+        }, 600);
+      }
 
       //check if we're on the last line of dialogue, and if so, do something different
       if (dialoguePopUp.classList.contains("last-line")) {
@@ -551,7 +751,7 @@ function buttonPress() {
       if (interactFound.id == "Gnash" && talked == false) {
         gnashAnimation();
         //stop the music right away (I'd like to fade it tbh)
-        document.getElementById("forest-player").pause();
+        fadeOut(forestPlayer);
 
         setTimeout(() => {
           //open the box
@@ -626,8 +826,6 @@ function buttonPress() {
       if (expressions != "") {
         expressions.shift();
       }
-
-      console.log(words);
 
       if (!dialoguePopUp.classList.contains("talking-now") && !interactFound.classList.contains("objective")) {
         //on our first one, we want to grab our facial expressions, so we separate those out (odd numbers, even is text),
@@ -725,6 +923,7 @@ function buttonPress() {
         //get the active button
         var activeButton = buttonArray.find((element) => element.classList.contains("active"));
 
+        //if we don't have one, add it to the first
         if (activeButton == null) {
           buttonArray[0].classList.add("active");
           activeButton = buttonArray[0];
@@ -775,9 +974,128 @@ function buttonPress() {
       }
   }
   
-
   if (!document.querySelector(".dialogue-popup").id == "") {
     //end this if dialogue is open
+    return
+  }
+
+  if (menu.classList.contains("open") && menu.querySelector(".collected") != null) {
+    //if menu is open we also wanna do some different stuff
+    if (eventVar.key === 'ArrowLeft' || eventVar.key === 'a' || eventVar.target.id == "left-arrow-button") {
+      var collected = menu.getElementsByClassName("collected");
+      var collectedItems = Array.from(collected);
+      var itemDisplays = itemViewer.getElementsByTagName("span");
+
+      //play sounds (stop first to make sure they restart)
+      document.getElementById("advance2").pause();
+      document.getElementById("advance2").currentTime = 0;
+
+      //play
+      document.getElementById("advance2").play();
+
+      //get the focused button
+      var focusButton = collectedItems.find((element) => element.classList.contains("focus"));
+
+      //if we don't have one, add it to the first
+      if (focusButton == null) {
+        collectedItems[0].classList.add("focus");
+        focusButton = collectedItems[0];
+      }
+
+      //get it's index
+      var buttonIndex = collectedItems.indexOf(focusButton);
+      //and the last button
+      var lastButton = collectedItems.length - 1;
+
+      //remove active from the current button
+      focusButton.classList.remove("focus");
+      //and remove viewing from em all
+      for (i = 0; i < itemDisplays.length; i++) {
+        if (itemDisplays[i].classList.contains("viewing")) {
+          itemDisplays[i].classList.remove("viewing");
+        }
+      }
+
+      //if we're not on the first button,
+      if (buttonIndex != 0) {
+        //subtract one from the index
+        collectedItems[buttonIndex - 1].classList.add("focus");
+      } else {
+        //otherwise, add to the last button
+        collectedItems[lastButton].classList.add("focus")
+      }
+
+      //redefine the focused button
+      var focusButton = collectedItems.find((element) => element.classList.contains("focus"));
+
+      //and set viewing on the corresponding description
+      for (i = 0; i < itemDisplays.length; i++) {
+        if (itemDisplays[i].id.replace("-description","") == focusButton.id.replace("Inventory","")) {
+          itemDisplays[i].classList.add("viewing");
+          break
+        }
+      }
+
+    }
+
+    if (eventVar.key === 'ArrowRight' || eventVar.key === 'd' || eventVar.target.id == "right-arrow-button") {
+      var collected = menu.getElementsByClassName("collected");
+      var collectedItems = Array.from(collected);
+      var itemDisplays = itemViewer.getElementsByTagName("span");
+
+      //play sounds (stop first to make sure they restart)
+      document.getElementById("advance2").pause();
+      document.getElementById("advance2").currentTime = 0;
+
+      //play
+      document.getElementById("advance2").play();
+
+      //get the focused button
+      var focusButton = collectedItems.find((element) => element.classList.contains("focus"));
+
+      //if we don't have one, add it to the first
+      if (focusButton == null) {
+        collectedItems[0].classList.add("focus");
+        focusButton = collectedItems[0];
+      }
+
+      //get it's index
+      var buttonIndex = collectedItems.indexOf(focusButton);
+      //and the last button
+      var lastButton = collectedItems.length - 1;
+
+      //remove active from the current button
+      focusButton.classList.remove("focus");
+      //and remove viewing from em all
+      for (i = 0; i < itemDisplays.length; i++) {
+        if (itemDisplays[i].classList.contains("viewing")) {
+          itemDisplays[i].classList.remove("viewing");
+        }
+      }
+
+      //if we're not on the last button,
+      if (buttonIndex != lastButton) {
+        //add one to the index
+        collectedItems[buttonIndex + 1].classList.add("focus");
+      } else {
+        //otherwise, add to the first button
+        collectedItems[0].classList.add("focus")
+      }
+
+      //redefine the focused button
+      var focusButton = collectedItems.find((element) => element.classList.contains("focus"));
+
+      //and set viewing on the corresponding description
+      for (i = 0; i < itemDisplays.length; i++) {
+        if (itemDisplays[i].id.replace("-description","") == focusButton.id.replace("Inventory","")) {
+          itemDisplays[i].classList.add("viewing");
+          break
+        }
+      }
+
+    }
+
+    //and end so we don't move the character
     return
   }
 
@@ -938,7 +1256,6 @@ function obstacleCheck(direction,moveDistance) {
   //get classes on game container
   var gameContainerClasses = gameContainer.classList.value.split(' ');
   //shift off the location name
-  gameContainerClasses.shift();
 
   var characterBounds = character.getBoundingClientRect();
 
@@ -986,40 +1303,46 @@ function obstacleCheck(direction,moveDistance) {
         //if we're going left (entering)
         if (character.classList.contains("left")) {
           //pause and reset the time on the music players
-          document.getElementById("background-player").pause();
-          document.getElementById("ambience-player").pause();
-          document.getElementById("background-player").currentTime = 0;
-          document.getElementById("ambience-player").currentTime = 0;
+          backgroundPlayer.pause();
+          ambiencePlayer.pause();
+          backgroundPlayer.currentTime = 0;
+          ambiencePlayer.currentTime = 0;
 
           for (i = 0; i < fog.length; i++) {
             fog[i].style.opacity = "0";
           }
 
+          leftLocation = "Stripey Hollow";
+          screenTitle();
+
           document.getElementById("health").style.opacity = "1";
           character.style.filter = "brightness(0.8) hue-rotate(-45deg) saturate(1.2)";
           document.body.classList.add("inForest");
 
-          document.getElementById("forest-player").play();
-          document.getElementById("forest-ambience-player").play();
+          forestPlayer.play();
+          forestAmbience.play();
         }
         //if we're going right (leaving)
         if (character.classList.contains("right")) {
           //pause and reset the time on the music players
-          document.getElementById("forest-player").pause();
-          document.getElementById("forest-ambience-player").pause();
-          document.getElementById("forest-player").currentTime = 0;
-          document.getElementById("forest-ambience-player").currentTime = 0;
+          forestPlayer.pause();
+          forestAmbience.pause();
+          forestPlayer.currentTime = 0;
+          forestAmbience.currentTime = 0;
 
           for (i = 0; i < fog.length; i++) {
             fog[i].style.opacity = "";
           }
 
+          leftLocation = "Jensen Acres";
+          screenTitle();
+
           document.getElementById("health").style.opacity = "";
           character.style.filter = "";
           document.body.classList.remove("inForest");
 
-          document.getElementById("background-player").play();
-          document.getElementById("ambience-player").play();
+          backgroundPlayer.play();
+          ambiencePlayer.play();
         }
       }
   }
@@ -1864,6 +2187,10 @@ function gnashInteraction() {
       //and we add option selected to prevent this happening again
       dialoguePopUp.classList.add("option-selected");
 
+      if (currentOption == "option-daisy") {
+        document.body.classList.add("success");
+      }
+
       //on option 7, check for and delete extrenuous buttons (to make arrow toggles smooth)
         if (currentOption == "option-7") {
           //delay to be sure they're in already
@@ -1889,7 +2216,7 @@ function gnashInteraction() {
 
             //any buttons added after this points must have a manual active added
             if (currentButtons.length == 0) {
-              dialogueLoader.innerHTML = "You don't have any items... <div class='flex-row'><button id='gnash-close' class='active'>[Run!!]</button></div>";
+              dialogueLoader.innerHTML = "[You don't have any items...] <div class='flex-row'><button id='gnash-close' class='active'>[Run!!]</button></div>";
               //this resets our dialogue box and allows it to close
               gnash = false;
               inDialogue = false;
@@ -1912,17 +2239,20 @@ function gnashInteraction() {
               for (i = 0; i < npcList.length; i++) {
                 if ("Gnash" == npcList[i].name) {
                   //new dialogue for conversation 2
-                  npcList[i].dialogue = "null♡Hey yo WB♡null♡.....♡null♡Why... have you come here?<div class='flex-row'><button class='active' id='option-1'>Seeking something strange</button> <button id='option-6'>Seeking you</button></div>"
+                  npcList[i].dialogue = "empty♡...♡empty♡...You're back.♡empty♡<div class='flex-row'><button class='active' id='option-6'>I have something for you...</button></div>"
+                }
+
+                //and update Cain & Vatra's dialogue options
+                if ("CainVatra" == npcList[i].name) {
+                  //new dialogue for conversation 2
+                  npcList[i].dialogue = "caintalking♡Were you just IN THE FOREST?!"
+                  npcList[i].repeatLine = "<span><i>Holy horselfies</i>, you're not dead?? You're not going in AGAIN are you!?</span>"
                 }
               }
 
               //NEW DIALOGUE
               gnashDialogueOptions = [
-                { option: "option-1", dialogue: "concern♡Something... strange?<div class='flex-row'><button id='option-3'>There's been rumours of a monster</button> <button id='option-3'>You, I think</button></div>"},
-                { option: "option-3", dialogue: "null♡Me...?♡null♡Why...?<div class='flex-row'><button id='option-4'>Have you been hurting equids?</button><button id='option-4'>Everyone is scared</button></div>"},
-                { option: "option-4", dialogue: "worry♡I would...♡worry♡I would not hurt anyone.♡concern♡I am here. Alone.♡concern♡I only... watch.♡null♡Are you...♡null♡...like me? <div class='flex-row'><button id='option-5'>Yes</button><button id='option-6'>No</button></div>"},
-                { option: "option-5", dialogue: "empty♡I am... not so sure.<div class='flex-row'><button id='option-7'>[Give him something]</button></div>"},
-                { option: "option-6", dialogue: "null♡...<div class='flex-row'><button id='option-7'>[Give him something]</button></div>"},
+                { option: "option-6", dialogue: "empty♡...<div class='flex-row'><button id='option-7'>[Give him something]</button></div>"},
                 { option: "option-7", dialogue: "null♡<div class='flex-row' style='margin-top: -20px;'><button class='drawing-button' id='option-drawing'><img src='objectives/drawing.png'></button><button id='option-hair' class='hair-button'><img src='objectives/hair.png'></button><button id='option-daisy' class='daisy-button'><img src='objectives/daisy.png'></button><button id='option-bone' class='bone-button'><img src='objectives/bone.png' class='bone-button'></button><button id='option-daisy' class='daisy-button'><img src='objectives/daisy.png'></button></div>"},
                 { option: "option-drawing", dialogue: "null♡Is this... me?♡null♡Then...♡null♡I am... not like you.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
                 { option: "option-hair", dialogue: "null♡Oh. My hair.♡null♡I do not... need this.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
@@ -2024,10 +2354,10 @@ function reset() {
 
   //and rerun the forest exit code
   //pause and reset the time on the music players
-  document.getElementById("forest-player").pause();
-  document.getElementById("forest-ambience-player").pause();
-  document.getElementById("forest-player").currentTime = 0;
-  document.getElementById("forest-ambience-player").currentTime = 0;
+  forestPlayer.pause();
+  forestAmbience.pause();
+  forestPlayer.currentTime = 0;
+  forestAmbience.currentTime = 0;
 
   var fog = document.querySelectorAll(".fog");
   for (i = 0; i < fog.length; i++) {
@@ -2038,8 +2368,8 @@ function reset() {
   character.style.filter = "";
   document.body.classList.remove("inForest");
 
-  document.getElementById("background-player").play();
-  document.getElementById("ambience-player").play();
+  backgroundPlayer.play();
+  ambiencePlayer.play();
 
   //aaaand remove reset from the body
   document.body.classList.remove("reset");
@@ -2053,4 +2383,19 @@ function zIndexSortCharacter() {
   if (character.style.top.replace("px","") > "0") {
     character.style.zIndex = character.style.top.replace("px","");
   }
+}
+
+function fadeOut(audioElement) {
+  var fadeInterval = setInterval(function() {
+    // Check if the volume is already at 0
+    if (audioElement.volume <= 0.01) {
+      clearInterval(fadeInterval);
+      audioElement.volume = 0; // Ensure volume is exactly 0
+      audioElement.pause();
+      audioElement.currentTime = 0;
+    } else {
+      // Decrease the volume
+      audioElement.volume -= 0.01;
+    }
+  }, 10); // Adjust the interval in milliseconds (e.g., 200ms)
 }
