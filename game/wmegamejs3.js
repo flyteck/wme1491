@@ -39,8 +39,9 @@ var ambiencePlayer = document.getElementById("ambience-player");
 var backgroundPlayer = document.getElementById("background-player");
 var forestAmbience = document.getElementById("forest-ambience-player");
 var forestPlayer = document.getElementById("forest-player");
-
+var musicBox = document.getElementById("music-box");
 var menuPlayer = document.getElementById("menu-player");
+
 const obstacle = document.getElementsByClassName("obstacle");
 
 //character + container
@@ -92,18 +93,31 @@ var OS = getMobileOperatingSystem();
 var smallMobile = matchMedia('(hover:none)').matches && screen.width < "1024";
 var appleDevice = OS == "Mac" && matchMedia('(any-pointer:coarse)').matches || OS == "iOS";
 
+////and a zoom set, for phones n shit
+//fire when we rotate/resize
+window.addEventListener("resize", zoomScreen);
+//and right away
+zoomScreen();
 
-//and a zoom set, for phones n shit
-const mediaQuery = window.matchMedia('(max-width: 896px)');
+function zoomScreen() {
+  const mediaQuery = window.matchMedia('(max-width: 896px)');
+  const mediaQueryLG = window.matchMedia('(max-width: 950px)');
 
-if (mediaQuery.matches || smallMobile == true || appleDevice == true) {
   var gameWrapper = document.getElementById("game-wrapper");
-  gameWrapper.style.zoom = ((document.documentElement.clientWidth / 1097) - 0.05);
-  gameWrapper.style.zoom = ((document.documentElement.clientHeight / 576) - 0.05);
-  console.log(document.documentElement.clientWidth * 0.05)
-} else {
-  console.log('Viewport is wide!');
-  console.log(document.documentElement.clientWidth);
+
+  if (mediaQuery.matches || (smallMobile == true && mediaQueryLG.matches) || (appleDevice == true && mediaQueryLG.matches)) {
+    gameWrapper.style.zoom = ((document.documentElement.clientWidth / 1097) - 0.05);
+    gameWrapper.style.zoom = ((document.documentElement.clientHeight / 576) - 0.05);
+  }
+
+  const ipadProW = window.matchMedia('(width: 1366px)');
+  const ipadProH = window.matchMedia('(height: 1024px)');
+
+  if (ipadProW.matches && ipadProH.matches) {
+    gameWrapper.style.zoom = ((document.documentElement.clientWidth / 1097) + 0.05);
+    document.getElementById("inventory").style.maxWidth = "160px";
+    document.getElementById("inventory").style.fontSize = "70%";
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -223,12 +237,22 @@ function hideTutorial() {
   }
 }
 
-function cutScene(slideContainer) {
+function cutScene(slidePlayer) {
   //theres.... a lot of timeouts in here and my head hurts but know they work okay
-
-  var cutScene = document.getElementById(slideContainer);
+  var cutScene = document.getElementById(slidePlayer);
   //show the cutscene box
-  cutScene.style.display = "flex";
+  cutScene.classList.add("playing");
+
+  if (slidePlayer == "outro-cutscene") {
+    var gnash = false;
+    var inDialogue = false;
+    var talked = false;
+    var gnashOptions = false;
+    var currentOption = "initial";
+    //no funny business
+    document.removeEventListener("keydown", buttonPress);
+    document.removeEventListener("keyup", buttonRelease);
+  }
 
   //get all cutscene slides
   var slides = cutScene.getElementsByClassName("slide")
@@ -242,7 +266,13 @@ function cutScene(slideContainer) {
   window.addEventListener("keydown", addSkip);
 
   //set the interval for slideshow
-  slideInterval = setInterval(slideChange, 10400);
+  clearInterval(slideInterval);
+
+  if (slidePlayer == "credits") {
+    slideInterval = setInterval(slideChange, 6000);
+  } else {
+    slideInterval = setInterval(slideChange, 10400);
+  }
   var slideNumber = "0";
 
   //show the first slide
@@ -274,16 +304,16 @@ function cutScene(slideContainer) {
       //if we're currently on the last slide,
       if (slideNumber == parseInt(slides.length) - parseInt("1")) {
         //stop iterating
-        clearInterval(slideInterval)
+        clearInterval(slideInterval);
 
         //fade out and hide the curent slide
         setTimeout(() => {
           slides[slideNumber].style.opacity = "0";
           setTimeout(() => {
             slides[slideNumber].style.display = "none";
-
-            //and then close it all down
+            //and hide
             hideCutscene();
+
           }, 200);
         }, 10200);
       }
@@ -292,46 +322,82 @@ function cutScene(slideContainer) {
 
 }
 
+function playCredits() {
+  //this has to be a looped function man
+  cutScene("credits");
+}
+
 //skip
 function addSkip() {
-  document.getElementById("skip").style.opacity = "0.6"
+  var cutScene = document.querySelector(".cutscene.playing");
+
+  cutScene.querySelector(".skip").style.opacity = "0.6"
   window.addEventListener("keydown", hideCutscene);
 
   setTimeout(() => {
-    document.getElementById("skip").style.opacity = "0"
+    cutScene.querySelector(".skip").style.opacity = "0"
     window.removeEventListener("keydown", hideCutscene);
   }, 2000);
-
-
 }
 
 function hideCutscene() {
+  var cutScene = document.querySelector(".cutscene.playing");
+  var slidePlayer = cutScene.id;
   //hide cutscence (lower opacity and then after it fades, hide it fully);
   var introPlayer = document.getElementById("intro-player")
-  fadeOut(introPlayer);
+
+  if (!introPlayer.paused) {
+    fadeOut(introPlayer);
+  }
+  if (!musicBox.paused) {
+    fadeOut(musicBox);
+  }
 
   setTimeout(() => {
-    document.getElementById("intro-cutscene").style.display = "none";
+    cutScene.classList.remove("playing");
     }, 200);
-  document.getElementById("intro-cutscene").style.opacity = "0";
+  cutScene.style.opacity = "0";
 
   //and remove the listener once it's gone, and clear interval
   window.removeEventListener("keydown", addSkip);
   window.removeEventListener("keydown", hideCutscene);
   clearInterval(slideInterval);
 
-  //start playing music
-  backgroundPlayer.play();
-  ambiencePlayer.play();
+  //only set the game up for play if it's the intro custcene
+  if (slidePlayer == "intro-cutscene") {
+    //start playing music
+    backgroundPlayer.play();
+    ambiencePlayer.play();
 
-  //add open to the mobile controls, showing them where relevant
-  document.getElementById("mobile-controls").classList.add("open");
-  //run through all the functions of the controller whenever someone presses a button
-  document.addEventListener("keydown", buttonPress);
-  //run through all the functions of the controller whenever someone lifts a button
-  document.addEventListener("keyup", buttonRelease);
+    //add open to the mobile controls on the intro cutscene, otherwise hide em
+    if (slidePlayer == "intro-cutscene") {
+      document.getElementById("mobile-controls").classList.add("open");
+    } else {
+      document.getElementById("mobile-controls").classList.remove("open");
+    }
+    //run through all the functions of the controller whenever someone presses a button
+    document.addEventListener("keydown", buttonPress);
+    //run through all the functions of the controller whenever someone lifts a button
+    document.addEventListener("keyup", buttonRelease);
+  }
+
+  if (slidePlayer == "outro-cutscene") {
+    //play the credits if we're on the outro
+    playCredits();
+  }
+
+  if (slidePlayer == "credits") {
+    //if we're on credits, set up and display the endcard
+    console.log("endcard");
+    document.getElementById("endcard").style.display = "flex";
+
+    document.addEventListener("keydown", endcardToggle);
+
+    //I cleared this in like 20000 places man IDFK
+    clearInterval(slideInterval);
+  }
+
 }
-
 //fill in inventory descriptions
 var itemViewer = document.getElementById("item-viewer");
 var menu = document.getElementById("inventory");
@@ -543,8 +609,9 @@ function buttonPress() {
   //on spacebar click, call item check. if it returns true, modify the clicked item
   if (eventVar.key === ' ' || eventVar.target.id == "dialogue-arrow" || eventVar.target.id == "interact-button" || (gnash == true && inDialogue == false)) {
 
+    //check if you're on a reset or a success
     if (document.body.classList.contains("reset") || document.body.classList.contains("success")) {
-       //if you are, set needed general variables
+      //if you are, set needed general variables
       var dialoguePopUp = document.querySelector(".dialogue-popup");
       var dialogueLoader = document.getElementById("dialogue-loader");
 
@@ -560,7 +627,7 @@ function buttonPress() {
 
       //play the ending cutscene, if we have success
       if (document.body.classList.contains("success")) {
-        document.getElementById("outro-cutscene").style.display = "flex";
+        document.getElementById("outro-cutscene").classList.add("playing");
         setTimeout(() => {
           cutScene("outro-cutscene");
         }, 600);
@@ -750,8 +817,11 @@ function buttonPress() {
       //this is for gnash specifically -- set the timeout to give time for Gnash Animation
       if (interactFound.id == "Gnash" && talked == false) {
         gnashAnimation();
-        //stop the music right away (I'd like to fade it tbh)
+        //fade the music
         fadeOut(forestPlayer);
+        //remove listeners
+        document.removeEventListener("keydown", buttonPress);
+        document.removeEventListener("keyup", buttonRelease);
 
         setTimeout(() => {
           //open the box
@@ -760,6 +830,10 @@ function buttonPress() {
           document.getElementById("GnashPix").style.backgroundImage = "url(charactersprites/gnashpix.png)";
           //set talked to true so this doesn't fire again
           talked = true;
+
+          //re-add listeners
+          document.addEventListener("keydown", buttonPress);
+          document.addEventListener("keyup", buttonRelease);
 
           //set the buttonpressed var to the current event trigger, to recall on mobile
           buttonPressed = eventVar;
@@ -1312,6 +1386,8 @@ function obstacleCheck(direction,moveDistance) {
             fog[i].style.opacity = "0";
           }
 
+          document.getElementById("clouds").style.opacity = "0";
+
           leftLocation = "Stripey Hollow";
           screenTitle();
 
@@ -1333,6 +1409,8 @@ function obstacleCheck(direction,moveDistance) {
           for (i = 0; i < fog.length; i++) {
             fog[i].style.opacity = "";
           }
+
+          document.getElementById("clouds").style.opacity = "0.25";
 
           leftLocation = "Jensen Acres";
           screenTitle();
@@ -1479,8 +1557,8 @@ function obstacleCheck(direction,moveDistance) {
           var overlapBottomTop = characterBounds.bottom >= obstacleBounds.top
 
           //we will allow to move up unless the character bottom is higher than the obstacle bottom
-          var behind = (parseInt(obstacle[i].style.zIndex) + parseInt(moveDistance)) > parseInt(character.style.zIndex);
-          var inFront = (parseInt(obstacle[i].style.zIndex) - parseInt(moveDistance)) < parseInt(character.style.zIndex);
+          var behind = (parseInt(obstacle[i].style.zIndex)) > parseInt(character.style.zIndex);
+          var inFront = (parseInt(obstacle[i].style.zIndex)) < parseInt(character.style.zIndex);
 
           if (overlapBottomTop == true && character.classList.contains("down") && behind == true) {
             if (smallMobile == false && appleDevice == false) {
@@ -1791,21 +1869,21 @@ function obstacleCorrect() {
     for (i = 0; i < obstacle.length; i++) {
       var obstacleBounds = obstacle[i].getBoundingClientRect();
       var characterBounds = character.getBoundingClientRect();
-      var overlap = !(obstacleBounds.right <= characterBounds.left || obstacleBounds.left >= characterBounds.right ||
-                      obstacleBounds.bottom <= characterBounds.top || obstacleBounds.top >= characterBounds.bottom);
+      var overlap = !(obstacleBounds.right < characterBounds.left || obstacleBounds.left > characterBounds.right ||
+                      obstacleBounds.bottom < characterBounds.top || obstacleBounds.top > characterBounds.bottom);
 
       if (overlap == true) {
         //check where the overlap is [overlap || character || object]
-        var overlapLeftRight = characterBounds.left <= obstacleBounds.right;
-        var overlapRightLeft = characterBounds.right >= obstacleBounds.left;
-        var overlapTopBottom = characterBounds.top <= obstacleBounds.bottom;
-        var overlapBottomTop = characterBounds.bottom >= obstacleBounds.top;
+        var overlapLeftRight = characterBounds.left < obstacleBounds.right;
+        var overlapRightLeft = characterBounds.right > obstacleBounds.left;
+        var overlapTopBottom = characterBounds.top < obstacleBounds.bottom;
+        var overlapBottomTop = characterBounds.bottom > obstacleBounds.top;
 
         //for general obstacles
         if (!obstacle[i].classList.contains("fence")) {
           if (facing == "left" && overlapLeftRight == true) {
             //first, we see how wide the obstacle is -- we move back movedistance if it's more than double the move distance
-            if (obstacleBounds.width > (moveDistance*2) && diagonal == true) {
+            if (obstacleBounds.width > (moveDistance*4) || diagonal == true) {
               character.style.left = parseInt(character.style.left.replace("px","")) + parseInt(moveDistance*2) + "px";
               character.classList.add("fixed");
             } else {
@@ -1815,7 +1893,7 @@ function obstacleCorrect() {
 
           if (facing == "right" && overlapRightLeft == true) {
             //first, we see how wide the obstacle is -- we move back movedistance if it's more than double the move distance
-            if (obstacleBounds.width > (moveDistance*2) && diagonal == true) {
+            if (obstacleBounds.width > (moveDistance*4) || diagonal == true) {
               character.style.left = parseInt(character.style.left.replace("px","")) - parseInt(moveDistance*2) + "px";
               character.classList.add("fixed");
             } else {
@@ -1825,7 +1903,7 @@ function obstacleCorrect() {
 
           if (facing == "up" && overlapTopBottom == true) {
             //first, we see how tall the obstacle is -- we move back movedistance if it's more than double the move distance
-            if (obstacleBounds.height > (moveDistance*2) && diagonal == true) {
+            if (obstacleBounds.height > (moveDistance*4) || diagonal == true) {
               character.style.top = parseInt(character.style.top.replace("px","")) + parseInt(moveDistance*2) + "px";
               character.classList.add("fixed");
             } else {
@@ -1835,7 +1913,7 @@ function obstacleCorrect() {
 
           if (facing == "down" && overlapBottomTop == true) {
             //first, we see how tall the obstacle is -- we move back movedistance if it's more than double the move distance
-            if (obstacleBounds.height > (moveDistance*2) && diagonal == true) {
+            if (obstacleBounds.height > (moveDistance*4) || diagonal == true) {
               character.style.top = parseInt(character.style.top.replace("px","")) - parseInt(moveDistance*2) + "px";
               character.classList.add("fixed");
             } else {
@@ -1846,8 +1924,8 @@ function obstacleCorrect() {
 
         //for fences
         if (obstacle[i].classList.contains("fence")) {
-          var behind = (parseInt(obstacle[i].style.zIndex) + parseInt(moveDistance)) > parseInt(character.style.zIndex);
-          var inFront = (parseInt(obstacle[i].style.zIndex) - parseInt(moveDistance)) < parseInt(character.style.zIndex);
+          var behind = (parseInt(obstacle[i].style.zIndex)) > parseInt(character.style.zIndex);
+          var inFront = (parseInt(obstacle[i].style.zIndex)) < parseInt(character.style.zIndex);
 
           if (overlapBottomTop == true && character.classList.contains("down") && behind == true) {
             //if character bottom overlaps object top, decrease top to push it up
@@ -2178,6 +2256,10 @@ function gnashInteraction() {
       expressions.shift();
     }
 
+    if (currentOption == "option-daisy" && expressions != "") {
+      document.body.classList.add("success");
+    }
+
     //if we don't have an option selected, do that + grab expressions
     if (!dialoguePopUp.classList.contains("option-selected")) {
       //we separate those out (odd numbers expressions, even is text),
@@ -2188,7 +2270,8 @@ function gnashInteraction() {
       dialoguePopUp.classList.add("option-selected");
 
       if (currentOption == "option-daisy") {
-        document.body.classList.add("success");
+        musicBox.play();
+        fadeOut(forestAmbience);
       }
 
       //on option 7, check for and delete extrenuous buttons (to make arrow toggles smooth)
@@ -2257,12 +2340,67 @@ function gnashInteraction() {
                 { option: "option-drawing", dialogue: "null♡Is this... me?♡null♡Then...♡null♡I am... not like you.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
                 { option: "option-hair", dialogue: "null♡Oh. My hair.♡null♡I do not... need this.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
                 { option: "option-bone", dialogue: "null♡Oh -♡null♡My gnawing bone.♡null♡I... misplaced it.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
+                { option: "option-feather", dialogue: "empty♡...♡empty♡Are you... with... these creatures... <div class='flex-row'><button id='option-feather-a'>Yes</button><button id='option-feather-b'>No</button></div>"},
+                { option: "option-feather-a", dialogue: "empty♡...You should leave. Now. <div class='flex-row'><button id='option-feather-close' class='active'>Okay-!</button></div>"},
+                { option: "option-feather-b", dialogue: "empty♡...That is good. <div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
               ];
 
               document.body.classList.add("reset");
   
             }
+          }, 200);
+        }
 
+      //for the feather option, reset but IDK it needs to be fucking separate
+        if (currentOption == "option-feather-a") {
+          //okay this has to be done from scratch fucking kill me right now
+          setTimeout(() => {
+              //this resets our dialogue box and allows it to close
+              gnash = false;
+              inDialogue = false;
+              talked = false;
+              gnashOptions = false;
+              expressions = "";
+              currentOption = "initial"
+
+              //reset Gnash's classlist
+              document.getElementById("Gnash").classList = "npc obstacle Oddly-Shaded-Woods up-1 left-3";
+
+              //and his position
+              document.getElementById("GnashPix").style.transition = "0ms ease all";
+              document.getElementById("GnashPix").style.left = "-195px";
+              setTimeout(() => {
+                document.getElementById("GnashPix").style.transition = "";
+              }, 32);
+
+              //replace Gnash's initial dialogue, before branching back to his specific tree
+              for (i = 0; i < npcList.length; i++) {
+                if ("Gnash" == npcList[i].name) {
+                  //new dialogue for conversation 2
+                  npcList[i].dialogue = "empty♡...♡empty♡...You're back.♡empty♡<div class='flex-row'><button class='active' id='option-6'>I have something for you...</button></div>"
+                }
+
+                //and update Cain & Vatra's dialogue options
+                if ("CainVatra" == npcList[i].name) {
+                  //new dialogue for conversation 2
+                  npcList[i].dialogue = "caintalking♡Were you just IN THE FOREST?!"
+                  npcList[i].repeatLine = "<span><i>Holy horselfies</i>, you're not dead?? You're not going in AGAIN are you!?</span>"
+                }
+              }
+
+              //NEW DIALOGUE
+              gnashDialogueOptions = [
+                { option: "option-6", dialogue: "empty♡...<div class='flex-row'><button id='option-7'>[Give him something]</button></div>"},
+                { option: "option-7", dialogue: "null♡<div class='flex-row' style='margin-top: -20px;'><button class='drawing-button' id='option-drawing'><img src='objectives/drawing.png'></button><button id='option-hair' class='hair-button'><img src='objectives/hair.png'></button><button id='option-daisy' class='daisy-button'><img src='objectives/daisy.png'></button><button id='option-bone' class='bone-button'><img src='objectives/bone.png' class='bone-button'></button><button id='option-daisy' class='daisy-button'><img src='objectives/daisy.png'></button></div>"},
+                { option: "option-drawing", dialogue: "null♡Is this... me?♡null♡Then...♡null♡I am... not like you.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
+                { option: "option-hair", dialogue: "null♡Oh. My hair.♡null♡I do not... need this.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
+                { option: "option-bone", dialogue: "null♡Oh -♡null♡My gnawing bone.♡null♡I... misplaced it.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
+                { option: "option-feather", dialogue: "empty♡...♡empty♡Are you... with... these creatures... <div class='flex-row'><button id='option-feather-a'>Yes</button><button id='option-feather-b'>No</button></div>"},
+                { option: "option-feather-a", dialogue: "empty♡...You should leave. Now. <div class='flex-row'><button id='option-feather-close' class='active'>Okay-!</button></div>"},
+                { option: "option-feather-b", dialogue: "empty♡...That is good. <div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
+              ];
+
+              document.body.classList.add("reset");
           }, 200);
         }
 
@@ -2398,4 +2536,119 @@ function fadeOut(audioElement) {
       audioElement.volume -= 0.01;
     }
   }, 10); // Adjust the interval in milliseconds (e.g., 200ms)
+}
+
+function endcardToggle() {
+    var endcard = document.getElementById("endcard");
+    var buttonList = endcard.getElementsByTagName("button");
+    var buttons = Array.from(buttonList);
+
+    //on mobile, check if we're on a recall, and if so, repeat that event
+    if (smallMobile == true || appleDevice == true) {
+      if (buttonPressed != "initial") {
+        eventVar = buttonPressed;
+      } else {
+        eventVar = event;
+      }
+    } else {
+      //and this makes sure it's defined for desktop
+      eventVar = event;
+    }
+
+    if (eventVar.key === 'ArrowLeft' || eventVar.key === 'a' || eventVar.target.id == "left-arrow-button") {
+      //play sounds (stop first to make sure they restart)
+      document.getElementById("advance2").pause();
+      document.getElementById("advance2").currentTime = 0;
+
+      //play
+      document.getElementById("advance2").play();
+
+      //get the focused button
+      var focusButton = buttons.find((element) => element.classList.contains("focus"));
+
+      //if we don't have one, add it to the first
+      if (focusButton == null) {
+        buttons[0].classList.add("focus");
+        focusButton = buttons[0];
+      }
+
+      //get it's index
+      var buttonIndex = buttons.indexOf(focusButton);
+      //and the last button
+      var lastButton = buttons.length - 1;
+
+      //remove active from the current button
+      focusButton.classList.remove("focus");
+
+      //if we're not on the first button,
+      if (buttonIndex != 0) {
+        //buttons one from the index
+        buttons[buttonIndex - 1].classList.add("focus");
+      } else {
+        //otherwise, add to the last button
+        buttons[lastButton].classList.add("focus")
+      }
+
+    }
+
+    if (eventVar.key === 'ArrowRight' || eventVar.key === 'd' || eventVar.target.id == "right-arrow-button") {
+      //play sounds (stop first to make sure they restart)
+      document.getElementById("advance2").pause();
+      document.getElementById("advance2").currentTime = 0;
+
+      //play
+      document.getElementById("advance2").play();
+
+      //get the focused button
+      var focusButton = buttons.find((element) => element.classList.contains("focus"));
+
+      //if we don't have one, add it to the first
+      if (focusButton == null) {
+        buttons[0].classList.add("focus");
+        focusButton = buttons[0];
+      }
+
+      //get it's index
+      var buttonIndex = buttons.indexOf(focusButton);
+      //and the last button
+      var lastButton = buttons.length - 1;
+
+      //remove active from the current button
+      focusButton.classList.remove("focus");
+
+      //if we're not on the last button,
+      if (buttonIndex != lastButton) {
+        //add one to the index
+        buttons[buttonIndex + 1].classList.add("focus");
+      } else {
+        //otherwise, add to the first button
+        buttons[0].classList.add("focus")
+      }
+
+    }
+
+    if (eventVar.key === ' ' || eventVar.target.id == "interact-button") {
+      var focusButton = document.querySelector("button.focus");
+      var action = focusButton.id;
+
+      if (action == "replay") {
+        //refresh
+        window.location.reload();
+      }
+
+      if (action == "return") {
+        window.location.href = 'https://flyteck.github.io/wme1491/index.html';
+      }
+    }
+}
+
+function refresh() {
+  if (event.target.id == "replay") {
+    //refresh
+      window.location.reload();
+    }
+
+    if (event.target.id == "return") {
+      window.location.href = 'https://flyteck.github.io/wme1491/index.html';
+    }
 }

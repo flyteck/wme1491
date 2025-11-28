@@ -17,4 +17,5 @@ const npcList = [
   { name: "Daisy", dialogue: "A freshly picked daisy."},
   { name: "Hair", dialogue: "A clump of scraggly black hair, caught in the brambles. It smells like forest earth, mildew, and... iron? It's slightly greasy to the touch."},
   { name: "Bone", dialogue: "A broken femur bone, with deep grooves scratched into it from large gnawing teeth."},
+  { name: "Feather", dialogue: "The primary feather of a crow. It has a slight iridescence to it."},
 ];

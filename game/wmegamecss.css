@@ -20,6 +20,7 @@ body {
 	font-family: 'Coders Crux', 'Micro 5';
 	font-size: 1.5em;
 	line-height: 0.8;
+	background: url(bgs/gamebg.png);
 }
 
 #workingOn {
@@ -50,12 +51,13 @@ button {
    padding: 3px 6px;
    display: block;
    cursor: pointer;
-   transition: 50ms ease;
+   transition: 100ms ease;
    padding: 8px 10px 6px;
    border-radius: 6px;
+   position: relative;
 }
 
-button:not(.game-button):hover, button:not(.game-button):focus {
+button:not(.game-button):hover, button:not(.game-button):focus, button.focus {
 	margin: 12px auto 8px;
 	background: var(--bright-accent);
 }
@@ -142,8 +144,12 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 }
 
 .desktop-confirm {
-		color:var(--mid-accent);
-	}
+	color:var(--mid-accent);
+}
+
+.desktop-confirm button {
+	color: var(--white);
+}
 
 .game-button {
 	background-color: transparent;
@@ -255,18 +261,22 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 
 /*** Intro Cutscene **/
 
-#game-container > div.cutscene {
+#game-container > div.cutscene, #game-container > div#endcard {
 	width: var(--game-width);
    height: var(--game-height);
    left: 0;
    top: 0;
-	z-index: 1000;
+	z-index: 1001;
    position: absolute;
    background: black;
    transition: 400ms ease;
 }
 
-#skip {
+#game-container > div.cutscene.playing {
+	display: flex;
+}
+
+.skip {
 	position: absolute;
 	right: 0;
 	bottom: 0;
@@ -281,11 +291,12 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 	display: none;
 	width: var(--game-width);
 	height: var(--game-height);
-	background-size: calc(var(--game-width) + 20px) auto;
+	background-size: calc(var(--game-width) + 2vw) auto;
 	display: flex;
 	align-items: center;
    justify-content: center;
-   background-position: -20px center;
+   background-position: -2vw center;
+   display: none;
 }
 
 .slide.static {
@@ -313,6 +324,51 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 
 .slide.s4 {
 	background-image: url(bgs/slide4.png);
+}
+
+.slide.s5 {
+	background-image: url(bgs/slide5.png);
+}
+
+.slide.s6 {
+	background-image: url(bgs/slide6.png);
+}
+
+.slide.s7 {
+	background-image: url(bgs/slide7.png);
+}
+
+.slide.s8 {
+	background-image: url(bgs/slide8.png);
+}
+
+.slide.s9 {
+	background-image: url(bgs/slide9.png);
+}
+
+.slide.s10 {
+	background-image: url(bgs/slide10.png);
+}
+
+/** Credits & Endcard**/
+
+#credits .slide {
+	flex-direction: column;
+}
+
+#credits .slide div, #credits .slide h3 {
+	margin: 10px;
+	padding: 0;
+}
+
+#endcard {
+	flex-direction: column;
+	align-items: center;
+   justify-content: center;
+}
+
+#endcard button {
+	margin: 16px;
 }
 
 /*** Blackout Div ***/
@@ -362,6 +418,10 @@ button:not(.game-button):hover, button:not(.game-button):focus {
 
 /** touch only stuff **/
 
+.touch-show {
+	display: none;
+}
+
 body.touch-only #mobile-controls.open {
 	opacity: 1;
 	display: flex;
@@ -377,6 +437,10 @@ body.touch-only .desktop-confirm {
 
 body.touch-only .touch-hide {
 	display: none;
+}
+
+body.touch-only .touch-show {
+	display: flex;
 }
 
 body.touch-only #shift-button {
@@ -512,7 +576,7 @@ body.touch-only #space-button {
    padding: 30px;
 }
 
-#inventory.open li.focus:before {
+#inventory.open li.focus:before, #endcard button.focus:before {
 	background-image: url(ui/arrow.png);
    content: "";
    width: 12px;
@@ -727,8 +791,41 @@ body.touch-only #space-button {
    flex: 0 0 auto;
 }
 
-#game-container:after {
+#gradient {
+	position: absolute;
+   left: 0;
+   top: 0;
+   height: 100%;
+   width: 100%;
+   background: linear-gradient(#8972e4, #ffda9f);
+   display: block !important;
+   z-index: 899;
+   mix-blend-mode: soft-light;
+   opacity: 0.45;
+   transition: 300ms ease;
+}
+
+.inForest #gradient {
+	background: linear-gradient(#760b39, #9ffffc);
+}
+
+#clouds {
 	display: none;
+}
+
+#game-container:not(.left-3) #clouds {
+	display: block;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	background-image: url(bgs/clouds.gif);
+	background-size: 100%;
+	z-index: 999;
+	pointer-events: none;
+	mix-blend-mode: multiply;
+	opacity: 0.25;
+	transform: scaleX(-1);
+	transition: 300ms ease;
 }
 
 #game-container.initial-screen:after,
@@ -1080,9 +1177,9 @@ body.touch-only #space-button {
 
 /** tombstone **/
 .obstacle.fence.tombstone {
-	height: 32px;
+	height: 34px;
 	width: 16px;
-	margin-top: 64px;
+	margin-top: 54px;
 }
 
 .obstacle.fence.tombstone div {
@@ -1779,6 +1876,10 @@ body.touch-only #space-button {
 	background-image: url(objectives/drawing.png);
 }
 
+#Feather, #FeatherInventory.collected span {
+	background-image: url(objectives/feather.png);
+}
+
 #DaisyInventory.collected span {
 	background-image: url(obstacles/flower2.png);
 }
@@ -1836,7 +1937,7 @@ body.touch-only #space-button {
 }
 
 #Crow.npc {
-	/** he has some extra code bc he's so small, so he gets padding for easier interaction **/
+	/** he has some extra code bc he's so small, so he gets padding for easier interaction, and a dif z index to be above his stone **/
 	background-image: url(charactersprites/crowpix.png);
    height: 66px;
    width: 68px;
@@ -1844,7 +1945,7 @@ body.touch-only #space-button {
    background-clip: content-box;
    background-size: 48px 46px;
    background-position: right top;
-   z-index: 275 !important;
+   z-index: 285 !important;
 }
 
 #Crow-talking #dialogue-loader {
@@ -1963,7 +2064,7 @@ body.touch-only #space-button {
 	}
 }
 
-@media (max-height: 915px) {
+@media (max-width: 915px) {
 
 	body.touch-only {
 		align-items: flex-end;
@@ -1982,7 +2083,7 @@ body.touch-only #space-button {
       width: var(--inventory-width);
       height: 100%;
       flex: 0 0 auto;
-      justify-content: flex-start;
+      justify-content: center;
 	}
 
 	body.touch-only #mobile-controls {

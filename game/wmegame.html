@@ -7,12 +7,15 @@
   <link rel="stylesheet" href="leafsprawl.css">
   <link rel="stylesheet" href="fonts.css">
 
+  <link rel="icon" href="../icon.png" type="image/png">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Jacquard+12&family=Micro+5&display=swap" rel="stylesheet">
 
 	<script src="dialogue.js"></script>
 	<script src="dialoguegnash.js"></script>
+	<!--<script src="loadercode.js"></script>!-->
 
 	<title>WME 1273</title>
 </head>
@@ -38,6 +41,8 @@
 	<audio id="advance" class="sound-effect" src="music/advance.wav" allow="autoplay"></audio>
 
 	<audio id="leaves" class="sound-effect ground-sound" src="music/leaves.wav" allow="autoplay"></audio>
+
+	<audio id="music-box" src="music/musicbox.wav" class="sound-effect" loop="loop" allow="autoplay"></audio>
 
 	<div id="game-wrapper">
 		<div id="health"></div>
@@ -111,6 +116,17 @@
 				<img src="bgs/background20.png">
 				<img src="bgs/background21.png">
 
+				<img src="bgs/slide1.png">
+				<img src="bgs/slide2.png">
+				<img src="bgs/slide3.png">
+				<img src="bgs/slide4.png">
+				<img src="bgs/slide5.png">
+				<img src="bgs/slide6.png">
+				<img src="bgs/slide7.png">
+				<img src="bgs/slide8.png">
+				<img src="bgs/slide9.png">
+				<img src="bgs/slide10.png">
+
 				<img src="obstacles/tombstone1.png">
 				<img src="obstacles/tombstone2.png">
 				<img src="obstacles/tombstone3.png">
@@ -164,8 +180,24 @@
 
 			</div>
 		</div>
-		<div id="game-container" class="initial-screen">
-			<div id="test-character" style="left:648px;top:320px;"><span id="nose"></span></div>
+		<div id="game-container" class="right-1 up-1">
+			<div id="gradient"></div>
+			<div id="clouds"></div>
+			<div id="endcard">
+				This is my endcard
+
+				<div class='flex-row desktop-confirm'>
+					<button class="focus" id='replay'>Replay</button>
+					<button id='return'>Return to Form</button>
+				</div>
+
+				<div class='flex-row touch-show'>
+				 <button id='replay' onclick="refresh()">Replay</button>
+				 <button id='return' onclick="refresh()">Return to Form</button>
+				</div>
+
+			</div>
+			<div id="test-character" style="left:448px;top:256px;"><span id="nose"></span></div>
 
 			<!------------------------ Level 1 ------------------------>
 			<!--------- Screen 11 / Initial Screen --------->
@@ -365,6 +397,10 @@
 
 			<div class="obstacle fence up-1 right-2" style="left: 0;top: 20px;width: 894px;"><div><!--fence image--></div></div>
 
+			<div class="obstacle fence deadtree tree up-1 right-2" style="left: 80px;top: 410px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence deadtree tree up-1 right-2" style="left: 200px;top: 200px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence deadtree tree up-1 right-2" style="left: 320px;top: 600px;"><div><!--fence image--></div></div>
+
 			<!--------- Screen 6 / Up 1 Right 3 --------->
 			<div class="obstacle treeblock up-1 right-3" style="left: 0;top: -24px; width: 100%;"><div><!--fence image--></div></div>
 			<div class="obstacle cliff ground up-1 right-3" style="left: 824px; top: 0px; height: 587px;"><div><!--fence image--></div></div>
@@ -375,52 +411,53 @@
 			<div class="obstacle pot2 fence up-1 right-3" style="top: 267px;left: 22px;"><div><!--fence image--></div></div>
 
 			<div id="Drawing" class="objective up-1 right-3" style="top: 311px; left: 86px;"></div>
+			<div id="Feather" class="objective up-1 right-3" style="top: 181px;left: 763px;"></div>
 
 			<div class="obstacle innerwall up-1 right-3" style="left:139px;top: 355px;height: 254px;transform: scaleX(-1);"><div style="bgs/background-position: center 150px;"><!--fence image--></div></div>
 			<div class="obstacle innerwallhorizontal fence up-1 right-3" style="left: -8px;top: 247px;width: 181px;"><div style="top: -34px;"><!--fence image--></div></div>
 			<div class="obstacle churchpew bible fence up-1 right-3" style="left: -14px;top: 495px;z-index: 495;"><div><!--fence image--></div></div>
 			<div class="obstacle churchpew fence up-1 right-3" style="left: -14px;top: 404px;z-index: 404;"><div><!--fence image--></div></div>
 
-			<div class="obstacle fence tombstone dirt t8 up-1 right-3" style="left: 580px;top: 526px;">
+			<div class="obstacle fence tombstone dirt t8 up-1 right-3" style="left: 580px;top: 536px;">
 				<div></div>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t6 up-1 right-3" style="left: 660px; top: 274px; z-index: 274;">
+			<div class="obstacle fence tombstone dirt t6 up-1 right-3" style="left: 660px; top: 284px;">
 				<div><span class="tombstone-text">
 					NECROPRANCER
 					<span style="font-size:80%;display: block;">1950-1980</span>
 				</span></div>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t1 up-1 right-3" style="left: 770px;top: 354px;z-index: 274;">
+			<div class="obstacle fence tombstone dirt t1 up-1 right-3" style="left: 770px;top: 364px;">
 				<div><span class="tombstone-text">
 					NECROPRANCER
 					<span style="font-size:80%;display: block;">1950-1980</span>
 				</span></div>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t5 up-1 right-3" style="left: 460px;top: 444px;z-index: 274;">
+			<div class="obstacle fence tombstone dirt t5 up-1 right-3" style="left: 460px;top: 454px">
 				<div><span class="tombstone-text">
 					NECROPRANCER
 					<span style="font-size:80%;display: block;">1950-1980</span>
 				</span></div>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t3 up-1 right-3" style="left: 550px;top: 334px;z-index: 274;">
+			<div class="obstacle fence tombstone dirt t3 up-1 right-3" style="left: 550px;top: 344px;">
 				<div><span class="tombstone-text">
 					NECROPRANCER
 					<span style="font-size:80%;display: block;">1950-1980</span>
 				</span></div>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t2 up-1 right-3" style="left: 320px;top: 364px;z-index: 274;">
+			<div class="obstacle fence tombstone dirt t2 up-1 right-3" style="left: 320px;top: 374px;">
 				<div><span class="tombstone-text">
 					NECROPRANCER
 					<span style="font-size:80%;display: block;">1950-1980</span>
 				</span></div>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t9 up-1 right-3" style="left: 440px;top: 174px;z-index: 274;">
+			<div class="obstacle fence tombstone dirt t9 up-1 right-3" style="left: 440px;top: 184px;">
 				<div><span class="tombstone-text">
 					NECROPRANCER
 					<span style="font-size:80%;display: block;">1950-1980</span>
@@ -514,15 +551,16 @@
 			<div class="obstacle fencevertical grass right-1" style="left:682px;top:330px;height:70px;"><div><!--fence image--></div></div>
 			<div class="obstacle fencevertical right-1" style="left:682px;top:0;height:194px;"><div><!--fence image--></div></div>
 
-			<div class="obstacle fence deadtree tree right-1" style="left:768px;top:128px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence deadtree tree right-1" style="left: 588px;top: 88px;"><div><!--fence image--></div></div>
 
-			<div class="decoration flowers1 right-1" style="left: 612px; top: 26px;"><div><!--fence image--></div></div>
+			<div class="decoration flowers1 right-1" style="left: 652px;top: 136px;"><div><!--fence image--></div></div>
 
 			<!--------- Screen 13 / Right 2 --------->
 			<div class="obstacle fence grass right-2" style="left:0;top:360px;width:640px;"><div><!--fence image--></div></div>
 			<div class="obstacle fencevertical right-2" style="left:618px;top:456px;height:138px;"><div><!--fence image--></div></div>
 			<div class="obstacle fence deadtree tree right-2" style="left:160px;top:160px;"><div><!--fence image--></div></div>
-			<div class="obstacle fence hollowtree tree right-2" style="left:320px;top:224px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence deadtree tree right-2" style="left: 360px;top: 220px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence deadtree tree right-2" style="left: 320px;top: 40px;"><div><!--fence image--></div></div>
 			
 			<div id="church-entrance" class="right-2"></div>
 			<div class="decoration flowers2 right-2" style="left: 532px; top: 238px;"><div><!--fence image--></div></div>
@@ -556,28 +594,28 @@
 			<div class="obstacle churchpew fence right-3" style="left: -14px;top: 4px;"><div><!--fence image--></div></div>
 			<div class="obstacle churchpew bible fence right-3" style="left: -14px;top: -76px;"><div><!--fence image--></div></div>
 
-			<div id="Crow" class="npc right-3" style="left: 463px;top: 272px;"><div><!--fence image--></div></div>
+			<div id="Crow" class="npc right-3" style="left: 463px;top: 280px;"><div><!--fence image--></div></div>
 
-			<div class="obstacle fence tombstone dirt t3 right-3" style="left: 300px;top: -36px;">
+			<div class="obstacle fence tombstone dirt t3 right-3" style="left: 300px;top: -26px;">
 				<div></div>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t7 right-3" style="left: 450px;top: -16px;">
+			<div class="obstacle fence tombstone dirt t7 right-3" style="left: 450px;top: -6px;">
 				<div></div>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t8 right-3" style="left: 580px;top: -46px;">
+			<div class="obstacle fence tombstone dirt t8 right-3" style="left: 580px;top: -36px;">
 				<div></div>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t1 right-3" style="left: 710px; top: 414px; z-index: 414;">
+			<div class="obstacle fence tombstone dirt t1 right-3" style="left: 710px; top: 424px;">
 				<div><span class="tombstone-text">
 					Bernadette&nbsp;Withers
 					<span style="font-size:80%;display: block;">1910-1990</span>
 				</span></div>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t2 right-3" style="left: 550px;top: 74px;z-index: 74;">
+			<div class="obstacle fence tombstone dirt t2 right-3" style="left: 550px;top: 84px;">
 				<div><span class="tombstone-text">
 					Sheila&nbsp;Croup
 					<span style="font-size:80%;display: block;">1901-1999</span>
@@ -585,7 +623,7 @@
 				<span class="flower2"></span>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t2 right-3" style="left: 300px; top: 324px; z-index: 324;">
+			<div class="obstacle fence tombstone dirt t2 right-3" style="left: 300px; top: 334px;">
 				<div><span class="tombstone-text">
 					Jerry&nbsp;Frog
 					<span style="font-size:80%;display: block;">1950-1980</span>
@@ -593,16 +631,16 @@
 				<span class="flower1"></span>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t3 right-3" style="left: 662px; top: 94px; z-index: 94;">
+			<div class="obstacle fence tombstone dirt t3 right-3" style="left: 662px; top: 104px;">
 				<div><span class="tombstone-text">
 					Tony&nbsp;Hock
 					<span style="font-size:80%;display: block;">1890-1994</span>
 				</span></div>
 			</div>
 
-			<div class="obstacle fence hollowtree tree right-3" style="left: 390px; top: 117px; z-index: 99;"><div><!--fence image--></div></div>
+			<div class="obstacle fence hollowtree tree right-3" style="left: 390px; top: 127px;"><div><!--fence image--></div></div>
 
-			<div class="obstacle fence tombstone dirt t4 right-3" style="left: 350px; top: 74px; z-index: 74;">
+			<div class="obstacle fence tombstone dirt t4 right-3" style="left: 350px; top: 84px;">
 				<div><span class="tombstone-text">
 					Michelle&nbsp;Pastern
 					<span style="font-size:80%;display: block;">1913-1997</span>
@@ -610,19 +648,19 @@
 				<span class="flower1"></span>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t5 right-3" style="left: 240px; top: 84px; z-index: 84;">
+			<div class="obstacle fence tombstone dirt t5 right-3" style="left: 240px; top: 94px;">
 				<div><span class="tombstone-text">
 					Hailey&nbsp;Poll
 					<span style="font-size:80%;display: block;">1898-1972</span>
 				</span></div>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t6 right-3" style="left: 480px; top: 274px; z-index: 274;">
+			<div class="obstacle fence tombstone dirt t6 right-3" style="left: 480px; top: 284px;">
 				<div></div>
 				<span class="flower1"></span>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t10 right-3" style="left: 700px; top: 24px; z-index: 24;">
+			<div class="obstacle fence tombstone dirt t10 right-3" style="left: 700px; top: 34px;">
 				<div><span class="tombstone-text">
 					David&nbsp;Barrel
 					<span style="font-size:80%;display: block;">1887-1942</span>
@@ -630,7 +668,7 @@
 				<span class="flower3"></span>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t7 right-3" style="left: 259px;top: 184px;z-index: 184;">
+			<div class="obstacle fence tombstone dirt t7 right-3" style="left: 259px;top: 194px;">
 				<div><span class="tombstone-text">
 					Austin&nbsp;Stifle
 					<span style="font-size:80%;display: block;">1899-1910</span>
@@ -638,14 +676,14 @@
 				<span class="flower2"></span>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t8 right-3" style="left: 758px;top: 164px;z-index: 164;">
+			<div class="obstacle fence tombstone dirt t8 right-3" style="left: 758px;top: 174px;">
 				<div><span class="tombstone-text">
 					Gregory&nbsp;Gaskin
 					<span style="font-size:80%;display: block;">1910-1999</span>
 				</span></div>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t8 right-3" style="left: 370px; top: 204px; z-index: 204;">
+			<div class="obstacle fence tombstone dirt t8 right-3" style="left: 370px; top: 214px;">
 				<div><span class="tombstone-text">
 					Othelia&nbsp;Cornet
 					<span style="font-size:80%;display: block;">1922-2013</span>
@@ -653,14 +691,14 @@
 				<span class="flower3"></span>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t9 right-3" style="left: 490px; top: 174px; z-index: 174;">
+			<div class="obstacle fence tombstone dirt t9 right-3" style="left: 490px; top: 184px;">
 				<div><span class="tombstone-text">
 					Antonio&nbsp;Ergot
 					<span style="font-size:80%;display: block;">1910-2003</span>
 				</span></div>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t9 right-3" style="left: 490px; top: 174px; z-index: 174;">
+			<div class="obstacle fence tombstone dirt t9 right-3" style="left: 490px; top: 184px;">
 				<div><span class="tombstone-text">
 					Lacey&nbsp;Splint
 					<span style="font-size:80%;display: block;">1932-1999</span>
@@ -668,21 +706,21 @@
 				<span class="flower2"></span>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t10 right-3" style="left: 615px;top: 194px;z-index: 194;">
+			<div class="obstacle fence tombstone dirt t10 right-3" style="left: 615px;top: 204px;">
 				<div><span class="tombstone-text">
 					Horseferatu
 					<span style="font-size:80%;display: block;">1829-1983</span>
 				</span></div>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t1 right-3" style="left: 660px; top: 274px; z-index: 274;">
+			<div class="obstacle fence tombstone dirt t1 right-3" style="left: 660px; top: 284px;">
 				<div><span class="tombstone-text">
 					Reba&nbsp;Chestnut
 					<span style="font-size:80%;display: block;">1910-1992</span>
 				</span></div>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t4 right-3" style="left: 540px; top: 384px; z-index: 384;">
+			<div class="obstacle fence tombstone dirt t4 right-3" style="left: 540px; top: 394px;">
 				<div><span class="tombstone-text">
 					Harley&nbsp;Cannon
 					<span style="font-size:80%;display: block;">1951-2001</span>
@@ -690,7 +728,7 @@
 				<span class="flower3"></span>
 			</div>
 
-			<div class="obstacle fence tombstone dirt t5 right-3" style="left: 430px; top: 444px; z-index: 444;">
+			<div class="obstacle fence tombstone dirt t5 right-3" style="left: 430px; top: 454px;">
 				<div><span class="tombstone-text">
 					Barrie&nbsp;Dock 
 					<span style="font-size:80%;display: block;">1923-2002</span>
@@ -1092,22 +1130,94 @@
 					<div>It made its way to <i>you</i>. Will you be the one to figure out what has everyone so spooked? Seek clues and see if you can get to the root of the mystery.</div>
 				</div>
 
-				<span id="skip">press any key to skip intro</span>
+				<span class="skip">press any key to skip intro</span>
 			</div>
 
 			<div id="outro-cutscene" class="cutscene">
-				<div class="slide s1">
-					<div>This is the outro custcene now</div>
+				<div class="slide s5">
+					<div>"I can take you to more, if you would like."</div>
 				</div>
-				<div class="slide s2">
-					<div>But... there's something <i>strange</i> on the brisk winds. There have been rumours circulating of unexplained occurunces, of a <i>creature</i> stalking in the shadows.</div>
+				<div class="slide s6">
+					<div>Despite his initial hesitation, you're able to convince him to come with you. He follows in your shadow, and equids balk at the sight of him.</div>
 				</div>
-				<div class="slide s3">
-					<div>Through hushed whispers, word has spread far beyond the sheltered meadows, and eventually...</div>
+				<div class="slide s7">
+					<div>His demeanor brightens as you approach the flower patch,</div>
 				</div>
-				<div class="slide s4">
-					<div>It made its way to <i>you</i>. Will you be the one to figure out just what's got everyone so spooked?</div>
+				<div class="slide s8">
+					<div>And you explain that although he is <i>strange</i>, that he is no danger.</div>
 				</div>
+				<div class="slide s9">
+					<div>With the mystery solved, it's time for you to take your leave -</div>
+				</div>
+				<div class="slide s10">
+					<div>Knowing that there's on less monster lurking in the shadows.</div>
+				</div>
+
+				<span class="skip">press any key to skip outro</span>
+			</div>
+
+			<div id="credits" class="cutscene">
+				<div class="slide">
+					<h2>Credits</h2>
+				</div>
+				<div class="slide">
+					<div>Art, Script, and Game Code - flyteck</div>
+				</div>
+
+				<div class="slide">
+					<h3>Featured WMEs (NPCs & PC)</h3>
+					<div>
+						<a href="https://www.chickensmoothie.com/Forum/viewtopic.php?f=124&t=5086914" target="_blank">WME 1491</a> • 
+						<a href="https://www.chickensmoothie.com/Forum/viewtopic.php?f=124&t=5029714" target="_blank">Jude</a> • 
+						<a href="https://www.chickensmoothie.com/Forum/viewtopic.php?f=124&t=5036296" target="_blank">Terracotta</a> • 
+						<a href="https://www.chickensmoothie.com/Forum/viewtopic.php?f=124&t=5084146" target="_blank">Acacia</a> • 
+						<a href="https://www.chickensmoothie.com/Forum/viewtopic.php?f=124&t=5083027" target="_blank">Quincy</a> • 
+						<a href="https://www.chickensmoothie.com/Forum/viewtopic.php?f=53&t=2335501" target="_blank">Cain</a> • 
+						<a href="https://www.chickensmoothie.com/Forum/viewtopic.php?f=53&t=2217558" target="_blank">Vatra</a>
+					</div>
+				</div>
+
+				<div class="slide">
+					<h3>Featured WMEs (NPCs & PC)</h3>
+					<div>
+						<a href="https://www.chickensmoothie.com/Forum/viewtopic.php?f=124&t=5049546" target="_blank">Melinoe</a> • 
+						<a href="https://www.chickensmoothie.com/Forum/viewtopic.php?f=53&t=1153733" target="_blank">Asfaloth</a> • 
+						<a href="https://www.chickensmoothie.com/Forum/viewtopic.php?f=53&t=1472140" target="_blank">Ricochet</a> • 
+						<a href="https://www.chickensmoothie.com/Forum/viewtopic.php?t=5052122" target="_blank">Aolani</a> • 
+						<a href="https://www.chickensmoothie.com/Forum/viewtopic.php?f=124&t=5048822" target="_blank">Sinbad</a> • 
+						<a href="https://www.chickensmoothie.com/Forum/viewtopic.php?f=124&t=5079612" target="_blank">Chip</a> • 
+						<a href="https://www.chickensmoothie.com/Forum/viewtopic.php?f=124&t=1949202" target="_blank">Tyyga</a> • 
+						<a href="https://www.chickensmoothie.com/Forum/viewtopic.php?f=124&t=2629120" target="_blank">Stornoway</a> • 
+						<a href="https://www.chickensmoothie.com/Forum/viewtopic.php?f=124&t=5048716" target="_blank">Kimora</a>
+					</div>
+				</div>
+
+				<div class="slide">
+					<h3>Game Score</h3>
+					<div>Intro Music - The Dreams You Make by <a href="https://freesound.org/people/MadGravityStudio/" target="_blank">MadGravityStudio</a></div>
+					<div>Overworld Music - The Room of a Missing Person by <a href="https://mmagicbhomb.bandcamp.com/" target="_blank">M'magic Bhomb</a></div>
+					<div>Overworld Ambience - Fall Wind Ambience by <a href="https://pixabay.com/sound-effects/fall-wind-ambience-418905/" target="_blank">Walter Nowicki</a></div>
+					<div>Forest Music - Haunted Lake by <a href="https://mmagicbhomb.bandcamp.com/" target="_blank">M'magic Bhomb</a></div>
+					<div>Forest Ambience - Ambient Wandering Wind by <a href="https://pixabay.com/users/soundreality-31074404/" target="_blank">SoundReality</a></div>
+					<div>Menu Music - Calm Menu Music (loopable)(LO-FI) by <a href="https://freesound.org/people/DAN2008/" target="_blank">DAN2008</a></div>
+					<div>Outro Music - MusikBox by <a href="https://freesound.org/people/noir%C3%A9/" target="_blank">noiré</a></div>
+				</div>
+
+				<div class="slide">
+					<h3>Sound Effects</h3>
+					<div>Walk - SFX Horse Walk by <a href="https://freesound.org/people/MrFizzywig/" target="_blank">MrFizzywig</a></div>
+					<div>Lope - SFX Horse Trot by <a href="https://freesound.org/people/MrFizzywig/" target="_blank">MrFizzywig</a></div>
+					<div>Leaf crunch - Leaves by <a href="https://freesound.org/people/LukeUPF/" target="_blank">LukeUPF</a></div>
+					<div>Item Get - Button by <a href="https://freesound.org/people/avreference/" target="_blank">avreference</a></div>
+					<div>Advance - Button Click 2 by <a href="https://freesound.org/people/Mellau/" target="_blank">Mellau</a></div>
+					<div>Advance 2 - Button Click 1 by <a href="https://freesound.org/people/Mellau/" target="_blank">Mellau</a></div>
+				</div>
+
+				<div class="slide">
+					<div>Thank you for playing!</div>
+				</div>
+
+				<span class="skip">press any key to skip credits</span>
 			</div>
 
 			<!--------- Character Pop-Up --------->

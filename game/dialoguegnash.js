@@ -11,8 +11,15 @@ let gnashDialogueOptions = [
   { option: "option-4", dialogue: "worry♡I would...♡worry♡I would not hurt anyone.♡concern♡I am here. Alone.♡concern♡I only... watch.♡null♡Are you...♡null♡...like me? <div class='flex-row'><button id='option-5'>Yes</button><button id='option-6'>No</button></div>"},
   { option: "option-5", dialogue: "empty♡I am... not so sure.<div class='flex-row'><button id='option-7'>[Give him something]</button></div>"},
   { option: "option-6", dialogue: "null♡...<div class='flex-row'><button id='option-7'>[Give him something]</button></div>"},
-  { option: "option-7", dialogue: "null♡<div class='flex-row' style='margin-top: -20px;'><button class='drawing-button' id='option-drawing'><img src='objectives/drawing.png'></button><button id='option-hair' class='hair-button'><img src='objectives/hair.png'></button><button id='option-daisy' class='daisy-button'><img src='objectives/daisy.png'></button><button id='option-bone' class='bone-button'><img src='objectives/bone.png' class='bone-button'></button><button id='option-daisy' class='daisy-button'><img src='objectives/daisy.png'></button></div>"},
+  { option: "option-7", dialogue: "null♡<div class='flex-row' style='margin-top: -20px;'><button class='drawing-button' id='option-drawing'><img src='objectives/drawing.png'></button><button id='option-hair' class='hair-button'><img src='objectives/hair.png'></button><button id='option-daisy' class='daisy-button'><img src='objectives/daisy.png'></button><button id='option-bone' class='bone-button'><img src='objectives/bone.png' class='bone-button'></button><button id='option-feather' class='feather-button'><img src='objectives/feather.png'></button></div>"},
   { option: "option-drawing", dialogue: "null♡Is this... me?♡null♡Then...♡null♡I am... not like you.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
   { option: "option-hair", dialogue: "null♡Oh. My hair.♡null♡I do not... need this.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
   { option: "option-bone", dialogue: "null♡Oh -♡null♡My gnawing bone.♡null♡I... misplaced it.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
+  { option: "option-daisy", dialogue: "null♡What... is this? <div class='flex-row'><button id='option-7'>It's a daisy</button></div>♡happy♡It... is beautiful."},
+  { option: "option-clover", dialogue: "null♡CLOVER"},
+  { option: "option-feather", dialogue: "empty♡...♡empty♡Are you... with... these creatures... <div class='flex-row'><button id='option-feather-a'>Yes</button><button id='option-feather-b'>No</button></div>"},
+  { option: "option-feather-a", dialogue: "anger♡...You should leave. Now. <div class='flex-row'><button id='option-feather-close' class='active'>Okay-!</button></div>"},
+  { option: "option-feather-b", dialogue: "empty♡...That is good. <div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
 ];
+
+//I'll need to update this in the JS for the re-encounter text as well
