@@ -98,6 +98,7 @@ function modalOpen() {
 	if(!this.classList.contains("open")) {
     	this.classList.add("open");
     	document.querySelector("body").classList.add("locked");
+      document.getElementById("gallery").scrollIntoView({ behavior: "instant"});
   	} else {
     	this.classList.remove("open");
     	document.querySelector("body").classList.remove("locked");
