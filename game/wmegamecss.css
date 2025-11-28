@@ -111,12 +111,29 @@ button:not(.game-button):hover, button:not(.game-button):focus, button.focus {
 	animation: none;
 }
 
-.hidden-load {
+#hidden-load {
 	display: block;
 	overflow: hidden;
 	height: 0;
 	width: 0;
 	opacity: 0;
+}
+
+#load-bar {
+	width: 0%;
+	height: 100%;
+	background: var(--bright-accent);
+	transition: 200ms ease;
+}
+
+#load-bar-wrap {
+	width: 300px;
+	height: 20px;
+	background: var(--white);
+	border-radius: 4px;
+	overflow: hidden;
+	margin: 10px 10px 5px;
+	border: 1px solid var(--mid-accent);
 }
 
 #tutorial {
