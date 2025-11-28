@@ -2410,6 +2410,13 @@ function gnashInteraction() {
         dialogueLoader.classList.remove(currentOption);
 
         //and we need to get rid of it in the inventory too
+        var inventoryVersion = document.getElementById(currentOption.replace("option-","").charAt(0).toUpperCase() + currentOption.replace("option-","").slice(1) + "Inventory");
+        inventoryVersion.classList.add("given");
+
+        //and note we gave it away in its description
+        var inventoryDescription = document.getElementById(currentOption.replace("option-","").charAt(0).toUpperCase() + currentOption.replace("option-","").slice(1) + "-description");
+        inventoryDescription.querySelector(".description").innerHTML += " Given to the creature in the forest.";
+        
       }
     }
 
@@ -2505,9 +2512,15 @@ function reset() {
   document.getElementById("health").style.opacity = "";
   character.style.filter = "";
   document.body.classList.remove("inForest");
+  document.getElementById("clouds").style.opacity = "0.25";
 
-  backgroundPlayer.play();
-  ambiencePlayer.play();
+  //we only wanna play these when we're not on a success
+  if (!document.body.classList.contains("success")) {
+    backgroundPlayer.play();
+    ambiencePlayer.play(); 
+  } else {
+    //play any outro music I wanna add
+  }
 
   //aaaand remove reset from the body
   document.body.classList.remove("reset");

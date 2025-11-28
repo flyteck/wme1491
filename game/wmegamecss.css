@@ -675,6 +675,7 @@ body.touch-only #space-button {
 
 #dialogue-loader button img {
 	width: 50px;
+	height: auto;
 }
 
 .daisy-button, .hair-button, .feather-button, .bone-button, .drawing-button  {
@@ -1878,6 +1879,15 @@ body.touch-only #space-button {
 .objective.collected {
 	position: unset;
 	display: none;
+}
+
+.collected.given span {
+	transition: 300ms ease;
+	opacity: 0.5;
+}
+
+.open .collected.focus {
+	background: #c5bbbb;
 }
 
 #CandyApple, #CandyAppleInventory.collected span {
