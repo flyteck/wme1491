@@ -1086,28 +1086,28 @@ body.touch-only #space-button {
 
 .water.left-1.down-1 {
 	top: 1px;
-	mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110501983_sF4kpBJeBQ1YMPM.png);
+	mask: url(obstacles/watermask17.png);
    mask-repeat: no-repeat;
    mask-size: 100% 100%;
 }
 
 .water.down-1:not(.right-1):not(.left-1):not(.right-2) {
 	top: 1px;
-	mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110501920_OEFIfCEq1AdYLNO.png);
+	mask: url(obstacles/watermask18.png);
 	mask-repeat: no-repeat;
    mask-size: 100% 100%;
 }
 
 .water.right-1.down-1 {
 	top: 1px;
-	mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110501705_Nu4nDe1QQYTh2gk.png);
+	mask: url(obstacles/watermask19.png);
    mask-repeat: no-repeat;
    mask-size: 100% 100%;
 }
 
 .water.right-2.down-1 {
 	top: 1px;
-	mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110502070_msKiAQRCXZEYfJi.png);
+	mask: url(obstacles/watermask20.png);
    mask-repeat: no-repeat;
    mask-size: 100% 100%;
 }
@@ -1620,7 +1620,7 @@ body.touch-only #space-button {
    z-index: 500;
    opacity: 0.95;
    display: block;
-   mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110096362_chRv2u9qijtxGM8.png?1762821628);
+   mask: url(obstacles/fogleft2down1.png);
    mask-repeat: no-repeat;
    mask-size: 100% 100%;
    pointer-events: none;
@@ -1632,25 +1632,25 @@ body.touch-only #space-button {
 }
 
 .fog.left-2:not(.down-1){
-   mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110102532_EBqkT7mPbCKC5us.png);
+   mask: url(obstacles/fogleft2.png);
    mask-repeat: no-repeat;
    mask-size: 100% 100%;
 }
 
 .fog.up-1:not(.left-1):not(.left-2) {
-   mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110506101_Rug5FfHv9kJ30SN.png);
+   mask: url(obstacles/fogup1.png);
    mask-repeat: no-repeat;
    mask-size: 100% 100%;
 }
 
 .fog.left-2.up-1 {
-   mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110103005_qwXzOAOOpaKv0a6.png?1762829937);
+   mask: url(obstacles/fogleft2up1.png);
    mask-repeat: no-repeat;
    mask-size: 100% 100%;
 }
 
 .fog.left-1.up-1 {
-   mask: url(https://f2.toyhou.se/file/f2-toyhou-se/images/110127189_1GL3amMRpN5x0GG.png);
+   mask: url(obstacles/fogleft1up1.png);
    mask-repeat: no-repeat;
    mask-size: 100% 100%;
 }
