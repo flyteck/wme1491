@@ -33,6 +33,11 @@ body.locked {
 	overflow: hidden;
 }
 
+body.locked .section-wrap.gallery {
+	z-index: 100;
+	opacity: 1!important;
+}
+
 img { max-width: 100% } 
 
 @keyframes fadeInOpacity {
@@ -123,7 +128,7 @@ a:hover, a:focus {
 
 #eyesimage {
 	position: absolute;
-	width: 800px;
+	width: 60vw;
 	max-width: 100vw;
 	transition: 100ms ease;
 }
@@ -457,5 +462,19 @@ ul.text-body {
     top: 0;
     left: 0;
 }
+
+/*/////////////////////////// Media Queries */
+
+@media (min-width: 1600px) {
+	#eyesimage {
+		width: 50vw;
+	}
+
+	.left-arrow, .right-arrow {
+		margin: 20px;
+	}
+}
+
+
 
 
