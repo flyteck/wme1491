@@ -16,7 +16,7 @@ let gnashDialogueOptions = [
   { option: "option-hair", dialogue: "null♡Oh. My hair.♡null♡I do not... need this.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
   { option: "option-bone", dialogue: "null♡Oh -♡null♡My gnawing bone.♡null♡I... misplaced it.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
   { option: "option-daisy", dialogue: "null♡What... is this? <div class='flex-row'><button id='option-7'>It's a daisy</button></div>♡happy♡It... is beautiful."},
-  { option: "option-clover", dialogue: "null♡CLOVER"},
+  { option: "option-clover", dialogue: "null♡Oh. A plant.<div class='flex-row'><button id='option-7'>It's a lucky clover</button></div>♡empty♡I... do not eat plants. <div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
   { option: "option-feather", dialogue: "empty♡...♡empty♡Are you... with... these creatures... <div class='flex-row'><button id='option-feather-a'>Yes</button><button id='option-feather-b'>No</button></div>"},
   { option: "option-feather-a", dialogue: "anger♡...You should leave. Now. <div class='flex-row'><button id='option-feather-close' class='active'>Okay-!</button></div>"},
   { option: "option-feather-b", dialogue: "empty♡...That is good. <div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
