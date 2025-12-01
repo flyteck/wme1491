@@ -591,8 +591,13 @@ function buttonPress() {
 
         var collectedItems = menu.getElementsByClassName("collected");
         var itemDisplays = itemViewer.getElementsByTagName("span");
+
+        //remove focus from all, to make sure we have no weirdness
+        for (i = 0; i < collectedItems.length; i++) {
+          collectedItems[i].classList.remove("focus");
+        }
         
-        //grab the first collected item, add focus to it
+        //and add it to the first collected item
         collectedItems[0].classList.add("focus");
 
         //and then we find the matching name, and add viewing to that
