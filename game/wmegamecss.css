@@ -1921,8 +1921,9 @@ body.touch-only #space-button {
 	opacity: 0.5;
 }
 
-.open .collected.focus {
-	background: #c5bbbb;
+#inventory.open li.focus {
+	background-color: #d34949;
+    border-color: #eee;
 }
 
 #CandyApple, #CandyAppleInventory.collected span {
