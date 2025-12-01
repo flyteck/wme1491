@@ -1660,7 +1660,6 @@ body.touch-only #space-button {
 
 .fog.up-1:not(.left-1):not(.left-2) {
    mask: url(obstacles/fogup1.png);
-   mask-repeat: no-repeat;
    mask-size: 100% 100%;
 }
 
