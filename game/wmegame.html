@@ -43,6 +43,9 @@
 	<audio id="leaves" class="sound-effect ground-sound" src="music/leaves.wav" allow="autoplay"></audio>
 
 	<audio id="music-box" src="music/musicbox.wav" class="sound-effect" loop="loop" allow="autoplay"></audio>
+	<audio id="credits-player" src="music/credits.wav" allow="autoplay" loop="loop"></audio>
+
+	<a href="https://flyteck.github.io/wme1491/index.html#game" id="page-back">&ltBack</a>
 
 	<div id="game-wrapper">
 		<div id="health"></div>
@@ -53,6 +56,7 @@
 			<div id="load-count"></div>
 
 			<div id="hidden-load">
+				<!--------- All elements must be placed in here, to preload (unless they're visible on the main screen) --------->
 				<img src="charactersprites/walkleft.png">
 				<img src="charactersprites/standleft.png">
 				<img src="charactersprites/quincypix.png">
@@ -61,10 +65,14 @@
 				<img src="charactersprites/vatrapix.png">
 				<img src="charactersprites/crowpix.png">
 				<img src="charactersprites/gnashpix.png">
+				<img src="charactersprites/duck.png">
 
 				<img src="objectives/drawing.png">
 				<img src="objectives/bone.png">
 				<img src="objectives/hair.png">
+				<img src="objectives/daisy.png">
+				<img src="objectives/feather.png">
+				<img src="objectives/clover.png">
 
 				<img src="objectives/quincy.png">
 				<img src="objectives/quincyannoyed.png">
@@ -152,6 +160,8 @@
 				<img src="obstacles/hauntedtree2.png">
 				<img src="obstacles/brambles.png">
 				<img src="obstacles/talltrunk.png">
+				<img src="obstacles/cattail.png">
+				<img src="obstacles/clovers.png">
 
 				<img src="obstacles/flowers1.png">
 				<img src="obstacles/flowers2.png">
@@ -176,6 +186,7 @@
 
 				<img src="obstacles/fence.png">
 				<img src="obstacles/fencevertical.png">
+				<img src="obstacles/fencewood.png">
 				<img src="obstacles/cliff.png">
 				<img src="obstacles/treeblock.png">
 
@@ -197,15 +208,15 @@
 			<div id="gradient"></div>
 			<div id="clouds"></div>
 			<div id="endcard">
-				<span>Thank you for playing <i class="fa-solid fa-heart"></i></span>
+				<span class="flex-row" style="gap:10px;">Thank you for playing <i class="fa-solid fa-heart"></i></span>
 
 				<div class='flex-row desktop-confirm'>
-					<button class="focus" id='replay'>Replay</button>
+					<button class="focus" id='replay'>Play Again</button>
 					<button id='return'>Return to Form</button>
 				</div>
 
 				<div class='flex-row touch-show'>
-				 <button id='replay' onclick="refresh()">Replay</button>
+				 <button id='replay' onclick="refresh()">Play Again</button>
 				 <button id='return' onclick="refresh()">Return to Form</button>
 				</div>
 
@@ -293,6 +304,10 @@
 
 			<div class="obstacle fence bigtreeorange tree up-1 left-1" style="left: 768px; top: 632px;"><div><!--fence image--></div></div>
 			<div class="obstacle fence bigtreeyellow tree up-1 left-1" style="left: 552px; top: 664px;"><div><!--fence image--></div></div>
+			<div class="obstacle fence bigtreegreen tree left-1 up-1" style="left: 880px;top: 400px;"><div><!--fence image--></div></div>
+			<div class="decoration clovers ground up-1 left-1" style="left: 560px;top: 364px;"></div>
+
+			<div id="Clover" class="objective up-1 left-1" style="top: 401px;left: 686px;"></div>
 
 			<div class="obstacle brambles up-1 left-1" style="left: 834px;top: 86px;"><div><!--fence image--></div></div>
 			<div class="obstacle brambles up-1 left-1" style="left: 764px; top: 156px;"><div><!--fence image--></div></div>
@@ -376,7 +391,8 @@
 
 			<div class="decoration flower3 up-1 right-1" style="left: 637px;top: 281px;"><div><!--fence image--></div></div>
 			<div class="decoration flower1 up-1 right-1" style="left: 622px;top: 284px;"><div><!--fence image--></div></div>
-			<div id="Daisy" class="objective flower2 up-1 right-1" style="left: 622px;top: 280px;"><div><!--fence image--></div></div>
+			<div class="decoration flower2 up-1 right-1" style="left: 642px;top: 287px;"><div><!--fence image--></div></div>
+			<div id="Daisy" class="objective up-1 right-1" style="left: 619px;top: 287px;"><div><!--fence image--></div></div>
 
 			<div class="obstacle fence bigtreeorange tree up-1 right-1" style="left: -86px;top: 128px;"><div><!--fence image--></div></div>
 			<div class="leaves leavesround ground up-1 right-1" style="left: 664px;top: 56px;"></div>
@@ -1191,7 +1207,7 @@
 				</div>
 
 				<div class="slide">
-					<h3>Featured WMEs (NPCs & PC)</h3>
+					<h3>Featured WMEs (Intro Cutscene)</h3>
 					<div>
 						<a href="https://www.chickensmoothie.com/Forum/viewtopic.php?f=124&t=5049546" target="_blank">Melinoe</a> • 
 						<a href="https://www.chickensmoothie.com/Forum/viewtopic.php?f=53&t=1153733" target="_blank">Asfaloth</a> • 
@@ -1214,6 +1230,7 @@
 					<div>Forest Ambience - Ambient Wandering Wind by <a href="https://pixabay.com/users/soundreality-31074404/" target="_blank">SoundReality</a></div>
 					<div>Menu Music - Calm Menu Music (loopable)(LO-FI) by <a href="https://freesound.org/people/DAN2008/" target="_blank">DAN2008</a></div>
 					<div>Outro Music - MusikBox by <a href="https://freesound.org/people/noir%C3%A9/" target="_blank">noiré</a></div>
+					<div>Credits Music - Nostalgic Ending Credits 3 by <a href="https://freesound.org/people/tyops/" target="_blank">tyops</a></div>
 				</div>
 
 				<div class="slide">

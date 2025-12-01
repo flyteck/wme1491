@@ -68,6 +68,25 @@ button:not(.game-button):hover, button:not(.game-button):focus, button.focus {
 	width: calc(var(--game-width) + var(--inventory-width) );
 }
 
+#page-back {
+	margin: 30px;
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	opacity: 0.6;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 4px;
+	text-transform: uppercase;
+	transition: 200ms ease all;
+}
+
+#page-back:hover, #page-back:focus {
+	opacity:1;
+}
+
 /********************** Game UI *********************/
 
 /*** Instructional Overlay ***/
@@ -376,6 +395,7 @@ button:not(.game-button):hover, button:not(.game-button):focus, button.focus {
 #credits .slide div, #credits .slide h3 {
 	margin: 10px;
 	padding: 0;
+	font-family: inherit;
 }
 
 #endcard {
@@ -1772,7 +1792,7 @@ body.touch-only #space-button {
 
 /** Flowers picked **/
 
-.flower1, .flower2, .flower3, #Daisy {
+.flower1, .flower2, .flower3 {
 	margin-top: 68px;
 	position: absolute;
 	background-position: left bottom;
@@ -1791,6 +1811,22 @@ body.touch-only #space-button {
 
 .flower3 {
 	background-image: url(obstacles/flower3.png);
+}
+
+#Daisy {
+	position: absolute;
+	background-image: url(objectives/daisy.png);
+}
+
+/** Clover Patch **/
+
+.clovers {
+	background-image: url(obstacles/clovers.png);
+	position: absolute;
+	background-position: left bottom;
+	background-size: contain;
+	width: 258px;
+	height: 112px;
 }
 
 /** Bones **/
@@ -1908,7 +1944,7 @@ body.touch-only #space-button {
 }
 
 #DaisyInventory.collected span {
-	background-image: url(obstacles/flower2.png);
+	background-image: url(objectives/daisy.png);
 }
 
 #Hair, #HairInventory.collected span {
@@ -1926,6 +1962,15 @@ body.touch-only #space-button {
 
 #Bone-talking #interact-display {
 	margin-top: 40px;
+}
+
+#Clover, #CloverInventory.collected span {
+	background-image: url(objectives/clover.png);
+}
+
+#Clover.objective {
+	height: 32px;
+	width: 32px;
 }
 
 /** NPCs **/
