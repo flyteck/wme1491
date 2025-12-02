@@ -171,7 +171,6 @@ function hideLoader() {
 
 //load the game title in when the page loads
 window.addEventListener("load", screenTitle);
-
 //(and it's also called when someone changes screens)
 function screenTitle() {
   var screenName = document.getElementById("screen-display");
@@ -1567,22 +1566,32 @@ function obstacleCheck(direction,moveDistance) {
           var behind = (parseInt(obstacle[i].style.zIndex)) > parseInt(character.style.zIndex);
           var inFront = (parseInt(obstacle[i].style.zIndex)) < parseInt(character.style.zIndex);
 
+          console.log("overlap found");
+
           if (overlapBottomTop == true && character.classList.contains("down") && behind == true) {
             if (smallMobile == false && appleDevice == false) {
               character.classList.add("blocked");
             }
+            console.log("blocked");
             return true;
           }
 
           if (overlapTopBottom == true && character.classList.contains("up")) {
+            console.log("overlap topbottom");
             //if character top overlaps object bottom,
-            var overlapBottomBottom = characterBounds.bottom <= obstacleBounds.bottom
+            var overlapBottomBottom = characterBounds.bottom <= obstacleBounds.bottom;
+
+            if (obstacle[i].classList.contains("tombstone")) {
+              var overlapBottomBottom = characterBounds.bottom <= (obstacleBounds.bottom + parseInt(moveDistance));
+            }
+
             //see if the bottom is also higher, and if we're in front
             if (overlapBottomBottom == true && inFront === true) {
               //if it is, increase top to push it down
               if (smallMobile == false && appleDevice == false) {
                 character.classList.add("blocked");
               }
+              console.log("blocked");
               return true;
             }
           }
