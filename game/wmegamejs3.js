@@ -389,9 +389,7 @@ function hideCutscene() {
 
   if (slidePlayer == "credits") {
     //if we're on credits, set up and display the endcard
-    console.log("endcard");
     document.getElementById("endcard").style.display = "flex";
-
     document.addEventListener("keydown", endcardToggle);
 
     //I cleared this in like 20000 places man IDFK
@@ -1566,18 +1564,14 @@ function obstacleCheck(direction,moveDistance) {
           var behind = (parseInt(obstacle[i].style.zIndex)) > parseInt(character.style.zIndex);
           var inFront = (parseInt(obstacle[i].style.zIndex)) < parseInt(character.style.zIndex);
 
-          console.log("overlap found");
-
           if (overlapBottomTop == true && character.classList.contains("down") && behind == true) {
             if (smallMobile == false && appleDevice == false) {
               character.classList.add("blocked");
             }
-            console.log("blocked");
             return true;
           }
 
           if (overlapTopBottom == true && character.classList.contains("up")) {
-            console.log("overlap topbottom");
             //if character top overlaps object bottom,
             var overlapBottomBottom = characterBounds.bottom <= obstacleBounds.bottom;
 
@@ -1591,7 +1585,6 @@ function obstacleCheck(direction,moveDistance) {
               if (smallMobile == false && appleDevice == false) {
                 character.classList.add("blocked");
               }
-              console.log("blocked");
               return true;
             }
           }
@@ -2306,9 +2299,13 @@ function gnashInteraction() {
             var currentButtons = dialogueLoader.querySelectorAll("button");
 
             for (i = 0; i < currentButtons.length; i++) {
+              currentButtons[i].style.opacity = "";
               if (!currentButtons[i].classList.contains("item-found")) {
                 currentButtons[i].remove();
               }
+              setTimeout(() => {
+                currentButtons[i].style.opacity = "1";
+              }, 64);
             }
 
             var currentButtons = dialogueLoader.querySelectorAll("button");
@@ -2354,10 +2351,10 @@ function gnashInteraction() {
                 { option: "option-6", dialogue: "empty♡...<div class='flex-row'><button id='option-7'>[Give him something]</button></div>"},
                 { option: "option-7", dialogue: "null♡<div class='flex-row' style='margin-top: -20px;'><button class='drawing-button' id='option-drawing'><img src='objectives/drawing.png'></button><button id='option-hair' class='hair-button'><img src='objectives/hair.png'></button><button id='option-daisy' class='daisy-button'><img src='objectives/daisy.png'></button><button id='option-bone' class='bone-button'><img src='objectives/bone.png' class='bone-button'></button><button id='option-feather' class='feather-button'><img src='objectives/feather.png'></button><button id='clover-feather' class='clover-button'><img src='objectives/clover.png'></button></div>"},
                 { option: "option-drawing", dialogue: "null♡Is this... me?♡null♡Then...♡null♡I am... not like you.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
-                { option: "option-hair", dialogue: "null♡Oh. My hair.♡null♡I do not... need this.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
-                { option: "option-bone", dialogue: "null♡Oh -♡null♡My gnawing bone.♡null♡I... misplaced it.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
+                { option: "option-hair", dialogue: "null♡...My hair.♡null♡I do not... need this.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
+                { option: "option-bone", dialogue: "null♡Oh...♡null♡My gnawing bone.♡null♡I... misplaced it.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
                 { option: "option-daisy", dialogue: "null♡What... is this? <div class='flex-row'><button id='option-7'>It's a daisy</button></div>♡happy♡It... is beautiful."},
-                { option: "option-clover", dialogue: "null♡Oh. A plant.<div class='flex-row'><button id='option-7'>It's a lucky clover</button></div>♡empty♡I... do not eat plants. <div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
+                { option: "option-clover", dialogue: "null♡...A plant.<div class='flex-row'><button id='option-7'>It's a lucky clover</button></div>♡empty♡I... do not eat plants. <div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
                 { option: "option-feather", dialogue: "empty♡...♡empty♡Are you... with... these creatures... <div class='flex-row'><button id='option-feather-a'>Yes</button><button id='option-feather-b'>No</button></div>"},
                 { option: "option-feather-a", dialogue: "anger♡...You should leave. Now. <div class='flex-row'><button id='option-feather-close' class='active'>Okay-!</button></div>"},
                 { option: "option-feather-b", dialogue: "empty♡...That is good. <div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
@@ -2366,7 +2363,7 @@ function gnashInteraction() {
               document.body.classList.add("reset");
   
             }
-          }, 200);
+          }, 64);
         }
 
       //for the feather option, reset but IDK it needs to be fucking separate
@@ -2411,17 +2408,17 @@ function gnashInteraction() {
                 { option: "option-6", dialogue: "empty♡...<div class='flex-row'><button id='option-7'>[Give him something]</button></div>"},
                 { option: "option-7", dialogue: "null♡<div class='flex-row' style='margin-top: -20px;'><button class='drawing-button' id='option-drawing'><img src='objectives/drawing.png'></button><button id='option-hair' class='hair-button'><img src='objectives/hair.png'></button><button id='option-daisy' class='daisy-button'><img src='objectives/daisy.png'></button><button id='option-bone' class='bone-button'><img src='objectives/bone.png' class='bone-button'></button><button id='option-feather' class='feather-button'><img src='objectives/feather.png'></button><button id='clover-feather' class='clover-button'><img src='objectives/clover.png'></button></div>"},
                 { option: "option-drawing", dialogue: "null♡Is this... me?♡null♡Then...♡null♡I am... not like you.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
-                { option: "option-hair", dialogue: "null♡Oh. My hair.♡null♡I do not... need this.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
-                { option: "option-bone", dialogue: "null♡Oh -♡null♡My gnawing bone.♡null♡I... misplaced it.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
+                { option: "option-hair", dialogue: "null♡...My hair.♡null♡I do not... need this.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
+                { option: "option-bone", dialogue: "null♡Oh...♡null♡My gnawing bone.♡null♡I... misplaced it.<div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
                 { option: "option-daisy", dialogue: "null♡What... is this? <div class='flex-row'><button id='option-7'>It's a daisy</button></div>♡happy♡It... is beautiful."},
-                { option: "option-clover", dialogue: "null♡Oh. A plant.<div class='flex-row'><button id='option-7'>It's a lucky clover</button></div>♡empty♡I... do not eat plants. <div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
+                { option: "option-clover", dialogue: "null♡...A plant.<div class='flex-row'><button id='option-7'>It's a lucky clover</button></div>♡empty♡I... do not eat plants. <div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
                 { option: "option-feather", dialogue: "empty♡...♡empty♡Are you... with... these creatures... <div class='flex-row'><button id='option-feather-a'>Yes</button><button id='option-feather-b'>No</button></div>"},
                 { option: "option-feather-a", dialogue: "anger♡...You should leave. Now. <div class='flex-row'><button id='option-feather-close' class='active'>Okay-!</button></div>"},
                 { option: "option-feather-b", dialogue: "empty♡...That is good. <div class='flex-row'><button id='option-7'>[Give him something else]</button></div>"},
               ];
 
               document.body.classList.add("reset");
-          }, 200);
+          }, 64);
         }
 
       //this is used to delete items you've already given away

@@ -181,6 +181,7 @@ button:not(.game-button):hover, button:not(.game-button):focus, button.focus {
 
 .desktop-confirm {
 	color:var(--mid-accent);
+	margin: 20px;
 }
 
 .desktop-confirm button {
@@ -682,6 +683,10 @@ body.touch-only #space-button {
    border-radius: 4px;
    transition: 400ms ease;
    text-transform: none;
+}
+
+#dialogue-loader #option-7 button {
+   opacity: 0;
 }
 
 #dialogue-loader button:not(:first-child) {
